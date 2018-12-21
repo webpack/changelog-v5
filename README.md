@@ -1,3 +1,5 @@
+[Help by editing this file](https://github.com/webpack/changelog-v5/edit/master/README.md).
+
 # General direction
 
 This release focus on the following:
