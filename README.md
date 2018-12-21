@@ -17,6 +17,10 @@ All things that were deprecated in v4 were removed.
 
 MIGRATION: Make sure that your webpack 4 build don't print deprecation warnings.
 
+Here are a few things that were removed but have no deprecation warning in v4:
+
+- IgnorePlugin and BannerPlugin must be passed an options object
+
 ## Automatic node.js polyfills removed
 
 In the early days webpack aimed to allow to run most node.js modules in the browser, but the module landscape changed and many modules uses are now written for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules. They are automatically applied once a module uses i. e. the `crypto` module.
@@ -137,8 +141,8 @@ MIGRATION: Upgrade to latest node.js version.
 - `optimization.moduleIds: "total-size"` removed
 - Deprecated flags for module and chunk ids were removed
   - `optimization.hashedModuleIds` removed
-  - `optimization.namedChunks` removed
-  - `optimization.namedModules` removed
+  - `optimization.namedChunks` removed (`NamedChunksPlugin` too)
+  - `optimization.namedModules` removed (`NamedModulesPlugin` too)
   - `optimization.occurrenceOrder` removed
   - MIGRATION: Use `chunkIds` and `moduleIds`
 - `optimization.splitChunks` sizes can now be objects with a size per source type
@@ -189,6 +193,7 @@ MIGRATION: Upgrade to latest node.js version.
 - `optimization.nodeEnv` defaults to `false` in `none` mode
 - `resolve(Loader).cache` defaults to `true` when a `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
+- `node.global` defaults to `false`
 
 # Major internal Changes
 
