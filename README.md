@@ -205,7 +205,7 @@ A large part of the runtime code was moved into the so called "runtime modules".
 
 The core runtime is now very small and only includes the `__webpack_require__` function, module factories and the module instance cache. In the future, an alternative code runtime can be used to avoid wrapping the bundle in a IIFE and allow ESM style exports. This will allow ESM as target.
 
-As some responsibilities from Main and ChunkTemplate were removed, several associated hooks were removed respectively.
+As some responsibilities from Main and ChunkTemplate were removed, several associated hooks were removed as well.
 
 MIGRATION: If you are injecting runtime code into the webpack runtime in a plugin, consider using RuntimeModules instead.
 
