@@ -310,7 +310,7 @@ That means the following information about modules has been moved:
 - Module is runtime module in chunk -> ChunkGraph
 - Chunk runtime requirements -> ChunkGraph
 
-Webpack used to disconnect modules from the graph when restored from cache. This is no longer necessary. A Module stores no info about the graph and can technically used in multiple graphs. This makes caching easier.
+webpack used to disconnect modules from the graph when restored from cache. This is no longer necessary. A Module stores no info about the graph and can technically used in multiple graphs. This makes caching easier.
 
 There is a compat-layer for most of these changes, which prints a deprecation warning when used.
 
