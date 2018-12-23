@@ -258,7 +258,7 @@ MIGRATION: Use Set methods instead of Array methods.
 
 ## Compilation.fileSystemInfo
 
-This new class can be used to access information about the filesystem in a cache way. Currently it allows to ask for file and directory timestamps. Information about timestamps is transferred from the watcher if possible, otherwise determined by filesystem access.
+This new class can be used to access information about the filesystem in a cached way. Currently it allows to ask for file and directory timestamps. Information about timestamps is transferred from the watcher if possible, otherwise determined by filesystem access.
 
 In future asking for file content hashes will be added and modules can check validity with file content instead of file hashes.
 
