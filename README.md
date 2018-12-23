@@ -532,7 +532,7 @@ MIGRATION: Instead of replacing the whole Stats functionality, you can now custo
   - MIGRATION: Use `setId` instead
 - acorn 5 -> 6
 - Testing
-  - HotTestCases now run for multiple targets `async-node` `node` `web` `webworker`
+  - HotTestCases now runs for multiple targets `async-node` `node` `web` `webworker`
   - TestCases now also runs for filesystem caching with `store: "instant"` and `store: "pack"`
   - TestCases now also runs for deterministic module ids
 - Tooling added to order the imports (checked in CI)
