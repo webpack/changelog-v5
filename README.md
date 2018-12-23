@@ -290,7 +290,7 @@ MIGRATION: As this is a newly intorduced functionality, there is nothing to migr
 
 ## Module and Chunk Graph
 
-Webpack used to store a resolved module in the dependency, and store the contained modules in the chunk. This is no longer the case. All information about how modules are connected in the module graph are now stored in a ModuleGraph class. All information about how modules are connected with chunks are now stored in the ChunkGraph class. Information which depends on i. e. the chunk graph, is also stored in the related class.
+webpack used to store a resolved module in the dependency, and store the contained modules in the chunk. This is no longer the case. All information about how modules are connected in the module graph are now stored in a ModuleGraph class. All information about how modules are connected with chunks are now stored in the ChunkGraph class. Information which depends on i. e. the chunk graph, is also stored in the related class.
 
 That means the following information about modules has been moved:
 
