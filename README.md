@@ -27,7 +27,7 @@ In the early days, Webpack's aim was to allow running most node.js modules in th
 
 While this makes using modules written for node.js easy, it adds these huge polyfills to the bundle. In many cases these polyfills are unnecessary.
 
-Webpack 5 stopped automatically polyfilling these core modules and focuses on frontend-compatible modules only.
+webpack 5 stops automatically polyfilling these core modules and focuses on frontend-compatible modules only.
 
 MIGRATION:
 
