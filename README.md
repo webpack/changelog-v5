@@ -55,7 +55,7 @@ A Module ID is detemined by its path, relative to the `context`.
 A Chunk ID is determined by the chunk's content.
 
 So you no longer need to use `import(/* webpackChunkName: "name" */ "module")` for debugging.
-But it would still make sense, if you want to control the filenames in production environments.
+But it would still make sense, if you want to control the filenames for production environments.
 
 It's possible to use `chunkIds: "named"` in production, but make sure not to accidentically expose sensitive information about module names.
 
