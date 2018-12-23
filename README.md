@@ -316,7 +316,7 @@ There is a compat-layer for most of these changes, which prints a deprecation wa
 
 MIGRATION: Use the new APIs on ModuleGraph and ChunkGraph
 
-## Initialize Fragments
+## Init Fragments
 
 `DependenciesBlockVariables` has been removed in favor of InitFragments. `DependencyTemplates` can now add `InitFragments` to inject code to the top of the module's source. `InitFragments` allows deduplication.
 
