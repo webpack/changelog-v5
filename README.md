@@ -223,7 +223,7 @@ The `FileCachePlugin` uses the serialization mechanism to persist and restore ca
 
 ## Hook Object Frozen
 
-Classes with `hooks` have their `hooks` object frozen, so adding custom hooks is no longer an option via this method.
+Classes with `hooks` have their `hooks` object frozen, so adding custom hooks is no longer possible this way.
 
 MIGRATION: The recommended way to add custom hooks is using a WeakMap and a static `getXXXHooks(XXX)` (i. e. `getCompilationHook(compilation)`) method. Internal classes use the same mechanism used for custom hooks.
 
