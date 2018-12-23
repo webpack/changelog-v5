@@ -85,7 +85,7 @@ minSize: {
 }
 ```
 
-MIGRATION: Check which types of sizes are used in your build and configure these in `splitChunks.minSize` and optinally in `splitChunks.maxSize`.
+MIGRATION: Check which types of sizes are used in your build and configure these in `splitChunks.minSize` and optionally in `splitChunks.maxSize`.
 
 ## Persistent Caching
 
