@@ -97,7 +97,7 @@ There is an automatic cache invalidation for resolving module source code and fi
 There is **no** automatic cache invalidations for configurations and loader/plugin/core changes!
 There is an option for manual cache invalidation for configuration or build code changes (`cache.version`).
 
-Do not worry, we plan on adding this, but it's not yet ready.
+Do not worry, we plan on adding this, but it's not ready yet.
 
 So, here is a guide to make sure you are fine:
 
