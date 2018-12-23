@@ -274,7 +274,7 @@ MIGRATION: As this is a newly intorduced functionality, there is nothing to migr
 
 ## Work Queues
 
-Webpack used to handle module processing by functions calling functions, and a `semaphore` which limits parallelism. The `Compilation.semaphore` has been removed and async queues now handle work queuing and processing. Each step has a separate queue:
+webpack used to handle module processing by functions calling functions, and a `semaphore` which limits parallelism. The `Compilation.semaphore` has been removed and async queues now handle work queuing and processing. Each step has a separate queue:
 
 - `Compilation.factorizeQueue`: calling the module factory for a group of dependencies.
 - `Compilation.addModuleQueue`: adding the module to the compilation queue (may restore module from cache).
