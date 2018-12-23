@@ -163,6 +163,8 @@ MIGRATION: Upgrade to latest node.js version.
 - `stats.chunkRootModules` added: Show root modules for chunks
 - `stats.orphanModules` added: Show modules which are not emitted
 - `stats.runtime` added: Show runtime modules
+- `stats.chunkRelations` added: Show parent/children/sibling chunks (since alpha.1)
+- `stats.preset` added: select a preset (since alpha.1)
 - `BannerPlugin.banner` signature changed
   - `data.basename` removed
   - `data.query` removed
