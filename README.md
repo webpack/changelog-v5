@@ -213,7 +213,7 @@ MIGRATION: If you are injecting runtime code into the webpack runtime in a plugi
 
 A serialization mechanism was added to allow serialization of complex objects in webpack. It has an opt-in semantic, so classes that should be serialized need to be explicitly flagged (and their serialization implemented). This has been done for most Modules, all Dependencies and some Errors.
 
-MIGRATION: When using custom Modules or Dependencies, make sure to provide them with serialization implemented, in order to benefit from persistent caching.
+MIGRATION: When using custom Modules or Dependencies, it is recommended to make them serializable to benefit from persistent caching.
 
 ## Extensible Caching
 
