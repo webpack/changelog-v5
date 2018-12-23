@@ -23,7 +23,7 @@ Here are a few things that were removed but did not have deprecation warnings in
 
 ## Automatic Node.js Polyfills Removed
 
-In the early days, Webpack's aim was to allow running most node.js modules in the browser, but the module landscape changed and many module uses are now written mainly for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules, which are automatically applied once a module uses any of the core modules (i.e. the `crypto` module).
+In the early days, webpack's aim was to allow running most node.js modules in the browser, but the module landscape changed and many module uses are now written mainly for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules, which are automatically applied once a module uses any of the core modules (i.e. the `crypto` module).
 
 While this makes using modules written for node.js easy, it adds these huge polyfills to the bundle. In many cases these polyfills are unnecessary.
 
