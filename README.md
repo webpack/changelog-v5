@@ -91,7 +91,7 @@ MIGRATION: Check which types of sizes are used in your build and configure these
 
 There is now an experimental filesystem cache. It's opt-in and can be enabled with `cache: { type: "filesystem" }` in the configuration.
 Currently only the core feature set is ready, and when using it one should be aware of the current limitations to avoid unexpected bugs.
-Please do not use this feature if you don't understand the limitations.
+**Please do not use this feature if you don't understand the limitations.**
 
 There is an automatic cache invalidation for resolving module source code and filesystem structure.
 There is **no** automatic cache invalidations for configurations and loader/plugin/core changes!
