@@ -364,7 +364,7 @@ MIGRATION: Instead of replacing the whole Stats functionality, you can now custo
 - Compilation.hooks.normalModuleLoader is deprecated
   - MIGRATION: Use `NormalModule.getCompilationHooks(compilation).loader` instead
 
-# Unimportant Smaller Changes
+# Other Minor Changes
 
 - removed buildin directory and replaced buildins with runtime modules
 - Removed deprecated features
