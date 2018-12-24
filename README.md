@@ -6,77 +6,77 @@ This release focus on the following:
 
 - We try to improve build performance with Persistent Caching.
 - We try to improve Long Term Caching with better algorithms and defaults.
-- We try to cleanup internal structures that were left in a weird state while implementing features in v4 without breaking changes.
-- We try to prepare for future features by doing breaking changes now to stay on v5 as long as possible.
+- We try to cleanup internal structures that were left in a weird state, while implementing features in v4 without introducing any breaking changes.
+- We try to prepare for future features by introducing breaking changes now, allowing us to stay on v5 for as long as possible.
 
 # Major Changes
 
-## Removed deprecated things
+## Removed Deprecated Items
 
-All things that were deprecated in v4 were removed.
+All items deprecated in v4 were removed.
 
-MIGRATION: Make sure that your webpack 4 build don't print deprecation warnings.
+MIGRATION: Make sure that your webpack 4 build does not print deprecation warnings.
 
-Here are a few things that were removed but have no deprecation warning in v4:
+Here are a few things that were removed but did not have deprecation warnings in v4:
 
-- IgnorePlugin and BannerPlugin must be passed an options object
+- IgnorePlugin and BannerPlugin must now be passed an options object.
 
-## Automatic node.js polyfills removed
+## Automatic Node.js Polyfills Removed
 
-In the early days webpack aimed to allow to run most node.js modules in the browser, but the module landscape changed and many modules uses are now written for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules. They are automatically applied once a module uses i. e. the `crypto` module.
+In the early days, webpack's aim was to allow running most node.js modules in the browser, but the module landscape changed and many module uses are now written mainly for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules, which are automatically applied once a module uses any of the core modules (i.e. the `crypto` module).
 
-While this makes using modules written for node.js easy, it adds these huge polyfills to the bundle. In many cases these polyfills are even unneeded.
+While this makes using modules written for node.js easy, it adds these huge polyfills to the bundle. In many cases these polyfills are unnecessary.
 
-webpack 5 stopped to automatically polyfill these core modules and tried to focus on frontend-compatible modules.
+webpack 5 stops automatically polyfilling these core modules and focuses on frontend-compatible modules.
 
 MIGRATION:
 
-- Try to use frontend-compatible modules when possible.
-- It's possible to manually add the polyfill for a node.js core module. The error message gives a hint how to do that.
+- Try to use frontend-compatible modules whenever possible.
+- It's possible to manually add a polyfill for a node.js core module. An error message will give a hint on how to achieve that.
 - Package authors: Use the `browser` field in `package.json` to make a package frontend-compatible. Provide alternative implementations/dependencies for the browser.
 
-FEEDBACK: Please give feedback if you like or dislike this change. We are unsure if this will make it into the final release.
+FEEDBACK: Please provide us with feedback whether you like or dislike the above mentioned change. We are uncertain whether this will make it into the final release or not.
 
-## Deterministic chunk and module ids
+## Deterministic Chunk and Module IDs
 
 New algorithms were added for long term caching. These are enabled by default in production mode.
 
 `chunkIds: "deterministic", moduleIds: "deterministic"`
 
-The algorithms assigns short (3 or 4 char) numeric ids to modules and chunks in a deterministic way.
+The algorithms assign short (3 or 4 charachter) numeric IDs to modules and chunks in a deterministic way.
 This is a trade-off between bundle size and long term caching.
 
-MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will create smaller bundles, but invalidate them more often for caching.
+MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
 
-## Named chunk ids
+## Named Chunk IDs
 
-A new named chunk id algorithm enabled by default in development mode gives chunk (and filename) useful names.
-Module id is detemined by path relative to the `context`.
-Chunk id is determined by chunk content.
+A new named chunk id algorithm enabled by default in development mode, gives chunks (and filenames) human-readable names.
+A Module ID is detemined by its path, relative to the `context`.
+A Chunk ID is determined by the chunk's content.
 
 So you no longer need to use `import(/* webpackChunkName: "name" */ "module")` for debugging.
-But it still make sense if you want to control the filename for production.
+But it would still make sense, if you want to control the filenames for production environments.
 
-It's possible to use `chunkIds: "named"` in production, but make sure to not accidentically expose sensitive information about module names.
+It's possible to use `chunkIds: "named"` in production, but make sure not to accidentically expose sensitive information about module names.
 
-MIGRATION: If you dislike the changed filenames in development, you can pass `chunkIds: "natural"` for the old numberic mode.
+MIGRATION: If you dislike the filenames being changed in development, you can pass `chunkIds: "natural"` in order to use the old numberic mode.
 
-## Compiler idle and close
+## Compiler Idle and Close
 
-Compilers now need to be closed after using. Compilers now enter and leave idle state and have hooks for this. Plugins may use this to do unimportant work. i. e. the Persistent cache slowy stores the cache to disk. On compiler close remaining work should be finished as fast as possible. A callback signals closing done.
+Compilers now need to be closed after being used. Compilers now enter and leave idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowy stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
 
-Plugins should expect that some users may forget to close the Compiler, so all work should eventually be finishing in idle too. Process should be prevented from exiting when work is done.
+Plugins and their respective authors should expect that some users may forget to close the Compiler. So, all work should eventually be finishing while in idle too. Processes should be prevented from exiting when the work is being done.
 
-The `webpack()` fasade automatically calls close when passing a callback.
+The `webpack()` facade automatically calls `close` when being passed a callback.
 
-MIGRATION: When using the node.js API make sure to call `Compiler.close` when done.
+MIGRATION: While using the node.js API, make sure to call `Compiler.close` when done.
 
-## SplitChunks and module sizes
+## SplitChunks and Module Sizes
 
-Modules now express size now in a better way than a single number. There are now different type of sizes.
+Modules now express size in a better way than displaying a single number. Also, there are now different types of sizes.
 
-The SplitChunksPlugin learned how to handle these different sizes and used them for `minSize` and `maxSize`.
-By default only `javascript` size is handled, but you can now pass multiple values to handle them:
+The SplitChunksPlugin now knows how to handle these different sizes and uses them for `minSize` and `maxSize`.
+By default, only `javascript` size is handled, but you can now pass multiple values to manage them:
 
 ```js
 minSize: {
@@ -85,38 +85,38 @@ minSize: {
 }
 ```
 
-MIGRATION: Check which types of sizes are used in your build and configure these in `splitChunks.minSize` and maybe `splitChunks.maxSize`.
+MIGRATION: Check which types of sizes are used in your build and configure these in `splitChunks.minSize` and optionally in `splitChunks.maxSize`.
 
 ## Persistent Caching
 
-There is now an experimental filesystem cache. It's opt-in and can be enabled with `cache: { type: "filesystem" }` in configuration.
-Currently only the core feature set is ready and when using it one should be aware of the current limitation to avoid weird bugs.
-Please do not use this feature if you don't understand the limitations.
+There is now an experimental filesystem cache. It's opt-in and can be enabled with `cache: { type: "filesystem" }` in the configuration.
+Currently only the core feature set is ready, and when using it one should be aware of the current limitations to avoid unexpected bugs.
+**Please do not use this feature if you don't understand the limitations.**
 
-There is automatic cache invalidation for module source code and filesystem structure for resolving.
-There is no automatic cache invalidation for configuration and loader/plugin/core changes!
-There is an option for manual cache invalidation when configuration or build code changes (`cache.version`).
+There is an automatic cache invalidation for resolving module source code and filesystem structure.
+There is **no** automatic cache invalidations for configurations and loader/plugin/core changes!
+There is an option for manual cache invalidation for configuration or build code changes (`cache.version`).
 
-No worry we plan to add this, but it's not ready yet.
+Do not worry, we plan on adding this, but it's not ready yet.
 
-So here is a guide to make sure you are fine:
+So, here is a guide to make sure you are fine:
 
 Update the `cache.version` when:
 
 - you upgrade your tooling dependencies (i. e. webpack, loader, plugin)
 - you change your configuration
 
-HINT: If you want to automate this, it could be a good idea to hash `webpack.config.js` and `node_modules/.yarn-integrity` and pass it to `cache.version`. That's probably how we will do it.
+HINT: If you want to automate this, it could be a good idea to hash `webpack.config.js` and `node_modules/.yarn-integrity` and pass them to `cache.version`. That's probably how we will do it internally.
 
-## Minimum node.js version
+## Minimum Node.js Version
 
-The minimal node.js version was increased from 6 to 8.
+The minimum supported node.js version has increased from 6 to 8.
 
-MIGRATION: Upgrade to latest node.js version.
+MIGRATION: Upgrade to the latest node.js version available.
 
 # Changes to the Configuration
 
-## Changes to the structure
+## Changes to the Structure
 
 - `cache: Object` removed: Setting to a memory-cache object is no longer possible
 - `cache.type` added: It's now possible to choose between `"memory"` and `"filesystem"`
@@ -184,70 +184,70 @@ MIGRATION: Upgrade to latest node.js version.
   - `[base]`
   - `[path]`
   - `[ext]`
-- `externals` when passing a function it has now a different signature `({ context, request }, callback)`
+- `externals` when passing a function, it has now a different signature `({ context, request }, callback)`
   - MIGRATION: Change signature
 
-## Changes to the defaults
+## Changes to the Defaults
 
 - `module.unsafeCache` is now only enabled for `node_modules` by default
-- `optimization.moduleIds` defaults to `deterministic` in production mode instead of `size`
-- `optimization.chunkIds` defaults to `deterministic` in production mode instead of `total-size`
+- `optimization.moduleIds` defaults to `deterministic` in production mode, instead of `size`
+- `optimization.chunkIds` defaults to `deterministic` in production mode, instead of `total-size`
 - `optimization.nodeEnv` defaults to `false` in `none` mode
-- `resolve(Loader).cache` defaults to `true` when a `cache` is used
+- `resolve(Loader).cache` defaults to `true` when `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
 - `node.global` defaults to `false`
 
-# Major internal Changes
+# Major Internal Changes
 
-The following changes are only relavant when writing plugins:
+The following changes are only relavant for plugin authors:
 
 ## Runtime Modules
 
-A large part of runtime code was moved into so called "runtime modules". These special modules add runtime code. They can be added in any chunk, but are currently always added to the runtime chunk. "Runtime requirements" control which runtime modules are added to the bundle. This ensures that only runtime code that is used is added to the bundle. In future runtime modules could also added to on-demand-loaded chunk to load runtime code when needed.
+A large part of the runtime code was moved into the so called "runtime modules". These special modules are in-charge of adding runtime code. They can be added in to any chunk, but are currently always added to the runtime chunk. "Runtime Requirements" control which runtime modules are added to the bundle. This ensures that only runtime code that is used is added to the bundle. In the future, runtime modules could also added to an on-demand-loaded chunk, to load runtime code when needed.
 
-The core runtime is now very small and only includes the `__webpack_require__` function, module factories and module instance cache. In future an alternative code runtime can be used to avoid wrapping the bundle in a IIFE and allow ESM style exports. This will allow ESM as target.
+The core runtime is now very small and only includes the `__webpack_require__` function, module factories and the module instance cache. In the future, an alternative code runtime can be used to avoid wrapping the bundle in a IIFE and allow ESM style exports. This will allow ESM as target.
 
-As some responsibilities from Main and ChunkTemplate were removed, also are some hooks.
+As some responsibilities from Main and ChunkTemplate were removed, several associated hooks were removed as well.
 
-MIGRATION: When injection runtime code into the webpack runtime in a plugin, consider using RuntimeModules instead.
+MIGRATION: If you are injecting runtime code into the webpack runtime in a plugin, consider using RuntimeModules instead.
 
 ## Serialization
 
-A serialization mechanism was added to allow serialization of complex objects in webpack. It has a opt-in semantic, so classes that should be serialized need to be explicitly flagged (and serialization implemented). This has been done for most Modules, all Dependencies and some Errors.
+A serialization mechanism was added to allow serialization of complex objects in webpack. It has an opt-in semantic, so classes that should be serialized need to be explicitly flagged (and their serialization implemented). This has been done for most Modules, all Dependencies and some Errors.
 
-MIGRATION: When using custom Modules or Dependencies make sure to make them serializable to benefit from persistent caching.
+MIGRATION: When using custom Modules or Dependencies, it is recommended to make them serializable to benefit from persistent caching.
 
 ## Extensible Caching
 
-A `Cache` class with a plugin interface has been added. This class can be used to write and read to the cache. Depending on configuration different plugins add the functionality to the cache. The `MemoryCachePlugin` adds in-memory caching. The `FileCachePlugin` adds persistent caching.
+A `Cache` class with a plugin interface has been added. This class can be used to write and read to the cache. Depending on configuration, different plugins can add the functionality to the cache. The `MemoryCachePlugin` adds in-memory caching. The `FileCachePlugin` adds persistent (file-system) caching.
 
-The `FileCachePlugin` uses the serialization mechanism to persist and restore cached items to disk.
+The `FileCachePlugin` uses the serialization mechanism to persist and restore cached items to/from the disk.
 
-## Hook object frozen
+## Hook Object Frozen
 
 Classes with `hooks` have their `hooks` object frozen, so adding custom hooks is no longer possible this way.
 
-MIGRATION: The recommended way to add custom hooks is via WeakMap and a static `getXXXHooks(XXX)` (i. e. `getCompilationHook(compilation)`) method. Internal classes use the same mechanism for custom hooks.
+MIGRATION: The recommended way to add custom hooks is using a WeakMap and a static `getXXXHooks(XXX)` (i. e. `getCompilationHook(compilation)`) method. Internal classes use the same mechanism used for custom hooks.
 
-## Tapable base class removed
+## Tapable Base Class Removed
 
-The compat layer for webpack 3 plugins was removed. It has been deprecated for webpack 4.
+The compat layer for webpack 3 plugins has been removed. It had already been deprecated for webpack 4.
 
 MIGRATION: Use the new tapable API.
 
-## Staged hooks
+## Staged Hooks
 
-For some steps in the sealing process there has been multiple hooks for different stages. i. e. `optimizeDependenciesBasic` `optimizeDependencies` and `optimizeDependenciesAdvanced`. These has been removed in favor of a single hook which should be used with a `stage` option. See `OptimizationStages` for possible stage values.
+For several steps in the sealing process, there had been multiple hooks for different stages. i. e. `optimizeDependenciesBasic` `optimizeDependencies` and `optimizeDependenciesAdvanced`. These have been removed in favor of a single hook which can be used with a `stage` option. See `OptimizationStages` for possible stage values.
 
-MIGRATION: Hook into the remaining hook instead. May add a `stage` option.
+MIGRATION: Hook into the remaining hook instead. You may add a `stage` option.
 
-## Order and ids
+## Order and IDs
 
-webpack used to order modules and chunks in the Compilation is a specific way to assign ids in a incremental matter. This is no longer the case. The order will no longer be used for id generation. Instead the full control of id generation is in the plugin.
+webpack used to order modules and chunks in the Compilation phase, in a specific way, to assign IDs in an incremental order. This is no longer the case. The order will no longer be used for id generation, instead, the full control of ID generation is in the plugin.
 
-Hooks to optimize the order of module and chunks has been removed.
+Hooks to optimize the order of module and chunks have been removed.
 
-MIGRATION: You can't rely on a order of modules and chunks in the compilation anymore.
+MIGRATION: You cannot rely on the order of modules and chunks in the compilation phase no more.
 
 ## Arrays to Sets
 
@@ -260,45 +260,45 @@ MIGRATION: Use Set methods instead of Array methods.
 
 ## Compilation.fileSystemInfo
 
-This new class can be used to access information about the filesystem in a cached way. Currently it allows to ask for file and directory timestamps. Information about timestamps is transferred from the watcher if possible, otherwise determined by filesystem access.
+This new class can be used to access information about the filesystem in a cached way. Currently it allows to ask for both file and directory timestamps. Information about timestamps is transferred from the watcher if possible, otherwise determined by filesystem access.
 
-In future asking for file content hashes will be added and modules can check validity with file content instead of file hashes.
+In the future, asking for file content hashes will be added and modules will be able to check validity with file contents instead of file hashes.
 
-MIGRATION: Instead of using `file/contextTimestamps` use the API of `compilation.fileSystemInfo` instead.
+MIGRATION: Instead of using `file/contextTimestamps` use the `compilation.fileSystemInfo` API instead.
 
 ## Hot Module Replacement
 
-HMR runtime has be refactored to Runtime Modules. `HotUpdateChunkTemplate` has been merged into `ChunkTemplate`. ChunkTemplates and plugins should now also handle `HotUpdateChunk`s.
+HMR runtime has be refactored to Runtime Modules. `HotUpdateChunkTemplate` has been merged into `ChunkTemplate`. ChunkTemplates and plugins should also handle `HotUpdateChunk`s now.
 
-The javascript part of HMR runtime has be separated from the core HMR runtime. Other module types can now also handle HMR in a own way. In future this allows i. e. HMR for the mini-css-extract-plugin or for WASM modules.
+The javascript part of HMR runtime has been separated from the core HMR runtime. Other module types can now also handle HMR in their own way. In the future, this will allow i. e. HMR for the mini-css-extract-plugin or for WASM modules.
 
-MIGRATION: As this is a new functionality and wasn't possible before, there is nothing to migrate.
+MIGRATION: As this is a newly intorduced functionality, there is nothing to migrate.
 
 ## Work Queues
 
-webpack used to handle module processing with functions calling functions and a `semaphore` which limits parallelism. The `Compilation.semaphore` has been removed and async queues now handle work queuing and processing. Each step has a separate queue:
+webpack used to handle module processing by functions calling functions, and a `semaphore` which limits parallelism. The `Compilation.semaphore` has been removed and async queues now handle work queuing and processing. Each step has a separate queue:
 
-- `Compilation.factorizeQueue`: calling the module factory for a group of dependencies
-- `Compilation.addModuleQueue`: adding the module to the compilation (may restores module from cache)
-- `Compilation.buildQueue`: building the module if neccessary (may stores module to cache)
-- `Compilation.rebuildQueue`: building a module again if manually triggered
-- `Compilation.processDependenciesQueue`: processing dependencies of a module
+- `Compilation.factorizeQueue`: calling the module factory for a group of dependencies.
+- `Compilation.addModuleQueue`: adding the module to the compilation queue (may restore module from cache).
+- `Compilation.buildQueue`: building the module if neccessary (may stores module to cache).
+- `Compilation.rebuildQueue`: building a module again if manually triggered.
+- `Compilation.processDependenciesQueue`: processing dependencies of a module.
 
 These queues have some hooks to watch and intercept job processing.
 
-In future multiple compilers may work together and job coordination can be done by intercepting these queues.
+In the future, multiple compilers may work together and job orchestration can be done by intercepting these queues.
 
-MIGRATION: As this is a new functionality and wasn't possible before, there is nothing to migrate.
+MIGRATION: As this is a newly intorduced functionality, there is nothing to migrate.
 
 ## Module and Chunk Graph
 
-webpack used to store the resolve module in the dependency and used to store the contained modules in the chunk. This is no longer the case. All information about how modules are connected in the module graph are now stored in a ModuleGraph class. All information about how module are connected with chunks are stored in the ChunkGraph class. Information which depend on i. e. the chunk graph is also stored in the related class.
+webpack used to store a resolved module in the dependency, and store the contained modules in the chunk. This is no longer the case. All information about how modules are connected in the module graph are now stored in a ModuleGraph class. All information about how modules are connected with chunks are now stored in the ChunkGraph class. Information which depends on i. e. the chunk graph, is also stored in the related class.
 
-This means the following information about modules have been moved:
+That means the following information about modules has been moved:
 
 - Module connections -> ModuleGraph
 - Module issuer -> ModuleGraph
-- Module optimization bailout -> ModuleGraph (TODO check if it should ChunkGraph instead)
+- Module optimization bailout -> ModuleGraph (TODO: check if it should ChunkGraph instead)
 - Module usedExports -> ModuleGraph
 - Module pre order index -> ModuleGraph
 - Module post order index -> ModuleGraph
@@ -312,21 +312,21 @@ This means the following information about modules have been moved:
 - Module is runtime module in chunk -> ChunkGraph
 - Chunk runtime requirements -> ChunkGraph
 
-webpack used disconnect modules from the graph when restored from cache. This is no longer necessary. Module store no info about the graph and can technically used in multiple graphs. This makes caching easier.
+webpack used to disconnect modules from the graph when restored from cache. This is no longer necessary. A Module stores no info about the graph and can technically used in multiple graphs. This makes caching easier.
 
-There is a compat-layer for most of these changes which prints a deprecation warning when used.
+There is a compat-layer for most of these changes, which prints a deprecation warning when used.
 
 MIGRATION: Use the new APIs on ModuleGraph and ChunkGraph
 
-## Init fragments
+## Init Fragments
 
-DependenciesBlockVariables has been removed in favor of InitFragments. DependencyTemplates can now add InitFragments to inject code to the top of the module source. InitFragments allow deduplication.
+`DependenciesBlockVariables` has been removed in favor of InitFragments. `DependencyTemplates` can now add `InitFragments` to inject code to the top of the module's source. `InitFragments` allows deduplication.
 
-MIGRATION: Use InitFragments instead of inserting something at a negative index into the source.
+MIGRATION: Use `InitFragments` instead of inserting something at a negative index into the source.
 
-## Module source types
+## Module Source Types
 
-Modules now have to tell which source types they support via `Module.getSourceTypes()`. Depending on that different plugins call `source()` with this types. i. e. for source type `javascript` the `JavascriptModulesPlugin` embed the source code into the bundle. Source type `webassembly` will make the `WebAssemblyModulesPlugin` emit a wasm file. Custom source types are possible, i. e. the mini-css-extract-plugin will probably use the source type `stylesheet` to embed the source code into the css file.
+Modules now have to define which source types they support via `Module.getSourceTypes()`. Depending on that, different plugins call `source()` with these types. i. e. for source type `javascript` the `JavascriptModulesPlugin` embeds the source code into the bundle. Source type `webassembly` will make the `WebAssemblyModulesPlugin` emit a wasm file. Custom source types are also supported, i. e. the mini-css-extract-plugin will probably use the source type `stylesheet` to embed the source code into a css file.
 
 There is no relationship between module type and source type. i. e. module type `json` also uses source type `javascript` and module type `webassembly/experimental` uses source types `javascript` and `webassembly`.
 
@@ -334,39 +334,39 @@ MIGRATION: Custom modules need to implement these new interface methods.
 
 ## Extensible Stats
 
-Stats preset, default, json and toString are now baked by a plugin system. Converted the current Stats into plugins.
+Stats `preset`, `default`, `json` and `toString` are now baked in by a plugin system. Converted the current Stats into plugins.
 
-MIGRATION: Instead of replacing the whole stats functionality you can now customize it. Extra information can be now added to the stats json instead of writing a separate file.
+MIGRATION: Instead of replacing the whole Stats functionality, you can now customize it. Extra information can now be added to the stats json instead of writing a separate file.
 
-# Smaller changes
+# Minor Changes
 
-- Compiler.name: When generating a compiler name with absolute paths make sure to separate them which `|` or `!` from other parts of the name.
-  - Using space a separator is now deprecated. (Paths could contain spaces)
+- Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
+  - Using space as a separator is now deprecated. (Paths could contain spaces)
   - Hint: `|` is replaced with space in Stats string output.
-- top-level return is now allowed in non-ESM modules
-- SystemPlugin now disabled by default
-  - MIGRATION: Avoid using it as the spec has been removed, but you can reeable it with `Rule.parser.system: true`
-- ModuleConcatenationPlugin: concatenation is no longer prevented by DependencyVariables as they has been removed
+- top-level return is now allowed in non-ESM modules.
+- SystemPlugin is now disabled by default.
+  - MIGRATION: Avoid using it as the spec has been removed. You can re-enable it with `Rule.parser.system: true`
+- ModuleConcatenationPlugin: concatenation is no longer prevented by `DependencyVariables` as they have been removed
   - This means it can now concatenate in cases of `module`, `global`, `process` or the ProvidePlugin
-- `exec` removed from loader context
+- `exec` removed from the loader context
   - MIGRATION: This can be implemented in the loader itself
-- Stats.presetToOptions removed
+- `Stats.presetToOptions` removed
   - MIGRATION: Use `compilation.createStatsOptions` instead
 - SingleEntryPlugin and SingleEntryDependency removed
-  - MIGRATION: use `EntryPlugin` and `EntryDependency`
+  - MIGRATION: use EntryPlugin and EntryDependency
 - Chunks can now have multiple entry modules
 - ExtendedAPIPlugin removed
-  - MIGRATION: No longer needed, `__webpack_hash__` and `__webpack_chunkname__` can always be used and runtime code is injected as needed
-- ProgressPlugin `entries` option now defaults to on
+  - MIGRATION: No longer needed, `__webpack_hash__` and `__webpack_chunkname__` can always be used and runtime code is injected where needed.
+- ProgressPlugin `entries` option now defaults to `on`
 - ProgressPlugin no longer uses tapable context for `reportProgress`
   - MIGRATION: Use `ProgressPlugin.getReporter(compiler)` instead
 - ProvidePlugin is now re-enabled for `.mjs` files
-- Stats json `errors` and `warnings` now no longer contain strings but objects with information splitted into properties.
+- Stats json `errors` and `warnings` no longer contain strings but objects with information splitted into properties.
   - MIGRATION: Access the information on the properties. i. e. `message`
 - Compilation.hooks.normalModuleLoader is deprecated
   - MIGRATION: Use `NormalModule.getCompilationHooks(compilation).loader` instead
 
-# Unimportant smaller changes
+# Other Minor Changes
 
 - removed buildin directory and replaced buildins with runtime modules
 - Removed deprecated features
@@ -437,7 +437,7 @@ MIGRATION: Instead of replacing the whole stats functionality you can now custom
   - MIGRATION: Use `Compiliation.hooks.beforeModuleHash` instead
 - Compilation.applyModuleIds removed
 - Compilation.applyChunkIds removed
-- Compiler.root added which points to the root compiler
+- Compiler.root added, which points to the root compiler
   - it can be used to cache data in WeakMaps instead of statically scoped
 - Source.emitted is no longer set by the Compiler
   - MIGRATION: Check `Compilation.emittedAssets` instead
@@ -534,8 +534,8 @@ MIGRATION: Instead of replacing the whole stats functionality you can now custom
   - MIGRATION: Use `setId` instead
 - acorn 5 -> 6
 - Testing
-  - HotTestCases now run for multiple target `async-node` `node` `web` `webworker`
-  - TestCases now also run for filesystem caching with `store: "instant"` and `store: "pack"`
-  - TestCases now also run for deterministic module ids
+  - HotTestCases now runs for multiple targets `async-node` `node` `web` `webworker`
+  - TestCases now also runs for filesystem caching with `store: "instant"` and `store: "pack"`
+  - TestCases now also runs for deterministic module ids
 - Tooling added to order the imports (checked in CI)
-- chunk name mapping in runtime now no longer contains entries when chunk name equals chunk id
+- Chunk name mapping in runtime no longer contains entries when chunk name equals chunk id
