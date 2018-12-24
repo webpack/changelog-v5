@@ -336,7 +336,7 @@ Stats `preset`, `default`, `json` and `toString` are now baked in by a plugin sy
 
 MIGRATION: Instead of replacing the whole Stats functionality, you can now customize it. Extra information can now be added to the stats json instead of writing a separate file.
 
-# Smaller Changes
+# Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
   - Using space as a separator is now deprecated. (Paths could contain spaces)
