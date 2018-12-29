@@ -108,6 +108,14 @@ Update the `cache.version` when:
 
 HINT: If you want to automate this, it could be a good idea to hash `webpack.config.js` and `node_modules/.yarn-integrity` and pass them to `cache.version`. That's probably how we will do it internally.
 
+## SplitChunks for single-file-targets
+
+Targets that only allow to startup a single file (like node, WebWorker, electron main) now support loading the dependent pieces required for bootstrap automatically by the runtime.
+
+This allows to use `splitChunks` for these targets with `chunks: "all"`.
+
+(since alpha.3)
+
 ## Minimum Node.js Version
 
 The minimum supported node.js version has increased from 6 to 8.
