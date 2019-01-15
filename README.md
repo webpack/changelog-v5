@@ -203,7 +203,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.nodeEnv` defaults to `false` in `none` mode
 - `resolve(Loader).cache` defaults to `true` when `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
-- `node.global` defaults to `false`
+- ~`node.global` defaults to `false`~ (since alpha.4 removed)
 
 # Major Internal Changes
 
@@ -308,6 +308,7 @@ That means the following information about modules has been moved:
 - Module issuer -> ModuleGraph
 - Module optimization bailout -> ModuleGraph (TODO: check if it should ChunkGraph instead)
 - Module usedExports -> ModuleGraph
+- Module providedExports -> ModuleGraph (since alpha.4)
 - Module pre order index -> ModuleGraph
 - Module post order index -> ModuleGraph
 - Module depth -> ModuleGraph
@@ -346,6 +347,14 @@ Stats `preset`, `default`, `json` and `toString` are now baked in by a plugin sy
 
 MIGRATION: Instead of replacing the whole Stats functionality, you can now customize it. Extra information can now be added to the stats json instead of writing a separate file.
 
+## New Watching
+
+The watcher used by webpack was refactored. It was previously using `chokidar` and the native dependency `fsevents` (only on OSX). Now it's only based on native node.js `fs`. This means there is no native dependency left in webpack.
+
+It also captures more information about the filesystem while watching. It now captures mtimes and watch event times, as well as information about missing files. For this the `WatchFileSystem` API changed a little bit. While on it we also converted Arrays to Sets and Objects to Maps.
+
+(since alpha.5)
+
 # Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
@@ -373,6 +382,11 @@ MIGRATION: Instead of replacing the whole Stats functionality, you can now custo
   - MIGRATION: Access the information on the properties. i. e. `message`
 - Compilation.hooks.normalModuleLoader is deprecated
   - MIGRATION: Use `NormalModule.getCompilationHooks(compilation).loader` instead
+- Changed hooks in `NormalModuleFactory` from waterfall to bailing, changed and renamed hooks that return waterfall functions (since alpha.5)
+- Removed `compilationParams.compilationDependencies` (since alpha.5)
+  - Plugins can add dependencies to the compilation by adding to `compilation.file/context/missingDependencies`
+- `stats.assetsByChunkName[x]` is now always an array (since alpha.5)
+
 
 # Other Minor Changes
 
