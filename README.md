@@ -561,3 +561,6 @@ It also captures more information about the filesystem while watching. It now ca
   - TestCases now also runs for deterministic module ids
 - Tooling added to order the imports (checked in CI)
 - Chunk name mapping in runtime no longer contains entries when chunk name equals chunk id
+- add `resolvedModuleId` `resolvedModuleIdentifier` and `resolvedModule` to reasons in Stats which point to the module before optimizations like scope hoisting (since alpha.6)
+- show `resolvedModule` in Stats toString output (since alpha.6)
+- loader-runner was upgraded: https://github.com/webpack/loader-runner/releases/tag/v3.0.0 (since alpha.6)
