@@ -43,7 +43,7 @@ New algorithms were added for long term caching. These are enabled by default in
 
 `chunkIds: "deterministic", moduleIds: "deterministic"`
 
-The algorithms assign short (3 or 4 charachter) numeric IDs to modules and chunks in a deterministic way.
+The algorithms assign short (3 or 4 character) numeric IDs to modules and chunks in a deterministic way.
 This is a trade-off between bundle size and long term caching.
 
 MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
