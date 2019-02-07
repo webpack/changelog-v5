@@ -166,6 +166,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.splitChunks.cacheGroups[].idHint` added: Gives a hint how the named chunk id should be chosen
 - `optimization.splitChunks` `automaticNamePrefix` removed
   - MIGRATION: Use `idHint` instead
+- `optimization.mangleExports` added (since alpha.10)
 - `output.devtoolLineToLine` removed
   - MIGRATION: No replacement
 - `output.hotUpdateChunkFilename: Function` is now forbidden: It never worked anyway.
@@ -363,6 +364,19 @@ It also captures more information about the filesystem while watching. It now ca
 webpack now replaces the Sources in `Compilation.assets` with `SizeOnlySource` variants to reduce memory usage.
 
 (since alpha.8)
+
+## ExportsInfo
+
+The way how information about exports of modules are stored has been refactored. The ModuleGraph now features a `ExportsInfo` for each `Module`, which stores information per export. It also stores information about unknown exports and if the module is used in side-effect-only way.
+
+For each export the following information is stored:
+
+* Is the export used? yes, no, not statically known, not determined. (see also `optimization.usedExports`)
+* Is the export provided? yes, no, not statically known, not determined. (see also `optimization.providedExports`)
+* Can be export name be renamed? yes, no, not determined.
+* The new name, if the export has been renamed. (see also `optimization.mangleExports`)
+
+(since alpha.10)
 
 # Minor Changes
 
