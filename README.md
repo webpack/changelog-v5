@@ -135,6 +135,8 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `cache.store`
   - `cache.loglevel`
   - `cache.hashAlgorithm`
+  - `cache.idleTimeout` (since alpha.8)
+  - `cache.idleTimeoutForIntialStore` (since alpha.8)
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
 - Automatic polyfills for native node.js modules were removed
@@ -204,6 +206,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `resolve(Loader).cache` defaults to `true` when `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
 - ~`node.global` defaults to `false`~ (since alpha.4 removed)
+- `resolveLoader.extensions` remove `.json` (since alpha.8)
 
 # Major Internal Changes
 
@@ -354,6 +357,12 @@ The watcher used by webpack was refactored. It was previously using `chokidar` a
 It also captures more information about the filesystem while watching. It now captures mtimes and watch event times, as well as information about missing files. For this the `WatchFileSystem` API changed a little bit. While on it we also converted Arrays to Sets and Objects to Maps.
 
 (since alpha.5)
+
+## SizeOnlySource after emit
+
+webpack now replaces the Sources in `Compilation.assets` with `SizeOnlySource` variants to reduce memory usage.
+
+(since alpha.8)
 
 # Minor Changes
 
@@ -564,3 +573,6 @@ It also captures more information about the filesystem while watching. It now ca
 - add `resolvedModuleId` `resolvedModuleIdentifier` and `resolvedModule` to reasons in Stats which point to the module before optimizations like scope hoisting (since alpha.6)
 - show `resolvedModule` in Stats toString output (since alpha.6)
 - loader-runner was upgraded: https://github.com/webpack/loader-runner/releases/tag/v3.0.0 (since alpha.6)
+- `file/context/missingDependencies` in `Compilation` are no longer sorted for performance reasons (since alpha.8)
+  - Do not rely on the order
+- webpack-sources was upgraded: https://github.com/webpack/webpack-sources/releases/tag/v2.0.0-beta.0 (since alpha.8)
