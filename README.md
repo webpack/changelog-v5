@@ -166,7 +166,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.splitChunks.cacheGroups[].idHint` added: Gives a hint how the named chunk id should be chosen
 - `optimization.splitChunks` `automaticNamePrefix` removed
   - MIGRATION: Use `idHint` instead
-- `optimization.splitChunks` `filename` is no longer restricted to initial chunks
+- `optimization.splitChunks` `filename` is no longer restricted to initial chunks (since alpha.11)
 - `optimization.mangleExports` added (since alpha.10)
 - `output.devtoolLineToLine` removed
   - MIGRATION: No replacement
