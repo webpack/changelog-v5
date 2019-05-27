@@ -48,6 +48,14 @@ This is a trade-off between bundle size and long term caching.
 
 MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
 
+## Deterministic Mangled Export Names
+
+A new algorithms was added to mangling export names. It's enabled by default.
+
+It will mangle export names when possible in a deterministic way.
+
+MIGRATION: Nothing to do.
+
 ## Named Chunk IDs
 
 A new named chunk id algorithm enabled by default in development mode, gives chunks (and filenames) human-readable names.
@@ -242,9 +250,11 @@ Classes with `hooks` have their `hooks` object frozen, so adding custom hooks is
 
 MIGRATION: The recommended way to add custom hooks is using a WeakMap and a static `getXXXHooks(XXX)` (i. e. `getCompilationHook(compilation)`) method. Internal classes use the same mechanism used for custom hooks.
 
-## Tapable Base Class Removed
+## Tapable Upgrade
 
 The compat layer for webpack 3 plugins has been removed. It had already been deprecated for webpack 4.
+
+Some less used tapable APIs were removed or deprecated. (since alpha.12)
 
 MIGRATION: Use the new tapable API.
 
@@ -410,6 +420,7 @@ For each export the following information is stored:
 - Removed `compilationParams.compilationDependencies` (since alpha.5)
   - Plugins can add dependencies to the compilation by adding to `compilation.file/context/missingDependencies`
 - `stats.assetsByChunkName[x]` is now always an array (since alpha.5)
+- `__webpack_get_script_filename__` function added to get the filename of a script file (since alpha.12)
 
 
 # Other Minor Changes
@@ -591,3 +602,4 @@ For each export the following information is stored:
 - `file/context/missingDependencies` in `Compilation` are no longer sorted for performance reasons (since alpha.8)
   - Do not rely on the order
 - webpack-sources was upgraded: https://github.com/webpack/webpack-sources/releases/tag/v2.0.0-beta.0 (since alpha.8)
+- webpack-command support was removed (since alpha.12)
