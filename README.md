@@ -163,10 +163,12 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `optimization.namedModules` removed (`NamedModulesPlugin` too)
   - `optimization.occurrenceOrder` removed
   - MIGRATION: Use `chunkIds` and `moduleIds`
+- `optimization.splitChunks` `minRemainingSize` was added (since alpha.13)
 - `optimization.splitChunks` sizes can now be objects with a size per source type
   - `minSize`
+  - `minRemainingSize`
   - `maxSize`
-  - `maxAsyncSize`
+  - `maxAsyncSize` (since alpha.13)
   - `maxInitialSize`
 - `optimization.splitChunks` `maxAsyncSize` and `maxInitialSize` added next to `maxSize`: allows to specify different max sizes for initial and async chunks
 - `optimization.splitChunks` `name: true` removed: Automatic names are no longer supported
@@ -180,6 +182,8 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: No replacement
 - `output.hotUpdateChunkFilename: Function` is now forbidden: It never worked anyway.
 - `output.hotUpdateMainFilename: Function` is now forbidden: It never worked anyway.
+- `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
+- `module.rules` `query` and `loaders` were removed (since alpha.13)
 - `stats.chunkRootModules` added: Show root modules for chunks
 - `stats.orphanModules` added: Show modules which are not emitted
 - `stats.runtime` added: Show runtime modules
@@ -213,6 +217,8 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.moduleIds` defaults to `deterministic` in production mode, instead of `size`
 - `optimization.chunkIds` defaults to `deterministic` in production mode, instead of `total-size`
 - `optimization.nodeEnv` defaults to `false` in `none` mode
+- `optimization.splitChunks` `minRemainingSize` defaults to `minSize` (since alpha.13)
+  - This will lead to less splitted chunks created in cases where the remaining part would be too small
 - `resolve(Loader).cache` defaults to `true` when `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
 - ~`node.global` defaults to `false`~ (since alpha.4 removed)
@@ -421,6 +427,9 @@ For each export the following information is stored:
   - Plugins can add dependencies to the compilation by adding to `compilation.file/context/missingDependencies`
 - `stats.assetsByChunkName[x]` is now always an array (since alpha.5)
 - `__webpack_get_script_filename__` function added to get the filename of a script file (since alpha.12)
+- `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve` (since alpha.13)
+- `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch` (since alpha.13)
+  - This may have changed semenatics in edge-cases
 
 
 # Other Minor Changes
