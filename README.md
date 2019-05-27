@@ -122,7 +122,15 @@ Targets that only allow to startup a single file (like node, WebWorker, electron
 
 This allows to use `splitChunks` for these targets with `chunks: "all"`.
 
+Note that since chunk loading is async, this makes initial evaluation async too. This can be an issue when using `output.library`, since the exported value is an Promise now. Since alpha.14 this do not apply to `target: "node"` since chunk loading is sync here.
+
 (since alpha.3)
+
+## Chunks without JS
+
+Chunks that contain no JS code, will no longer generate a JS file.
+
+(since alpha.14)
 
 ## Minimum Node.js Version
 
@@ -223,6 +231,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `resolve(Loader).cacheWithContext` defaults to `false`
 - ~`node.global` defaults to `false`~ (since alpha.4 removed)
 - `resolveLoader.extensions` remove `.json` (since alpha.8)
+- `node.global` `node.__filename` and `node.__dirname` defaults to `false` in node-`target`s (since alpha.14)
 
 # Major Internal Changes
 
