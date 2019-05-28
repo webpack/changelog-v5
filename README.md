@@ -409,7 +409,6 @@ For each export the following information is stored:
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
   - Using space as a separator is now deprecated. (Paths could contain spaces)
   - Hint: `|` is replaced with space in Stats string output.
-- top-level return is now allowed in non-ESM modules.
 - SystemPlugin is now disabled by default.
   - MIGRATION: Avoid using it as the spec has been removed. You can re-enable it with `Rule.parser.system: true`
 - ModuleConcatenationPlugin: concatenation is no longer prevented by `DependencyVariables` as they have been removed
