@@ -173,7 +173,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: Use `chunkIds` and `moduleIds`
 - `optimization.splitChunks` `test` no longer matches chunk name
   - MIGRATION: Use a test function
-    `(module, { chunkGraph }) => chunkGraph.getModuleChunks(chunk).some(chunk => chunk.name === "name")`
+    `(module, { chunkGraph }) => chunkGraph.getModuleChunks(module).some(chunk => chunk.name === "name")`
 - `optimization.splitChunks` `minRemainingSize` was added (since alpha.13)
 - `optimization.splitChunks` sizes can now be objects with a size per source type
   - `minSize`
