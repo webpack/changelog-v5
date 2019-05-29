@@ -171,6 +171,9 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `optimization.namedModules` removed (`NamedModulesPlugin` too)
   - `optimization.occurrenceOrder` removed
   - MIGRATION: Use `chunkIds` and `moduleIds`
+- `optimization.splitChunks` `test` no longer matches chunk name
+  - MIGRATION: Use a test function
+    `(module, { chunkGraph }) => chunkGraph.getModuleChunks(chunk).some(chunk => chunk.name === "name")`
 - `optimization.splitChunks` `minRemainingSize` was added (since alpha.13)
 - `optimization.splitChunks` sizes can now be objects with a size per source type
   - `minSize`
