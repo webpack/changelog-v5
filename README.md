@@ -73,6 +73,8 @@ MIGRATION: If you dislike the filenames being changed in development, you can pa
 
 JSON modules now align with the spec and emit a warning when using a non-default export.
 
+MIGRATION: Use the default export.
+
 ## Nested tree-shaking
 
 webpack is now able to track access to nested properties of exports. This can improve Tree Shaking (Unused export elimination and export mangling) when reexporting namespace objects.
@@ -92,6 +94,8 @@ console.log(module.inner.a);
 ```
 
 In this example the export `b` can be removed in production mode.
+
+(since alpha.15)
 
 ## Compiler Idle and Close
 
@@ -150,7 +154,7 @@ Note that since chunk loading is async, this makes initial evaluation async too.
 
 (since alpha.3)
 
-## New Resolver major version
+## Updated Resolver
 
 `enhanced-resolve` was updated to v5. This has the following improvements:
 
@@ -229,7 +233,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `node.process` removed
   - `node.*` (node.js native module) removed
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
-- `output.filename` can now be a function
+- `output.filename` can now be a function (since alpha.17)
 - `output.assetModuleFilename` added (since alpha.19)
 - `resolve.alias` values can be arrays or `false` now
 - `optimization.chunkIds: "deterministic"` added
@@ -246,7 +250,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: Use a test function
     `(module, { chunkGraph }) => chunkGraph.getModuleChunks(module).some(chunk => chunk.name === "name")`
 - `optimization.splitChunks` `minRemainingSize` was added (since alpha.13)
-- `optimization.splitChunks` `filename` can now be a function
+- `optimization.splitChunks` `filename` can now be a function (since alpha.17)
 - `optimization.splitChunks` sizes can now be objects with a size per source type
   - `minSize`
   - `minRemainingSize`
@@ -581,6 +585,8 @@ For each export the following information is stored:
 - Compilation.hooks.optimizeExtractedChunks removed
 - Compilation.hooks.optimizeExtractedChunksAdvanced removed
 - Compilation.hooks.afterOptimizeExtractedChunks removed
+- Compilation.hooks.stillValidModule added
+- Compilation.fileDependencies, Compilation.contextDependencies and Compilation.missingDependencies are now LazySets (since alpha.20)
 - Compilation.entries removed
   - MIGRATION: Use `Compilation.entryDependencies` instead
 - Compilation.\_preparedEntrypoints removed
@@ -597,6 +603,7 @@ For each export the following information is stored:
 - Compilation.applyChunkIds removed
 - Compiler.root added, which points to the root compiler
   - it can be used to cache data in WeakMaps instead of statically scoped
+- Compiler.hooks.afterDone added
 - Source.emitted is no longer set by the Compiler
   - MIGRATION: Check `Compilation.emittedAssets` instead
 - Compiler/Compilation.compilerPath added: It's a unique name of the compiler in the compiler tree. (Unique to the root compiler scope)
@@ -677,6 +684,7 @@ For each export the following information is stored:
   - MIGRATION: Use `MultiCompiler.setDependencies` instead
 - MultiModule removed
 - MultiModuleFactory removed
+- NormalModuleFactory.fileDependencies, NormalModuleFactory.contextDependencies and NormalModuleFactory.missingDependencies are now LazySets (since alpha.20)
 - RuntimeTemplate methods now take `runtimeRequirements` arguments
 - Stats.jsonToString removed
 - Stats.filterWarnings removed
@@ -704,3 +712,4 @@ For each export the following information is stored:
   - Do not rely on the order
 - webpack-sources was upgraded: https://github.com/webpack/webpack-sources/releases/tag/v2.0.0-beta.0 (since alpha.8)
 - webpack-command support was removed (since alpha.12)
+- Use schema-utils@2 for schema validation (since alpha.20)
