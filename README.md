@@ -127,24 +127,30 @@ MIGRATION: Check which types of sizes are used in your build and configure these
 
 ## Persistent Caching
 
-There is now an experimental filesystem cache. It's opt-in and can be enabled with `cache: { type: "filesystem" }` in the configuration.
-Currently only the core feature set is ready, and when using it one should be aware of the current limitations to avoid unexpected bugs.
-**Please do not use this feature if you don't understand the limitations.**
+There is now a filesystem cache. It's opt-in and can be enabled with the following configuration:
 
-There is an automatic cache invalidation for resolving module source code and filesystem structure.
-There is **no** automatic cache invalidations for configurations and loader/plugin/core changes!
-There is an option for manual cache invalidation for configuration or build code changes (`cache.version`).
+``` js
+cache: {
+  // 1. Set cache type to filesystem
+  type: "filesystem",
+  
+  buildDependencies: {
+    // 2. Add your config as buildDependency to get cache invalidation on config change
+    config: [__filename]
+  
+    // 3. If you have other things the build depends on you can add them here
+    // Note that webpack, loaders and all modules referenced from your config are automatically added
+  }
+}
+```
 
-Do not worry, we plan on adding this, but it's not ready yet.
+Important notes:
 
-So, here is a guide to make sure you are fine:
+By default webpack assumes that the `node_modules` directory webpack is inside of is **only** modified by a package manager. Hashing and timestamping is skipped for node_modules. Instead only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `cache.managedPaths: []`
 
-Update the `cache.version` when:
+The cache will be stored into `node_modules/.cache/webpack` by default. You probably never have to delete it manually.
 
-- you upgrade your tooling dependencies (i. e. webpack, loader, plugin)
-- you change your configuration
-
-HINT: If you want to automate this, it could be a good idea to hash `webpack.config.js` and `node_modules/.yarn-integrity` and pass them to `cache.version`. That's probably how we will do it internally.
+(since alpha.20)
 
 ## SplitChunks for single-file-targets
 
