@@ -186,11 +186,17 @@ The following experiments will ship with webpack 5:
   * Using `await` on top-level makes the module an async module
 * Importing async modules with `import` (`experiments.importAsync`)
 * Importing async modules with `import await` (`experiments.importAwait`)
-* The `asset` module type which is similar to the `file-loader` (`experiments.asset`)
+* The `asset` module type which is similar to the `file-loader` (`experiments.asset`) (since alpha.19)
 
 Note that this also means `.mjs` support and WebAssembly support are now disabled by default.
 
 (since alpha.15)
+
+## Stats
+
+Stats differentiate between `files` and `auxiliaryFiles` now.
+
+(since alpha.19)
 
 ## Minimum Node.js Version
 
@@ -222,6 +228,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `node.*` (node.js native module) removed
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
 - `output.filename` can now be a function
+- `output.assetModuleFilename` added (since alpha.19)
 - `resolve.alias` values can be arrays or `false` now
 - `optimization.chunkIds: "deterministic"` added
 - `optimization.moduleIds: "deterministic"` added
@@ -285,6 +292,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `externals` when passing a function, it has now a different signature `({ context, request }, callback)`
   - MIGRATION: Change signature
 - `experiments` added (see Experiments section above)
+- `watchOptions.followSymlinks` added (since alpha.19)
 
 ## Changes to the Defaults
 
