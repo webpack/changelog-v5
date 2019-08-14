@@ -209,6 +209,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `node.process` removed
   - `node.*` (node.js native module) removed
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
+- `output.filename` can now be a function
 - `optimization.chunkIds: "deterministic"` added
 - `optimization.moduleIds: "deterministic"` added
 - `optimization.moduleIds: "hashed"` deprecated
@@ -223,6 +224,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: Use a test function
     `(module, { chunkGraph }) => chunkGraph.getModuleChunks(module).some(chunk => chunk.name === "name")`
 - `optimization.splitChunks` `minRemainingSize` was added (since alpha.13)
+- `optimization.splitChunks` `filename` can now be a function
 - `optimization.splitChunks` sizes can now be objects with a size per source type
   - `minSize`
   - `minRemainingSize`
