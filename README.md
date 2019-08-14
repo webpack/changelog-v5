@@ -150,6 +150,18 @@ Note that since chunk loading is async, this makes initial evaluation async too.
 
 (since alpha.3)
 
+## New Resolver major version
+
+`enhanced-resolve` was updated to v5. This has the following improvements:
+
+- When Yarn PnP is used, the resolver will handle it without an additional plugin
+- The resolve tracks more dependencies, like missing files
+- aliasing may have multiple alternatives
+- aliasing to `false` is possible now
+- Increased performance
+
+(since alpha.18)
+
 ## Chunks without JS
 
 Chunks that contain no JS code, will no longer generate a JS file.
@@ -210,6 +222,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `node.*` (node.js native module) removed
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
 - `output.filename` can now be a function
+- `resolve.alias` values can be arrays or `false` now
 - `optimization.chunkIds: "deterministic"` added
 - `optimization.moduleIds: "deterministic"` added
 - `optimization.moduleIds: "hashed"` deprecated
