@@ -69,6 +69,26 @@ It's possible to use `chunkIds: "named"` in production, but make sure not to acc
 
 MIGRATION: If you dislike the filenames being changed in development, you can pass `chunkIds: "natural"` in order to use the old numberic mode.
 
+## Nested tree-shaking
+
+webpack is now able to track access to nested properties of exports. This can improve Tree Shaking (Unused export elimination and export mangling) when reexporting namespace objects.
+
+``` js
+// inner.js
+export const a = 1;
+export const b = 2;
+
+// module.js
+import * as inner from "./inner";
+export { inner }
+
+// user.js
+import * as module from "./module";
+console.log(module.inner.a);
+```
+
+In this example the export `b` can be removed in production mode.
+
 ## Compiler Idle and Close
 
 Compilers now need to be closed after being used. Compilers now enter and leave idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowy stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
@@ -131,6 +151,30 @@ Note that since chunk loading is async, this makes initial evaluation async too.
 Chunks that contain no JS code, will no longer generate a JS file.
 
 (since alpha.14)
+
+## Experiments
+
+Not all features are stable from the beginning. In webpack 4 we added experimental features and noted in changelog that they are experimental, but it was not always clear from the configuration that these features are experimental.
+
+In webpack 5 there is a new `experiments` config option which allows to enabled experimental features. This makes it clear which ones are enabled/used.
+
+While webpack follows semantic versioning, it will make an exception for experimental features. Experimental features might contain breaking changes in minor webpack versions. When this happens we will add a clear note into the changelog. This will allow us to interate faster for experimental features, while also allowing us to stay longer on a major version for stable features.
+
+The following experiments will ship with webpack 5:
+
+* `.mjs` support like in webpack 4 (`experiments.mjs`)
+* Old WebAssembly support like in webpack 4 (`experiments.syncWebAssembly`)
+* New WebAssembly support acording to the [updated spec](https://github.com/WebAssembly/esm-integration) (`experiments.asyncWebAssembly`)
+  * This makes a WebAssembly module an async module
+* [Top Level Await](https://github.com/tc39/proposal-top-level-await) Stage 3 proposal (`experiments.topLevelAwait`)
+  * Using `await` on top-level makes the module an async module
+* Importing async modules with `import` (`experiments.importAsync`)
+* Importing async modules with `import await` (`experiments.importAwait`)
+* The `asset` module type which is similar to the `file-loader` (`experiments.asset`)
+
+Note that this also means `.mjs` support and WebAssembly support are now disabled by default.
+
+(since alpha.15)
 
 ## Minimum Node.js Version
 
@@ -221,6 +265,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `[ext]`
 - `externals` when passing a function, it has now a different signature `({ context, request }, callback)`
   - MIGRATION: Change signature
+- `experiments` added (see Experiments section above)
 
 ## Changes to the Defaults
 
