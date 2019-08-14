@@ -75,6 +75,8 @@ JSON modules now align with the spec and emit a warning when using a non-default
 
 MIGRATION: Use the default export.
 
+(since alpha.16)
+
 ## Nested tree-shaking
 
 webpack is now able to track access to nested properties of exports. This can improve Tree Shaking (Unused export elimination and export mangling) when reexporting namespace objects.
@@ -235,7 +237,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
 - `output.filename` can now be a function (since alpha.17)
 - `output.assetModuleFilename` added (since alpha.19)
-- `resolve.alias` values can be arrays or `false` now
+- `resolve.alias` values can be arrays or `false` now (since alpha.18)
 - `optimization.chunkIds: "deterministic"` added
 - `optimization.moduleIds: "deterministic"` added
 - `optimization.moduleIds: "hashed"` deprecated
@@ -297,7 +299,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `[ext]`
 - `externals` when passing a function, it has now a different signature `({ context, request }, callback)`
   - MIGRATION: Change signature
-- `experiments` added (see Experiments section above)
+- `experiments` added (see Experiments section above, since alpha.19)
 - `watchOptions.followSymlinks` added (since alpha.19)
 
 ## Changes to the Defaults
@@ -372,7 +374,7 @@ MIGRATION: You cannot rely on the order of modules and chunks in the compilation
 
 - Compilation.modules is now a Set
 - Compilation.chunks is now a Set
-- Chunk.files is now a Set
+- Chunk.files is now a Set (since alpha.16)
 
 There is a compat-layer which prints deprecation warnings.
 
@@ -391,6 +393,8 @@ MIGRATION: Instead of using `file/contextTimestamps` use the `compilation.fileSy
 Next to `compiler.inputFileSystem` and `compiler.outputFileSystem` there is a new `compiler.intermediateFileSystem` for all fs actions that are not considers as input or output, like writing records, cache or profiling output.
 
 The filesystems have now the `fs` interface and do no longer demand additional methods like `join` or `mkdirp`. But if they have methods like `join` or `dirname` they are used.
+
+(since alpha.16)
 
 ## Hot Module Replacement
 
@@ -526,7 +530,7 @@ For each export the following information is stored:
 - `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve` (since alpha.13)
 - `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch` (since alpha.13)
   - This may have changed semenatics in edge-cases
-- `checkContext` was removed from `IgnorePlugin`
+- `checkContext` was removed from `IgnorePlugin` (since alpha.16)
 
 # Other Minor Changes
 
