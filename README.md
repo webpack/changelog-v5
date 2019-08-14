@@ -215,10 +215,12 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `cache.name`
   - `cache.version`
   - `cache.store`
-  - `cache.loglevel`
+  - ~`cache.loglevel`~ (removed since alpha.20)
   - `cache.hashAlgorithm`
   - `cache.idleTimeout` (since alpha.8)
   - `cache.idleTimeoutForIntialStore` (since alpha.8)
+  - `cache.managedPaths` (since alpha.20)
+  - `cache.buildDependencies` (since alpha.20)
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
 - Automatic polyfills for native node.js modules were removed
