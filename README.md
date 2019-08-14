@@ -69,6 +69,10 @@ It's possible to use `chunkIds: "named"` in production, but make sure not to acc
 
 MIGRATION: If you dislike the filenames being changed in development, you can pass `chunkIds: "natural"` in order to use the old numberic mode.
 
+## JSON modules
+
+JSON modules now align with the spec and emit a warning when using a non-default export.
+
 ## Nested tree-shaking
 
 webpack is now able to track access to nested properties of exports. This can improve Tree Shaking (Unused export elimination and export mangling) when reexporting namespace objects.
@@ -339,6 +343,7 @@ MIGRATION: You cannot rely on the order of modules and chunks in the compilation
 
 - Compilation.modules is now a Set
 - Compilation.chunks is now a Set
+- Chunk.files is now a Set
 
 There is a compat-layer which prints deprecation warnings.
 
@@ -351,6 +356,12 @@ This new class can be used to access information about the filesystem in a cache
 In the future, asking for file content hashes will be added and modules will be able to check validity with file contents instead of file hashes.
 
 MIGRATION: Instead of using `file/contextTimestamps` use the `compilation.fileSystemInfo` API instead.
+
+## Filesystems
+
+Next to `compiler.inputFileSystem` and `compiler.outputFileSystem` there is a new `compiler.intermediateFileSystem` for all fs actions that are not considers as input or output, like writing records, cache or profiling output.
+
+The filesystems have now the `fs` interface and do no longer demand additional methods like `join` or `mkdirp`. But if they have methods like `join` or `dirname` they are used.
 
 ## Hot Module Replacement
 
@@ -486,7 +497,7 @@ For each export the following information is stored:
 - `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve` (since alpha.13)
 - `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch` (since alpha.13)
   - This may have changed semenatics in edge-cases
-
+- `checkContext` was removed from `IgnorePlugin`
 
 # Other Minor Changes
 
