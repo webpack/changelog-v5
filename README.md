@@ -307,6 +307,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: Change signature
 - `experiments` added (see Experiments section above, since alpha.19)
 - `watchOptions.followSymlinks` added (since alpha.19)
+- `output.ecmaVersion` added (since alpha.23, defaults to `2015`)
 
 ## Changes to the Defaults
 
