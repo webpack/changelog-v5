@@ -26,7 +26,7 @@ Check migration guide when upgrading plugins across major version.
 
 ## Make sure your build has no errors or warnings
 
-There might be need errors or warnings because of the upgraded versions of webpack, cli, plugins and loaders.
+There might be new errors or warnings because of the upgraded versions of webpack, cli, plugins and loaders.
 
 ## Check for deprecation warnings during build
 
