@@ -146,11 +146,16 @@ cache: {
 
 Important notes:
 
-By default webpack assumes that the `node_modules` directory webpack is inside of is **only** modified by a package manager. Hashing and timestamping is skipped for node_modules. Instead only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `cache.managedPaths: []`
+By default webpack assumes that the `node_modules` directory, which webpack is inside of, is **only** modified by a package manager. Hashing and timestamping is skipped for node_modules. Instead only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `cache.managedPaths: []`
 
-The cache will be stored into `node_modules/.cache/webpack` by default. You probably never have to delete it manually.
+The cache will be stored into `node_modules/.cache/webpack` (when using node_modules) resp. `.pnp/.cache/webpack` (when using Yarn PnP, since alpha.21) by default. You probably never have to delete it manually.
 
 (since alpha.20)
+
+When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `cache.immutablePaths: []`
+
+(since alpha.21)
+
 
 ## SplitChunks for single-file-targets
 
@@ -232,6 +237,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `cache.idleTimeout` (since alpha.8)
   - `cache.idleTimeoutForIntialStore` (since alpha.8)
   - `cache.managedPaths` (since alpha.20)
+  - `cache.immutablePaths` (since alpha.21)
   - `cache.buildDependencies` (since alpha.20)
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
@@ -537,6 +543,7 @@ For each export the following information is stored:
 - `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch` (since alpha.13)
   - This may have changed semenatics in edge-cases
 - `checkContext` was removed from `IgnorePlugin` (since alpha.16)
+- New `__webpack_exports_info__` API allows export usage introspection (since alpha.21)
 
 # Other Minor Changes
 
@@ -708,7 +715,7 @@ For each export the following information is stored:
 - DependencyReference now takes a function to a module instead of a Module
 - HarmonyImportSpecifierDependency.redirectedId removed
   - MIGRATION: Use `setId` instead
-- acorn 5 -> 6
+- acorn 5 -> 7 (since alpha.21)
 - Testing
   - HotTestCases now runs for multiple targets `async-node` `node` `web` `webworker`
   - TestCases now also runs for filesystem caching with `store: "instant"` and `store: "pack"`
