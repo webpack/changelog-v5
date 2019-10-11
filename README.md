@@ -268,6 +268,10 @@ Note that this also means `.mjs` support and WebAssembly support are now disable
 
 ## Stats
 
+Chunk relations are hidden by default now. This can be toggled with `stats.chunkRelations`.
+
+(since alpha.1)
+
 Stats differentiate between `files` and `auxiliaryFiles` now.
 
 (since alpha.19)
