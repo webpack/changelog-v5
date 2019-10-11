@@ -10,6 +10,10 @@ This release focus on the following:
 - We try to cleanup internal structures that were left in a weird state, while implementing features in v4 without introducing any breaking changes.
 - We try to prepare for future features by introducing breaking changes now, allowing us to stay on v5 for as long as possible.
 
+# Migration Guide
+
+=> [see here for a migration guide](https://github.com/webpack/changelog-v5/blob/master/MIGRATION%20GUIDE.md) <=
+
 # Major Changes
 
 ## Removed Deprecated Items
