@@ -134,7 +134,7 @@ The following symbols can be analysed:
 * `export default` with or variable declarations with
   * function expressions
   * class expressions
-  * `/*#__PURE__*/ expressions
+  * `/*#__PURE__*/` expressions
   * local variables
   * imported bindings
 
