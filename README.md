@@ -605,6 +605,7 @@ webpack merges multiple export getters into a single runtime function call: `r.d
   - This may have changed semenatics in edge-cases
 - `checkContext` was removed from `IgnorePlugin` (since alpha.16)
 - New `__webpack_exports_info__` API allows export usage introspection (since alpha.21)
+- SourceMapDevToolPlugin applies to non-chunk assets too now (since alpha.27)
 
 # Other Minor Changes
 
@@ -791,3 +792,4 @@ webpack merges multiple export getters into a single runtime function call: `r.d
 - webpack-sources was upgraded: https://github.com/webpack/webpack-sources/releases/tag/v2.0.0-beta.0 (since alpha.8)
 - webpack-command support was removed (since alpha.12)
 - Use schema-utils@2 for schema validation (since alpha.20)
+- `Compiler.assetEmitted` has a improved second argument with more information (since alpha.27)
