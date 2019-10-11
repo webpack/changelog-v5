@@ -162,6 +162,8 @@ Choosing `output.ecmaVersion: 2015` will generate shorter code using arrow funct
 
 (since alpha.23)
 
+The default minimizing in production mode also used this `ecmaVersion` option to generate smaller code. (since alpha.31)
+
 ## SplitChunks and Module Sizes
 
 Modules now express size in a better way than displaying a single number. Also, there are now different types of sizes.
@@ -257,6 +259,8 @@ The following experiments will ship with webpack 5:
 * Importing async modules with `import` (`experiments.importAsync`)
 * Importing async modules with `import await` (`experiments.importAwait`)
 * The `asset` module type which is similar to the `file-loader` (`experiments.asset`) (since alpha.19)
+* Emitting bundle as module (`experiments.outputModule`) (since alpha.31)
+  * This removed the wrapper IIFE from the bundle, enforces strict mode, lazy loads via `<script type="module">` and minimized in module mode
 
 Note that this also means `.mjs` support and WebAssembly support are now disabled by default.
 
@@ -267,6 +271,18 @@ Note that this also means `.mjs` support and WebAssembly support are now disable
 Stats differentiate between `files` and `auxiliaryFiles` now.
 
 (since alpha.19)
+
+Stats hides module and chunk ids by default now. This can be toggled with `stats.ids`.
+
+The list of all modules is sorted by distance to entrypoint now. This can be changed with `stats.modulesSort`.
+
+The list of chunk modules resp. chunk root modules is sorted by module name now. This can be changed with `stats.chunkModulesSort` resp. `stats.chunkRootModulesSort`.
+
+The list of nested modules in concatenated modules is sorted topologicial now. This can be changed with `stats.nestedModulesSort`.
+
+Chunks and Assets show chunk id hints now.
+
+(since alpha.31)
 
 ## Minimum Node.js Version
 
@@ -387,13 +403,15 @@ The following changes are only relavant for plugin authors:
 
 ## Runtime Modules
 
-A large part of the runtime code was moved into the so called "runtime modules". These special modules are in-charge of adding runtime code. They can be added in to any chunk, but are currently always added to the runtime chunk. "Runtime Requirements" control which runtime modules are added to the bundle. This ensures that only runtime code that is used is added to the bundle. In the future, runtime modules could also added to an on-demand-loaded chunk, to load runtime code when needed.
+A large part of the runtime code was moved into the so called "runtime modules". These special modules are in-charge of adding runtime code. They can be added in to any chunk, but are currently always added to the runtime chunk. "Runtime Requirements" control which runtime modules (or core runtime parts) are added to the bundle. This ensures that only runtime code that is used is added to the bundle. In the future, runtime modules could also added to an on-demand-loaded chunk, to load runtime code when needed.
 
-The core runtime is now very small and only includes the `__webpack_require__` function, module factories and the module instance cache. In the future, an alternative code runtime can be used to avoid wrapping the bundle in a IIFE and allow ESM style exports. This will allow ESM as target.
+In most cases the core runtime allows to inline the entry module instead of calling it with `__webpack_require__`. If there is no other module in the bundle, no `__webpack_require__` is needed at all. This combines well with Module Concatenation where multiple modules are concatenated into a single module.
 
-As some responsibilities from Main and ChunkTemplate were removed, several associated hooks were removed as well.
+In the best case no runtime code is needed at all.
 
 MIGRATION: If you are injecting runtime code into the webpack runtime in a plugin, consider using RuntimeModules instead.
+
+(since alpha.31)
 
 ## Serialization
 
@@ -426,6 +444,20 @@ MIGRATION: Use the new tapable API.
 For several steps in the sealing process, there had been multiple hooks for different stages. i. e. `optimizeDependenciesBasic` `optimizeDependencies` and `optimizeDependenciesAdvanced`. These have been removed in favor of a single hook which can be used with a `stage` option. See `OptimizationStages` for possible stage values.
 
 MIGRATION: Hook into the remaining hook instead. You may add a `stage` option.
+
+## Main/Chunk/ModuleTemplate deprecation
+
+Bundle templating has been refactored. MainTemplate/ChunkTemplate/ModuleTemplate were deprecated and the JavascriptModulesPlugin takes care of JS templating now.
+
+Before that refactoring JS output was handled by Main/ChunkTemplate while other output (i. e. WASM, CSS) was handled by plugins. This looks like JS is first class, while other output is second class. The refactoring changes that and all output is handled by their plugins.
+
+It's still possible to hook into parts of the templating. The hooks are in JavascriptModulesPlugin instead of Main/ChunkTemplate now. (Yes plugins can have hooks too. I call them attached hooks.)
+
+There is a compat-layer, so Main/Chunk/ModuleTemplate still exist, but only delegate tap calls to the new hook locations.
+
+MIGRATION: Follow the advises in the deprecation messages. Mostly pointing to hooks at different locations.
+
+(since alpha.31)
 
 ## Order and IDs
 
@@ -563,6 +595,16 @@ For each export the following information is stored:
 
 (since alpha.10)
 
+## Code Generation Phase
+
+The Compilation features Code Generation as separate compilation phase now. It no longer runs hidden in `Module.source()` or `Module.getRuntimeRequirements()`.
+
+This should make the flow much cleaner. It also allows to report progress for this phase and makes Code Generation more visible when profiling.
+
+MIGRATION: `Module.source()` and `Module.getRuntimeRequirements()` are deprecated now. Use `Module.codeGeneration()` instead.
+
+(since alpha.31)
+
 ## Improved Code Generation
 
 webpack detects when ASI happens and generates shorter code when no semicolons are inserted. `Object(...)` -> `(0, ...)` (since alpha.22)
@@ -588,6 +630,7 @@ webpack merges multiple export getters into a single runtime function call: `r.d
 - ExtendedAPIPlugin removed
   - MIGRATION: No longer needed, `__webpack_hash__` and `__webpack_chunkname__` can always be used and runtime code is injected where needed.
 - ProgressPlugin `entries` option now defaults to `on`
+- ProgressPlugin `activeModules` option now defaults to `off` (since alpha.31)
 - ProgressPlugin no longer uses tapable context for `reportProgress`
   - MIGRATION: Use `ProgressPlugin.getReporter(compiler)` instead
 - ProvidePlugin is now re-enabled for `.mjs` files
