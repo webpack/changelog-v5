@@ -598,6 +598,7 @@ webpack merges multiple export getters into a single runtime function call: `r.d
 - Changed hooks in `NormalModuleFactory` from waterfall to bailing, changed and renamed hooks that return waterfall functions (since alpha.5)
 - Removed `compilationParams.compilationDependencies` (since alpha.5)
   - Plugins can add dependencies to the compilation by adding to `compilation.file/context/missingDependencies`
+  - Compat layer will delegate `compilationDependencies.add` to `fileDependencies.add` (since alpha.30)
 - `stats.assetsByChunkName[x]` is now always an array (since alpha.5)
 - `__webpack_get_script_filename__` function added to get the filename of a script file (since alpha.12)
 - `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve` (since alpha.13)
