@@ -508,6 +508,12 @@ For each export the following information is stored:
 
 (since alpha.10)
 
+## Improved Code Generation
+
+webpack detects when ASI happens and generates shorter code when no semicolons are inserted. `Object(...)` -> `(0, ...)` (since alpha.22)
+
+webpack merges multiple export getters into a single runtime function call: `r.d(x, "a", () => a); r.d(x, "b", () => b);` -> `r.d(x, {a: () => a, b: () => b});` (since alpha.22)
+
 # Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
