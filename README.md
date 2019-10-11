@@ -100,6 +100,46 @@ In this example the export `b` can be removed in production mode.
 
 (since alpha.15)
 
+## Inner-module tree-shaking
+
+webpack 4 didn't analyse dependencies between exports and imports of an module. webpack 5 has a new option `optimization.innerGraph`, which is enabled by default in production mode, that runs a analysis on symbols in a module to figure out dependencies from exports to imports.
+
+In an module like this:
+
+``` js
+import { something } from "./something";
+
+function usingSomething() {
+  return something;
+}
+
+export function test() {
+  return usingSomething();
+}
+```
+
+The inner graph algorithm will figure out that `something` is only used when the `test` export is used. This allows to flag more exports as unused and to omit more code from the bundle.
+
+When `"sideEffects": false` is set, this allows to omit even more modules. In this example `./something` will be omitted when the `test` export is unused.
+
+To get the information about unused exports `optimization.unusedExports` is required. To remove side-effect-free modules `optimization.sideEffects` is required.
+
+The following symbols can be analysed:
+* function declarations
+* class declarations
+* `export default` with or variable declarations with
+  * function expressions
+  * class expressions
+  * `/*#__PURE__*/ expressions
+  * local variables
+  * imported bindings
+
+FEEDBACK: If you find something missing in this analysis, please report an issue and we consider adding it.
+
+This optimization is also known as Deep Scope Analysis.
+
+(since alpha.24)
+
 ## Compiler Idle and Close
 
 Compilers now need to be closed after being used. Compilers now enter and leave idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowy stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
@@ -412,6 +452,8 @@ This new class can be used to access information about the filesystem in a cache
 In the future, asking for file content hashes will be added and modules will be able to check validity with file contents instead of file hashes.
 
 MIGRATION: Instead of using `file/contextTimestamps` use the `compilation.fileSystemInfo` API instead.
+
+(since alpha.24) Timestamping for directories is possible now, which allows serialization of ContextModules
 
 ## Filesystems
 
