@@ -91,7 +91,7 @@ Run `yarn add webpack@next -D` resp. `npm install webpack@next --dev`.
 * Using `entry: "./src/index.js`: you can omit it, that's the default
 * Using `output.path: path.resolve(__dirname, "dist")`: you can omit it, that's the default
 * Using `output.filename: "[name].js"`: you can omit it, that's the default
-* Using Yarn PnP and the pnp-resolver-plugin: yan must omit it, that's supported by default now.
+* Using Yarn PnP and the pnp-resolver-plugin: you must omit it, that's supported by default now.
 
 # Cleanup code
 
@@ -128,7 +128,7 @@ The error message should have a `BREAKING CHANGE:` note.
 
 ## Level 4: Build Warnings
 
-The warning message should tell you want can be improved.
+The warning message should tell you what can be improved.
 
 ## Deprecation warnings
 
