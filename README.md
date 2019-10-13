@@ -146,7 +146,7 @@ This optimization is also known as Deep Scope Analysis.
 
 ## Compiler Idle and Close
 
-Compilers now need to be closed after being used. Compilers now enter and leave idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowy stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
+Compilers now need to be closed after being used. Compilers now enter and leave idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
 
 Plugins and their respective authors should expect that some users may forget to close the Compiler. So, all work should eventually be finishing while in idle too. Processes should be prevented from exiting when the work is being done.
 
@@ -214,7 +214,6 @@ The cache will be stored into `node_modules/.cache/webpack` (when using node_mod
 When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `cache.immutablePaths: []`
 
 (since alpha.21)
-
 
 ## SplitChunks for single-file-targets
 
