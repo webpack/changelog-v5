@@ -73,17 +73,20 @@ Try to set the following options in your webpack 4 build and check if it still w
 * `node.Buffer: false`
 * `node.process: false`
 
+Note: webpack 5 removes this options and will always used `false`. You have to remove these options again when upgrating to webpack 5.
+
 # Upgrade webpack version
 
 Run `yarn add webpack@next -D` resp. `npm install webpack@next --dev`.
 
 # Cleanup configuration
 
-* Remove `optimization.moduleIds` and `optimization.chunkIds`. The defaults are probably perfect. They support Long Term Caching (in production) and debugging (in development)
+* Consider removing `optimization.moduleIds` and `optimization.chunkIds`. The defaults are probably perfect. They support Long Term Caching (in production) and debugging (in development)
 * Reconsider `optimization.splitChunks`.
   * It's recommended to use either the defaults or `optimization.splitChunks: { chunks: "all" }`
   * When using HTTP/2 and Long Term Caching set `optimization.splitChunks: { chunks: "all", maxInitialRequests: 30, maxAsyncRequests: 30, maxSize: 100_000 }`
   * When really using a custom configuration replace `name` with `idHint`.
+  * Used to disable the defaults with `default: false, vendors: false`. Consider not doing this, but if you really want to `default: false, defaultVendors: false`.
 * When using the `WatchIgnorePlugin`, use `watchOptions.ignore` instead.
 * When using `[hash]`: Consider changing to `[contenthash]` (not the same, but better)
 * Using WASM: Set `experiments.syncWebAssembly: true` (after migration to webpack 5, migrate to `experiments: { asyncWebAssembly: true, importAsync: true }` instead)
@@ -92,6 +95,7 @@ Run `yarn add webpack@next -D` resp. `npm install webpack@next --dev`.
 * Using `output.path: path.resolve(__dirname, "dist")`: you can omit it, that's the default
 * Using `output.filename: "[name].js"`: you can omit it, that's the default
 * Using Yarn PnP and the pnp-resolver-plugin: you must omit it, that's supported by default now.
+* Using `IgnorePlugin` with a regular expression as argument: It takes an options object now: `new IgnorePlugin({ resourceRegExp: /regExp/ })`.
 
 # Cleanup code
 
