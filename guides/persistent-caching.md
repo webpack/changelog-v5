@@ -72,7 +72,7 @@ cache.buildDependencies: {
 ```
 
 This invalidates the persistent cache when anything in `webpack/lib` or in dependencies of webpack like `watchpack`, `enhanced-resolved`, etc. changes.
-Coincidentally is this always a default value, so you don't have to specify it.
+Coincidentally this is already the default value, so you don't have to specify it.
 
 Another example: The build usually also depends on your configuration file.
 You could specify it this way:
