@@ -78,7 +78,7 @@ Another example: The build usually also depends on your configuration file.
 You could specify it this way:
 
 ``` js
-cache.builddependencies: {
+cache.buildDependencies: {
     config: [__filename]
 }
 ```
