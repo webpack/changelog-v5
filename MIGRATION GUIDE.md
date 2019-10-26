@@ -68,7 +68,7 @@ Update the following options to their new version:
 
 ## Disable ES2015 syntax in boilerplate code, if necessary
 
-By default, Webpack's boilerplate code uses ES2015 syntax to build smaller bundles. If your build targets environments that don't support this syntax (like IE11), you'll need to set `output.ecmaVersion: 5` to revert to ES5 syntax.
+By default, Webpack's runtime code uses ES2015 syntax to build smaller bundles. If your build targets environments that don't support this syntax (like IE11), you'll need to set `output.ecmaVersion: 5` to revert to ES5 syntax.
 
 # Test webpack 5 compatibility
 
