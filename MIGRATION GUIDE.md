@@ -66,7 +66,7 @@ Update the following options to their new version:
 * `HashedModulesPlugin` -> `optimization.moduleIds: "hashed"`
 * `optimization.occurrenceOrder: true` -> `optimization: { chunkIds: "total-size", moduleIds: "size" }`
 
-## Disable ES2015 syntax in boilerplate code, if necessary
+## Disable ES2015 syntax in runtime code, if necessary
 
 By default, Webpack's runtime code uses ES2015 syntax to build smaller bundles. If your build targets environments that don't support this syntax (like IE11), you'll need to set `output.ecmaVersion: 5` to revert to ES5 syntax.
 
