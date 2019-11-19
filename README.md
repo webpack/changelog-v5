@@ -295,7 +295,7 @@ Chunks and Assets show chunk id hints now.
 
 ## Minimum Node.js Version
 
-The minimum supported node.js version has increased from 6 to 8.
+The minimum supported node.js version has increased from 6 to 10(LTS).
 
 MIGRATION: Upgrade to the latest node.js version available.
 
