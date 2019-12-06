@@ -265,7 +265,7 @@ The following experiments will ship with webpack 5:
   * Using `await` on top-level makes the module an async module
 * Importing async modules with `import` (`experiments.importAsync`)
 * Importing async modules with `import await` (`experiments.importAwait`)
-* The `asset` module type which is similar to the `file-loader`/`url-loader`/`raw-loader` (`experiments.asset`) (since alpha.19)
+* The `asset` module type which is similar to the `file-loader`|`url-loader`|`raw-loader` (`experiments.asset`) (since alpha.19)
 * Emitting bundle as module (`experiments.outputModule`) (since alpha.31)
   * This removed the wrapper IIFE from the bundle, enforces strict mode, lazy loads via `<script type="module">` and minimized in module mode
 
