@@ -92,6 +92,8 @@ MIGRATION: Use the default export.
 
 (since alpha.16)
 
+Unused properties are dropped by the `optimization.usedExports` optimization and properties are mangled by the `optimization.mangleExports` optimization. (since beta.3)
+
 It's possible to specify a custom JSON parser in `module.rules.parser` to import non-JSON files (e.g. for import toml, yaml, json5, etc) as a JSON (since beta.8)
 
 ## Nested tree-shaking
@@ -228,6 +230,24 @@ The cache will be stored into `node_modules/.cache/webpack` (when using node_mod
 When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `cache.immutablePaths: []`
 
 (since alpha.21)
+
+## File Emitting
+
+webpack used to always emit all output files during first build, but skipped writing unchanged files during incremental (watch) builds.
+It is assumed that nothing else changes output files while webpack is running.
+
+With Persistent Caching added a watch-like experience should be given even when restarting the webpack process, but it would be a too strong assumption to think that nothing else changes the output directory even when webpack is not running.
+
+So webpack will now check existing files in the output directory and compares their content with the output file in memory. It will only write the file when it has been changed.
+This is only done on first build. Any incremental build will always write the file when a new asset has been generated in the running webpack process.
+
+We assume that webpack and plugins only generate new assets when content has been changed. Caching should be used to ensure that no new asset is generated when input is equal.
+Not following this advise will degrade performance.
+
+Files that are flagged as `immutable` (including a content hash), will never be written when a file with the same name already exists.
+We assume that content hash will change when file content changes. This is true in general, but might not be always true during webpack or plugin development.
+
+(since beta.3)
 
 ## SplitChunks for single-file-targets
 
@@ -544,6 +564,13 @@ In the future, multiple compilers may work together and job orchestration can be
 
 MIGRATION: As this is a newly intorduced functionality, there is nothing to migrate.
 
+## Logging
+
+webpack internals include some logging now.
+`stats.logging` and `infrastructureLogging` options can be used to enabled these messages.
+
+(since beta.3)
+
 ## Module and Chunk Graph
 
 webpack used to store a resolved module in the dependency, and store the contained modules in the chunk. This is no longer the case. All information about how modules are connected in the module graph are now stored in a ModuleGraph class. All information about how modules are connected with chunks are now stored in the ChunkGraph class. Information which depends on i. e. the chunk graph, is also stored in the related class.
@@ -613,10 +640,13 @@ The way how information about exports of modules are stored has been refactored.
 
 For each export the following information is stored:
 
-* Is the export used? yes, no, not statically known, not determined. (see also `optimization.usedExports`)
-* Is the export provided? yes, no, not statically known, not determined. (see also `optimization.providedExports`)
-* Can be export name be renamed? yes, no, not determined.
-* The new name, if the export has been renamed. (see also `optimization.mangleExports`)
+- Is the export used? yes, no, not statically known, not determined. (see also `optimization.usedExports`)
+- Is the export provided? yes, no, not statically known, not determined. (see also `optimization.providedExports`)
+- Can be export name be renamed? yes, no, not determined.
+- The new name, if the export has been renamed. (see also `optimization.mangleExports`)
+- Nested ExportsInfo, if the export is an object with information attached itself
+  - Used for reexporting namespace objects: `import * as X from "..."; export { X };`
+  - Used for representing structure in JSON modules (since beta.3)
 
 (since alpha.10)
 
@@ -893,3 +923,4 @@ These dependencies are cheaper to process and webpack uses them when possible
 - removed `minChunkSize` option from `LimitChunkCountPlugin` (since beta.1)
 - reorganize from javascript related files into sub-directory (since beta.1)
   - `webpack.JavascriptModulesPlugin` -> `webpack.javascript.JavascriptModulesPlugin`
+- Logger.getChildLogger added (since beta.3)
