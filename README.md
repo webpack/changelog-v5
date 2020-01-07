@@ -100,9 +100,9 @@ MIGRATION: Use the default export.
 
 Unused properties are dropped by the `optimization.usedExports` optimization and properties are mangled by the `optimization.mangleExports` optimization. (since beta.3)
 
-It's possible to specify a custom JSON parser in `module.rules.parser` to import non-JSON files (e.g. for import toml, yaml, json5, etc) as a JSON (since beta.8)
-
 JSON modules no longer have named exports when importing from a string EcmaScript module (since beta.7)
+
+It's possible to specify a custom JSON parser in `Rule.parser.parse` to import JSON-like files (e. g. for toml, yaml, json5, etc.). (since beta.8)
 
 ## Nested tree-shaking
 
@@ -308,6 +308,7 @@ The following experiments will ship with webpack 5:
 * Importing async modules with `import` (`experiments.importAsync`)
 * Importing async modules with `import await` (`experiments.importAwait`)
 * The `asset` module type which is similar to the `file-loader`|`url-loader`|`raw-loader` (`experiments.asset`) (since alpha.19)
+  * DataUrls and options related to that are supported since beta.8
 * Emitting bundle as module (`experiments.outputModule`) (since alpha.31)
   * This removed the wrapper IIFE from the bundle, enforces strict mode, lazy loads via `<script type="module">` and minimized in module mode
 
