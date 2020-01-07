@@ -26,6 +26,12 @@ Here are a few things that were removed but did not have deprecation warnings in
 
 - IgnorePlugin and BannerPlugin must now be passed an options object.
 
+## Deprecation codes
+
+New deprecations include a deprecation code so they are easier to reference.
+
+(since beta.7)
+
 ## Syntax deprecated
 
 `require.include` has been deprecated and will emit a warning by default when used.
@@ -95,6 +101,8 @@ MIGRATION: Use the default export.
 Unused properties are dropped by the `optimization.usedExports` optimization and properties are mangled by the `optimization.mangleExports` optimization. (since beta.3)
 
 It's possible to specify a custom JSON parser in `module.rules.parser` to import non-JSON files (e.g. for import toml, yaml, json5, etc) as a JSON (since beta.8)
+
+JSON modules no longer have named exports when importing from a string EcmaScript module (since beta.7)
 
 ## Nested tree-shaking
 
@@ -453,6 +461,8 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.nodeEnv` defaults to `false` in `none` mode
 - `optimization.splitChunks` `minRemainingSize` defaults to `minSize` (since alpha.13)
   - This will lead to less splitted chunks created in cases where the remaining part would be too small
+- `optimization.splitChunks.cacheGroups.vendors` has be renamed to `optimization.splitChunks.cacheGroups.defaultVendors`
+- `optimization.splitChunks.cacheGroups.defaultVendors.reuseExistingChunk` now defaults to `true` (since beta.7)
 - `resolve(Loader).cache` defaults to `true` when `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
 - ~`node.global` defaults to `false`~ (since alpha.4 removed)
@@ -548,7 +558,9 @@ In the future, asking for file content hashes will be added and modules will be 
 
 MIGRATION: Instead of using `file/contextTimestamps` use the `compilation.fileSystemInfo` API instead.
 
-(since alpha.24) Timestamping for directories is possible now, which allows serialization of ContextModules
+Timestamping for directories is possible now, which allows serialization of ContextModules. (since alpha.24)
+
+`Compiler.modifiedFiles` has been added (next to `Compiler.removedFiles`) to make it easier to reference the changed files. (since beta.7)
 
 ## Filesystems
 
@@ -651,6 +663,12 @@ It also captures more information about the filesystem while watching. It now ca
 webpack now replaces the Sources in `Compilation.assets` with `SizeOnlySource` variants to reduce memory usage.
 
 (since alpha.8)
+
+## Emitting assets multiple times
+
+The warning `Multiple assets emit different content to the same filename` has been made an error.
+
+(since beta.7)
 
 ## ExportsInfo
 
