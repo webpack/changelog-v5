@@ -166,6 +166,26 @@ This optimization is also known as Deep Scope Analysis.
 
 (since alpha.24)
 
+## CommonJs Tree Shaking
+
+webpack used to opt-out from used exports analysing for CommonJs exports and `require()` calls.
+
+webpack 5 adds support for some CommonJs constructs, allows to eliminate unused CommonJs exports and track referenced export names from `require()` calls.
+
+The following constructs are supported:
+
+- `exports|this|module.exports.xxx = ...`
+- `Object.defineProperty(exports|this|module.exports, "xxx", ...)`
+- `require("abc").xxx`
+- `require("abc").xxx()`
+- importing from ESM
+- `require()` a ESM
+- flagged exportType (special handling for non-strict ESM import):
+  - `Object.defineProperty(exports|this|module.exports, "__esModule", { value: true|!0 })`
+  - `exports|this|module.exports.__esModule = true|!0`
+
+(since beta.9)
+
 ## Compiler Idle and Close
 
 Compilers now need to be closed after being used. Compilers now enter and leave idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
