@@ -166,6 +166,10 @@ This optimization is also known as Deep Scope Analysis.
 
 (since alpha.24)
 
+Using `eval()` will bail-out this optimization for a module, because evaled code could reference any symbol in scope.
+
+(since beta.10)
+
 ## CommonJs Tree Shaking
 
 webpack used to opt-out from used exports analysing for CommonJs exports and `require()` calls.
@@ -262,6 +266,10 @@ When using Yarn PnP webpack assumes that the yarn cache is immutable (which it u
 `SourceMapDevToolPlugin` uses the Persistent Cache.
 
 (since beta.4)
+
+`ConcatenatedModule` used the Persistent Cache.
+
+(since beta.10)
 
 ## File Emitting
 
@@ -372,6 +380,11 @@ Now writing to stderr is throttled to 500ms.
 
 (since beta.4)
 
+The profiling mode also got an upgrade and will display timings of nested progress messages.
+This makes it easier to figure out while plugin is causing performance problems.
+
+(since beta.10)
+
 ## Minimum Node.js Version
 
 The minimum supported node.js version has increased from 6 to 10.13.0(LTS).
@@ -444,6 +457,8 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `output.hotUpdateMainFilename: Function` is now forbidden: It never worked anyway.
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
 - `module.rules` `query` and `loaders` were removed (since alpha.13)
+- `module.rules` `options` passing a string is deprecated (since beta.10)
+  - MIGRATION: Pass an options object instead, open an issue on the loader when this is not supported
 - `stats.chunkRootModules` added: Show root modules for chunks
 - `stats.orphanModules` added: Show modules which are not emitted
 - `stats.runtime` added: Show runtime modules
