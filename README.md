@@ -636,6 +636,33 @@ webpack detects when ASI happens and generates shorter code when no semicolons a
 
 webpack merges multiple export getters into a single runtime function call: `r.d(x, "a", () => a); r.d(x, "b", () => b);` -> `r.d(x, {a: () => a, b: () => b});` (since alpha.22)
 
+## DependencyReference
+
+webpack used to have a single method and type to represent references of dependencies (`Compilation.getDependencyReference` returning a `DependencyReference`).
+This type used to include all information about this reference like the referenced Module, which exports has been imported, if it's a weak reference and also some ordering related information.
+
+Bundling all these information together makes getting the reference expensive and it's also called very often everytime somebody need one piece of information.
+
+In webpack 5 this part of the codebase was refactored and the method has been split up.
+
+- The referenced module can be read from the ModuleGraphConnection
+- The imported export names can be get via `Dependency.getReferencedExports()`
+- These is a `weak` flag on the `Dependency` class
+- Ordering is only relevant to `HarmonyImportDependencies` and can be get via `sourceOrder` property
+
+(since beta.2)
+
+## Presentational Dependencies
+
+There is now a new type of dependency in `NormalModules`: Presentational Dependencies
+
+These dependencies are only used during the Code Generation phase, but are not used during Module Graph building.
+So they can never have referenced modules or influence exports/imports.
+
+These dependencies are cheaper to process and webpack uses them when possible
+
+(since beta.2)
+
 # Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
