@@ -231,6 +231,10 @@ When using Yarn PnP webpack assumes that the yarn cache is immutable (which it u
 
 (since alpha.21)
 
+`SourceMapDevToolPlugin` uses the Persistent Cache.
+
+(since beta.4)
+
 ## File Emitting
 
 webpack used to always emit all output files during first build, but skipped writing unchanged files during incremental (watch) builds.
@@ -324,6 +328,20 @@ The list of nested modules in concatenated modules is sorted topological now. Th
 Chunks and Assets show chunk id hints now.
 
 (since alpha.31)
+
+## Progress
+
+A few improvements has been done to the `ProgressPlugin` which is used for `--progress` by the CLI, but can also be used manually as plugin.
+
+It used to only count the processed modules. Now it can count `entries` `dependencies` and `modules`.
+All of them are shown by default now.
+
+It used to disable the currently processed module. This caused much process stderr output and yielded a performance problem on some consoles.
+This is now disabled by default (`activeModules` option). This also reduces the amount of spam on the console. (since alpha.31)
+
+Now writing to stderr is throttled to 500ms.
+
+(since beta.4)
 
 ## Minimum Node.js Version
 
@@ -711,8 +729,6 @@ These dependencies are cheaper to process and webpack uses them when possible
 - Chunks can now have multiple entry modules
 - ExtendedAPIPlugin removed
   - MIGRATION: No longer needed, `__webpack_hash__` and `__webpack_chunkname__` can always be used and runtime code is injected where needed.
-- ProgressPlugin `entries` option now defaults to `on`
-- ProgressPlugin `activeModules` option now defaults to `off` (since alpha.31)
 - ProgressPlugin no longer uses tapable context for `reportProgress`
   - MIGRATION: Use `ProgressPlugin.getReporter(compiler)` instead
 - ProvidePlugin is now re-enabled for `.mjs` files
