@@ -15,29 +15,29 @@ While serialization and deserialization would work out-of-the-box without extra 
 
 What's cache invalidation?
 Webpack need to figure out when cache entries are no longer valid and stop using them for the build.
-So this happens when you change a file in you application.
+So this happens when you change a file in your application.
 
 Example: You change `magic.js`.
 Webpack must invalidate the cache entry for `magic.js`.
 The build will process the file again, i. e. runs babel, typescript, whatever, parses the file and runs Code Generation again.
-Than Webpack probably also invalidates the cache entry for `bundle.js`,
+Then Webpack probably also invalidates the cache entry for `bundle.js`,
 and the build will rebuild this file from the contained modules.
 
 For this Webpack tracks `fileDependencies` `contextDependencies` and `missingDependencies` for each Module, and creates a file system snapshot.
-This snapshot is compared with the real file system and when differences are detected a re-build is trigger for that module.
+This snapshot is compared with the real file system and when differences are detected a re-build is triggered for that module.
 
-The the cache entry of `bundle.js` webpack stores a `etag`, which is a hash of all contributors.
+Then for the cache entry of `bundle.js`, webpack stores an `etag`, which is a hash of all contributors.
 This `etag` is compared and only when it matches the cache entry can be used.
 
 All this was also required for in-memory caching in webpack 4.
-And all this work out-of-the-box from developer-view without extra configuration.
-For persistent caching in webpack 5 there is a new challange.
+And all this works out-of-the-box from developer-view without extra configuration.
+For persistent caching in webpack 5 there is a new challenge.
 
 Webpack also need to invalidate cache entries:
 * when you npm upgrade a loader or plugin
 * when you change your configuration
-* when you change a file that is read in the configuration
-* when you npm upgrade a dependencies that is used in the configuration
+* when you change a file that is being read in the configuration
+* when you npm upgrade a dependency that is used in the configuration
 * when you pass different command line arguments to your build script
 * when you have a custom build script and change that
 
@@ -45,7 +45,7 @@ Here it becomes tricky.
 Webpack is not able to handle all these cases out-of-the-box.
 That's why we've chosen the safe way and made persistent caching an opt-in feature.
 We want you to learn how to enable persistent caching to give you the correct hints.
-We want you to know which configuration need to be used to handle i. e. your custom build script.
+We want you to know which configuration needs to be used to handle i. e. your custom build script.
 
 # Build dependencies, version and name
 
@@ -53,7 +53,7 @@ To handle these "dependencies" of your build webpack provides three new tools:
 
 ## Build dependencies
 
-These is a new configuration option `cache.buildDependencies`, which allows to specify code dependencies of the build process.
+This is a new configuration option `cache.buildDependencies`, which allows to specify code dependencies of the build process.
 To make it easier webpack takes care of the resolving and following of dependencies of specified values.
 
 There are two possible types of values: files and directories.
@@ -88,7 +88,7 @@ The `__filename` variable points to the current file in node.js.
 This invalidates the persistent cache when your config or anything the config depends on via `require()` changes.
 As your config probably references all used plugins via `require()` they also become build dependencies.
 
-If your configuration file read a file via `fs.readFile`, this would **not** become a build dependencies, as webpack only follows `require()`.
+If your configuration file read a file via `fs.readFile`, this would **not** become a build dependency, as webpack only follows `require()`.
 You need to add such files to `buildDependencies` manually.
 
 ## Version
