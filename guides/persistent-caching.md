@@ -88,7 +88,7 @@ The `__filename` variable points to the current file in node.js.
 This invalidates the persistent cache when your config or anything the config depends on via `require()` changes.
 As your config probably references all used plugins via `require()` they also become build dependencies.
 
-If your configuration file read a file via `fs.readFile`, this would **not** become a build dependency, as webpack only follows `require()`.
+If your configuration file reads a file via `fs.readFile`, this would **not** become a build dependency, as webpack only follows `require()`.
 You need to add such files to `buildDependencies` manually.
 
 ## Version
@@ -129,7 +129,7 @@ cache: {
 # Performance optimizations
 
 Hashing and timestamping a large part of node_modules for build and normal dependencies would be pretty expensive, and would slow down webpack a lot.
-To avoid this webpack includes a performance optimization that skips over files in `node_modules` by default and uses the `version` and `name` in `package.json`s as source of truth.
+To avoid this webpack includes a performance optimization that skips over files in `node_modules` by default and uses the `version` and `name` in `package.json` as a source of truth.
 
 This optimization will be used for all paths in the configuration option `cache.managedPaths`.
 It defaults to the `node_modules` directory in which webpack is installed.
@@ -240,7 +240,7 @@ infrastructureLogging: {
 
 ## Internal workflow
 
-* webpack read the cache file.
+* webpack reads the cache file.
   * There is no cache file -> build without cache
   * `version` in the cache file doesn't match the `cache.version` -> build without cache
 * webpack compares the `resolve snapshot` with the filesystem
@@ -252,7 +252,7 @@ infrastructureLogging: {
 * webpack compares the `build dependencies snapshot` with the filesystem
   * It doesn't match -> build without cache
   * It does match -> continue below
-* cache entries are deserialized (big cache entries are deserialized lazy during the build)
+* cache entries are deserialized (big cache entries are deserialized lazily during the build)
 * build runs (with or without cache)
   * build dependencies are tracked
     * from `cache.buildDependencies`
@@ -285,12 +285,12 @@ It will be used this way: `require(request)`.
 
 `serializer.serialize(object, context)` is called when an object should be serialized.
 `context` is an object that contains at least a `write(anything)` method.
-This method write something into the output stream.
+This method writes something into the output stream.
 The passed value will be serialized too.
 
-`serializer.deserialize(context)` is called when an serialized object should be deserialized.
+`serializer.deserialize(context)` is called when a serialized object should be deserialized.
 `context` is an object that contains at least a `read(): anything` method.
-This methods deserializes something from the input stream.
+This method deserializes something from the input stream.
 `deserialize` must return the deserialized object.
 
 `serialize` and `deserialize` should read and write the same objects in the same order.
