@@ -26,6 +26,14 @@ Here are a few things that were removed but did not have deprecation warnings in
 
 - IgnorePlugin and BannerPlugin must now be passed an options object.
 
+## Syntax deprecated
+
+`require.include` has been deprecated and will emit a warning by default when used.
+
+Behavior can be changed with `Rule.parser.requireInclude` to allowed, deprecated or disabled.
+
+(since beta.1)
+
 ## Automatic Node.js Polyfills Removed
 
 In the early days, webpack's aim was to allow running most node.js modules in the browser, but the module landscape changed and many module uses are now written mainly for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules, which are automatically applied once a module uses any of the core modules (i.e. the `crypto` module).
@@ -52,6 +60,8 @@ The algorithms assign short (3 or 4 characters) numeric IDs to modules and chunk
 This is a trade-off between bundle size and long term caching.
 
 MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
+
+Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was related to changed module order and has been fixed. (since beta.1)
 
 ## Deterministic Mangled Export Names
 
@@ -297,7 +307,7 @@ Chunks and Assets show chunk id hints now.
 
 ## Minimum Node.js Version
 
-The minimum supported node.js version has increased from 6 to 10(LTS).
+The minimum supported node.js version has increased from 6 to 10.13.0(LTS).
 
 MIGRATION: Upgrade to the latest node.js version available.
 
@@ -321,6 +331,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `cache.buildDependencies` (since alpha.20)
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
+- `resolve.alias` values can be arrays or `false` now (since alpha.18)
 - Automatic polyfills for native node.js modules were removed
   - `node.Buffer` removed
   - `node.console` removed
@@ -329,7 +340,8 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
 - `output.filename` can now be a function (since alpha.17)
 - `output.assetModuleFilename` added (since alpha.19)
-- `resolve.alias` values can be arrays or `false` now (since alpha.18)
+- `devtool` is more strict (since beta.1)
+  - Format: `false | eval | [inline-|hidden-|eval-][nosources-][cheap-[module-]]source-map`
 - `optimization.chunkIds: "deterministic"` added
 - `optimization.moduleIds: "deterministic"` added
 - `optimization.moduleIds: "hashed"` deprecated
@@ -369,6 +381,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `stats.orphanModules` added: Show modules which are not emitted
 - `stats.runtime` added: Show runtime modules
 - `stats.chunkRelations` added: Show parent/children/sibling chunks (since alpha.1)
+- `stats.errorStack` added: Show webpack-internal stack trace of errors (since beta.1)
 - `stats.preset` added: select a preset (since alpha.1)
 - `BannerPlugin.banner` signature changed
   - `data.basename` removed
@@ -407,6 +420,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - ~`node.global` defaults to `false`~ (since alpha.4 removed)
 - `resolveLoader.extensions` remove `.json` (since alpha.8)
 - `node.global` `node.__filename` and `node.__dirname` defaults to `false` in node-`target`s (since alpha.14)
+- `stats.errorStack` defaults to `false` (since beta.1)
 
 # Major Internal Changes
 
@@ -848,3 +862,7 @@ webpack merges multiple export getters into a single runtime function call: `r.d
 - webpack-command support was removed (since alpha.12)
 - Use schema-utils@2 for schema validation (since alpha.20)
 - `Compiler.assetEmitted` has a improved second argument with more information (since alpha.27)
+- BannerPlugin omits trailing whitespace (since beta.1)
+- removed `minChunkSize` option from `LimitChunkCountPlugin` (since beta.1)
+- reorganize from javascript related files into sub-directory (since beta.1)
+  - `webpack.JavascriptModulesPlugin` -> `webpack.javascript.JavascriptModulesPlugin`
