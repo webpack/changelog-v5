@@ -65,6 +65,8 @@ New algorithms were added for long term caching. These are enabled by default in
 The algorithms assign short (3 or 4 characters) numeric IDs to modules and chunks in a deterministic way.
 This is a trade-off between bundle size and long term caching.
 
+`moduleIds/chunkIds: false` disables the default behavior and one can provide a custom algorithm via plugin. Note that in webpack 4 `moduleIds/chunkIds: false` without custom plugin resulted in a working build, while in webpack 5 you must provide a custom plugin.
+
 MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
 
 Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was related to changed module order and has been fixed. (since beta.1)
