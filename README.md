@@ -614,7 +614,7 @@ HMR runtime has be refactored to Runtime Modules. `HotUpdateChunkTemplate` has b
 
 The javascript part of HMR runtime has been separated from the core HMR runtime. Other module types can now also handle HMR in their own way. In the future, this will allow i. e. HMR for the mini-css-extract-plugin or for WASM modules.
 
-MIGRATION: As this is a newly intorduced functionality, there is nothing to migrate.
+MIGRATION: As this is a newly introduced functionality, there is nothing to migrate.
 
 ## Work Queues
 
