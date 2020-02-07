@@ -630,7 +630,7 @@ These queues have some hooks to watch and intercept job processing.
 
 In the future, multiple compilers may work together and job orchestration can be done by intercepting these queues.
 
-MIGRATION: As this is a newly intorduced functionality, there is nothing to migrate.
+MIGRATION: As this is a newly introduced functionality, there is nothing to migrate.
 
 ## Logging
 
