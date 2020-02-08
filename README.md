@@ -40,6 +40,8 @@ Behavior can be changed with `Rule.parser.requireInclude` to allowed, deprecated
 
 (since beta.1)
 
+`requireEnsure: false` is no longer accepted.
+
 ## Automatic Node.js Polyfills Removed
 
 In the early days, webpack's aim was to allow running most node.js modules in the browser, but the module landscape changed and many module uses are now written mainly for frontend purposes. webpack <= 4 ships with polyfills for many of the node.js core modules, which are automatically applied once a module uses any of the core modules (i.e. the `crypto` module).
