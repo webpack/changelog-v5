@@ -2,19 +2,19 @@ Welcome to the persistent caching guide.
 
 # Opt-in
 
-First note that persistent caching is not enabled by default. You have to opt-in using it.
+First, note that persistent caching is not enabled by default. You have to opt-in using it.
 
 Why is that?
 Webpack tries to favor safety over performance.
-We don't want to enable a feature by default that will improve your performance in 95%, but breaks your application/workflow/build in 5%.
+We don't want to enable a feature by default that will improve your performance by 95% but breaks your application/workflow/build in 5%.
 
-That sounds like it's really broken, but believe me it's not.
+That sounds like it's broken, but believe me, it's not.
 But it requires an extra step by the developer to configure it correctly.
 
 While serialization and deserialization would work out-of-the-box without extra steps by the developer, the part that may not work out-of-the-box is cache invalidation.
 
 What's cache invalidation?
-Webpack need to figure out when cache entries are no longer valid and stop using them for the build.
+Webpack needs to figure out when cache entries are no longer valid and stop using them for the build.
 So this happens when you change a file in your application.
 
 Example: You change `magic.js`.
@@ -31,14 +31,14 @@ This `etag` is compared and only when it matches the cache entry can be used.
 
 All this was also required for in-memory caching in webpack 4.
 And all this works out-of-the-box from developer-view without extra configuration.
-For persistent caching in webpack 5 there is a new challenge.
+For persistent caching in webpack 5, there is a new challenge.
 
-Webpack also need to invalidate cache entries:
+Webpack also needs to invalidate cache entries:
 * when you npm upgrade a loader or plugin
 * when you change your configuration
 * when you change a file that is being read in the configuration
 * when you npm upgrade a dependency that is used in the configuration
-* when you pass different command line arguments to your build script
+* when you pass different command-line arguments to your build script
 * when you have a custom build script and change that
 
 Here it becomes tricky.
@@ -53,14 +53,14 @@ To handle these "dependencies" of your build webpack provides three new tools:
 
 ## Build dependencies
 
-This is a new configuration option `cache.buildDependencies`, which allows to specify code dependencies of the build process.
+This is a new configuration option `cache.buildDependencies`, which allows specifying code dependencies of the build process.
 To make it easier webpack takes care of the resolving and following of dependencies of specified values.
 
 There are two possible types of values: files and directories.
 Directories must end with a slash. Everything else is resolved as a file.
 
-For directories the nearest `package.json` is analysed for dependencies.
-For files we will look into the node.js module cache to find dependencies.
+For directories, the nearest `package.json` is analysed for dependencies.
+For files, we will look into the node.js module cache to find dependencies.
 
 Example: The build usually depends on the `lib` folder of `webpack` itself.
 You could specify it this way:
@@ -93,8 +93,8 @@ You need to add such files to `buildDependencies` manually.
 
 ## Version
 
-Some dependencies of your build can't be expressed as references to a file, i. e. values read from database, environment variables or values passed on command line.
-For these values there is a new configuration option `cache.version`.
+Some dependencies of your build can't be expressed as references to a file, i. e. values read from a database, environment variables or values passed on the command line.
+For these values, there is a new configuration option `cache.version`.
 
 `cache.version` is a string. Passing a different string will invalidate the persistent cache.
 
@@ -110,12 +110,12 @@ cache: {
 
 ## Name
 
-In some cases dependencies toggle between multiple different values and invalidating the persistent cache for each value change would be wasteful.
-For these values there is a new configuration options `cache.name`.
+In some cases, dependencies toggle between multiple different values and invalidating the persistent cache for each value change would be wasteful.
+For these values, there is a new configuration options `cache.name`.
 
 `cache.name` is a string. Passing a value will create a separate independent persistent cache.
 
-`cache.name` is used as filename of the persistent cache file. Make sure to only pass short and fs-safe names.
+`cache.name` is used as the filename of the persistent cache file. Make sure to only pass short and fs-safe names.
 
 Example: Your config uses the `--env.target mobile|desktop` argument to creates builds for either mobile or desktop users.
 You could specify it this way:
@@ -138,7 +138,7 @@ It defaults to the `node_modules` directory in which webpack is installed.
 You can disable it with `cache.managedPaths: []`.
 
 When using Yarn PnP another optimization kicks in.
-All files in the yarn cache are skipped for hashing and timestamping at all (not even `version` and `name` is tracked), as the cache content is immutable.
+All files in the yarn cache are skipped for hashing and timestamping at all (not even `version` and `name` is tracked), as the cached content is immutable.
 
 This is controlled by the configuration option `cache.immutablePaths`.
 It defaults to the yarn cache in which webpack is installed when Yarn PnP is enabled.
@@ -162,14 +162,14 @@ cache: {
 
 ## Watching
 
-The persistent cache can be used for single builds and for continuous building (watch).
+The persistent cache can be used for single builds and continuous building (watch).
 
 When setting `cache.type: "filesystem"` webpack internally enables the filesystem cache and the memory cache in a layered way.
 Reading from cache will look into the memory cache first and fallback to filesystem cache.
 Writing to cache will write to both caches.
 
 The filesystem cache won't directly serialize write requests to disk. It will wait until the compilation process has finished and the compiler is idling.
-This happens because serialization and disk writing uses up resources and we don't want to additionally delay the compilation process.
+This happens because serialization and disk writing uses up resources and we don't want to add delay the compilation process.
 
 For single builds the workflow is:
 
@@ -198,9 +198,9 @@ For continuous builds (watch) the workflow is:
 
 You see the two new configuration options `cache.idleTimeout` and `cache.idleTimeoutForInitialStore` which control how long the compiler has to idle before cache is persisted.
 `cache.idleTimeout` defaults to 60s and `cache.idleTimeoutForInitialStore` defaults to 0s.
-As serialization blocks the event loop, no cache is detected while cache is serialized.
-The delay tries to avoid recompilation delay in watch mode due to fast paced editing of files, while trying to keep the persistent cache fresh for the next cold start.
-It's a trade-off, feel free to choose a value that fits your workflow. Smaller values shorten cold startup time and increase risk of delayed rebuilds. Bigger values can increase cold startup time and reduce the risk of delayed rebuilds.
+As serialization blocks the event loop, no cache is detected while the cache is serialized.
+The delay tries to avoid recompilation delay in watch mode due to fast-paced editing of files while trying to keep the persistent cache fresh for the next cold start.
+It's a trade-off, feel free to choose a value that fits your workflow. Smaller values shorten cold startup time and increase the risk of delayed rebuilds. Bigger values can increase cold startup time and reduce the risk of delayed rebuilds.
 
 ## Error handling
 
@@ -279,7 +279,7 @@ For any object that should be serialized `object.constructor` will be used to fi
 It should point to the current module.
 It will be used this way: `require(request)`.
 
-`name` is used to differ multiple `register` calls with the same `request`.
+`name` is used to differentiate multiple `register` calls with the same `request`.
 
 `serializer` is an object with at least two methods `serialize` and `deserialize`.
 
