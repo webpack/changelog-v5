@@ -771,7 +771,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 - `null-loader`
   
-  `null-loader` will be depreciated. Use `alias: { "module": false }` 
+  `null-loader` will be depreciated. Use `alias: false` 
 
 # Minor Changes
 
