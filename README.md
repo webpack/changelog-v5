@@ -767,6 +767,12 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 (since beta.2)
 
+## Depreciated loaders
+
+- `null-loader`
+  
+  `null-loader` will be depreciated. Use `alias: { "module": false }` 
+
 # Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
