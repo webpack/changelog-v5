@@ -767,16 +767,16 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 (since beta.2)
 
-## Depreciated loaders
+## deprecated loaders
 
 - `null-loader`
   
-  `null-loader` will be depreciated. Use 
+  `null-loader` will be deprecated. Use 
   
   ```js
   alias: {
       xyz$: false
-    }
+  }
   ```  
   
   or use absolute path
