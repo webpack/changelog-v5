@@ -771,8 +771,22 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 - `null-loader`
   
-  `null-loader` will be depreciated. Use `alias: false` 
-
+  `null-loader` will be depreciated. Use 
+  
+  ```js
+  alias: {
+      xyz$: false
+    }
+  ```  
+  
+  or use absolute path
+ 
+  ```js
+  alias: { 
+    [path.resolve(__dirname, "....")]: false 
+  } 
+  ```
+  
 # Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
