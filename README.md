@@ -771,7 +771,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 - [`null-loader`](https://github.com/webpack-contrib/null-loader)
   
-  `null-loader` will be deprecated. Use 
+  It will be deprecated. Use 
   
   ```js
   alias: {
