@@ -769,7 +769,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 ## deprecated loaders
 
-- `null-loader`
+- [`null-loader`](https://github.com/webpack-contrib/null-loader)
   
   `null-loader` will be deprecated. Use 
   
