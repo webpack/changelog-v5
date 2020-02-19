@@ -767,6 +767,26 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 (since beta.2)
 
+## deprecated loaders
+
+- [`null-loader`](https://github.com/webpack-contrib/null-loader)
+  
+  It will be deprecated. Use 
+  
+  ```js
+  alias: {
+      xyz$: false
+  }
+  ```  
+  
+  or use absolute path
+ 
+  ```js
+  alias: { 
+    [path.resolve(__dirname, "....")]: false 
+  } 
+  ```
+  
 # Minor Changes
 
 - Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
@@ -963,6 +983,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - MultiModuleFactory removed
 - NormalModuleFactory.fileDependencies, NormalModuleFactory.contextDependencies and NormalModuleFactory.missingDependencies are now LazySets (since alpha.20)
 - RuntimeTemplate methods now take `runtimeRequirements` arguments
+- serve property is removed
 - Stats.jsonToString removed
 - Stats.filterWarnings removed
 - Stats.getChildOptions removed
