@@ -983,6 +983,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - MultiModuleFactory removed
 - NormalModuleFactory.fileDependencies, NormalModuleFactory.contextDependencies and NormalModuleFactory.missingDependencies are now LazySets (since alpha.20)
 - RuntimeTemplate methods now take `runtimeRequirements` arguments
+- serve property is removed
 - Stats.jsonToString removed
 - Stats.filterWarnings removed
 - Stats.getChildOptions removed
