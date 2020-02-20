@@ -130,9 +130,9 @@ In this example, the export `b` can be removed in production mode.
 
 ## Inner-module tree-shaking
 
-webpack 4 didn't analyze dependencies between exports and imports of an module. webpack 5 has a new option `optimization.innerGraph`, which is enabled by default in production mode, that runs an analysis on symbols in a module to figure out dependencies from exports to imports.
+webpack 4 didn't analyze dependencies between exports and imports of a module. webpack 5 has a new option `optimization.innerGraph`, which is enabled by default in production mode, that runs an analysis on symbols in a module to figure out dependencies from exports to imports.
 
-In an module like this:
+In a module like this:
 
 ``` js
 import { something } from "./something";
