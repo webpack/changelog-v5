@@ -944,7 +944,9 @@ These dependencies are cheaper to process and webpack uses them when possible
 - Module.prefetched removed
 - Module.built removed
 - Module.used removed
+  - MIGRATION: Use `Module.getUsedExports` instead
 - Module.usedExports deprecated
+  - MIGRATION: Use `Module.getUsedExports` instead
 - Module.optimizationBailout deprecated
 - Module.exportsArgument removed
 - Module.optional deprecated
