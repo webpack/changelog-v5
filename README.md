@@ -54,8 +54,6 @@ MIGRATION:
 - It's possible to manually add a polyfill for a node.js core module. An error message will give a hint on how to achieve that.
 - Package authors: Use the `browser` field in `package.json` to make a package frontend-compatible. Provide alternative implementations/dependencies for the browser.
 
-FEEDBACK: Please provide us with feedback whether you like or dislike the above mentioned change. We are uncertain whether this will make it into the final release or not.
-
 ## Deterministic Chunk and Module IDs
 
 New algorithms were added for long term caching. These are enabled by default in production mode.
@@ -273,6 +271,10 @@ When using Yarn PnP webpack assumes that the yarn cache is immutable (which it u
 
 (since beta.10)
 
+`ProgressPlugin` used the Persistent Cache.
+
+(since beta.14)
+
 ## File Emitting
 
 webpack used to always emit all output files during first build, but skipped writing unchanged files during incremental (watch) builds.
@@ -386,6 +388,16 @@ The profiling mode also got an upgrade and will display timings of nested progre
 This makes it easier to figure out while plugin is causing performance problems.
 
 (since beta.10)
+
+Added `percentBy`-options that tells `ProgressPlugin` how to calculate progress percentage.
+
+```js
+new webpack.ProgressPlugin({ percentBy: "entries" });
+```
+
+To make progress percentage more accurate `ProgressPlugin` caches the last known total modules count and reuses this value on the next build. The first build will warm the cache but the following builds will use and update this value.
+
+(since beta.14)
 
 ## Minimum Node.js Version
 
@@ -569,6 +581,51 @@ There is a compat-layer, so Main/Chunk/ModuleTemplate still exist, but only dele
 MIGRATION: Follow the advises in the deprecation messages. Mostly pointing to hooks at different locations.
 
 (since alpha.31)
+
+## Entry point descriptor
+
+If an object is passed as entry point the value might be a string, array of strings or a descriptor:
+
+```js
+module.exports = {
+  entry: {
+    catalog: { 
+      import: './catalog.js', 
+    }
+  }
+};
+```
+
+Descriptor syntax might be used to pass additional options to an entry point.
+
+### Entry point output filename
+
+By default, the output filename for the entry chunk is extracted from `output.filename` but you can specify a custom output filename for a specific entry:
+
+```js
+module.exports = {
+  entry: {
+    about: { import: './about.js', filename: 'pages/[name][ext]' }
+  }
+};
+```
+
+### Entry point dependency
+
+By default, every entry chunk stores all the modules that it uses. With `dependOn`-option you can share the modules from one entry chunk to another:
+
+```js
+module.exports = {
+  entry: {
+    app: { import: './app.js', dependOn: 'react-vendors' },
+    'react-vendors': ['react', 'react-dom', 'prop-types']
+  }
+};
+```
+
+The app chunk will not contain the modules that `react-vendors` has.
+
+(since beta.14)
 
 ## Order and IDs
 
