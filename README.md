@@ -389,7 +389,7 @@ This makes it easier to figure out while plugin is causing performance problems.
 
 (since beta.10)
 
-Added `percentBy`-options that tells `ProgressPlugin` how to calculate progress percentage.
+Added `percentBy`-option that tells `ProgressPlugin` how to calculate progress percentage.
 
 ```js
 new webpack.ProgressPlugin({ percentBy: "entries" });
