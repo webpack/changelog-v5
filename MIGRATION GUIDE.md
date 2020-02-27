@@ -4,11 +4,11 @@ This guide should help you migrating to webpack 5 when **using webpack directly*
 
 # Preparations
 
-## Upgrade your node.js version
+## Upgrade your Node.js version
 
-webpack requires at least 8.9.0, but using node.js 10 or 12 is recommended.
+webpack requires at least 8.9.0, but using Node.js 10 or 12 is recommended.
 
-Newer node.js version will improve build performance a lot.
+Newer Node.js version will improve build performance a lot.
 
 ## Upgrade to latest webpack 4 version
 
