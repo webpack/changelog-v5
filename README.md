@@ -1,5 +1,3 @@
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/webpack/changelog-v5) 
-
 [Help by editing this file](https://github.com/webpack/changelog-v5/edit/master/README.md).
 
 # General direction
