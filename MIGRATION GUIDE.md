@@ -1,14 +1,14 @@
 [Help by editing this file](https://github.com/webpack/changelog-v5/edit/master/MIGRATION%20GUIDE.md).
 
-This guide should help you migrating to webpack 5 when **using webpack directly**. If you are using some higher-level tool to run webpack, please see guide in this tool for migration.
+This guide should help you migrating to webpack 5 when **using webpack directly**. If you are using some higher-level tool to run webpack, please see the guide in this tool for migration.
 
 # Preparations
 
-## Upgrade your node.js version
+## Upgrade your Node.js version
 
-webpack requires at least 8.9.0, but using node.js 10 or 12 is recommended.
+webpack requires at least 8.9.0, but using Node.js 10 or 12 is recommended.
 
-Newer node.js version will improve build performance a lot.
+Newer Node.js version will improve build performance a lot.
 
 ## Upgrade to latest webpack 4 version
 
@@ -18,11 +18,11 @@ When using webpack >= 4, this should be possible without problems.
 
 ## Upgrade to latest webpack-cli version (when used)
 
-## Upgrade all plugins and loaders to latest version
+## Upgrade all plugins and loaders to the latest version
 
-Some plugins have beta version that need to be used for webpack 5 compatibility. Use them.
+Some plugins have a beta version that needs to be used for webpack 5 compatibility. Use them.
 
-Check migration guide when upgrading plugins across major version.
+Check migration guide when upgrading plugins across the major version.
 
 ## Make sure your build has no errors or warnings
 
@@ -72,12 +72,12 @@ By default, Webpack's runtime code uses ES2015 syntax to build smaller bundles. 
 
 # Test webpack 5 compatibility
 
-Try to set the following options in your webpack 4 build and check if it still works correctly.
+Try to set the following options in your webpack 4 builds and check if it still works correctly.
 
 * `node.Buffer: false`
 * `node.process: false`
 
-Note: webpack 5 removes this options and will always used `false`. You have to remove these options again when upgrating to webpack 5.
+Note: webpack 5 removes these options and will always use `false`. You have to remove these options again when upgrading to webpack 5.
 
 # Upgrade webpack version
 

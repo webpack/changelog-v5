@@ -60,7 +60,7 @@ There are two possible types of values: files and directories.
 Directories must end with a slash. Everything else is resolved as a file.
 
 For directories, the nearest `package.json` is analysed for dependencies.
-For files, we will look into the node.js module cache to find dependencies.
+For files, we will look into the Node.js module cache to find dependencies.
 
 Example: The build usually depends on the `lib` folder of `webpack` itself.
 You could specify it this way:
@@ -83,7 +83,7 @@ cache.buildDependencies: {
 }
 ```
 
-The `__filename` variable points to the current file in node.js.
+The `__filename` variable points to the current file in Node.js.
 
 This invalidates the persistent cache when your config or anything the config depends on via `require()` changes.
 As your config probably references all used plugins via `require()` they also become build dependencies.
