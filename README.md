@@ -947,7 +947,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - Compilation.fileDependencies, Compilation.contextDependencies and Compilation.missingDependencies are now LazySets (since alpha.20)
 - Compilation.entries removed
   - MIGRATION: Use `Compilation.entryDependencies` instead
-- Compilation.\_preparedEntrypoints removed
+- Compilation._preparedEntrypoints removed
 - dependencyTemplates is now a `DependencyTemplates` class instead of a raw `Map`
 - Compilation.fileTimestamps and contextTimestamps removed
   - MIGRATION: Use `Compilation.fileSystemInfo` instead
