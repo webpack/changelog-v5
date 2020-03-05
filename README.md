@@ -888,7 +888,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - Removed deprecated features
   - BannerPlugin now only support an options object
 - removed CachePlugin
-- Chunk.entryModule is deprecated
+- Chunk.entryModule is deprecated, use ChunkGraph instead
 - Chunk.hasEntryModule is deprecated
 - Chunk.addModule is deprecated
 - Chunk.removeModule is deprecated
