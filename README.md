@@ -333,7 +333,7 @@ The following experiments will ship with webpack 5:
 
 * `.mjs` support like in webpack 4 (`experiments.mjs`)
 * Old WebAssembly support like in webpack 4 (`experiments.syncWebAssembly`)
-* New WebAssembly support acording to the [updated spec](https://github.com/WebAssembly/esm-integration) (`experiments.asyncWebAssembly`)
+* New WebAssembly support according to the [updated spec](https://github.com/WebAssembly/esm-integration) (`experiments.asyncWebAssembly`)
   * This makes a WebAssembly module an async module
 * [Top Level Await](https://github.com/tc39/proposal-top-level-await) Stage 3 proposal (`experiments.topLevelAwait`)
   * Using `await` on top-level makes the module an async module
@@ -679,7 +679,7 @@ webpack used to handle module processing by functions calling functions, and a `
 
 - `Compilation.factorizeQueue`: calling the module factory for a group of dependencies.
 - `Compilation.addModuleQueue`: adding the module to the compilation queue (may restore module from cache).
-- `Compilation.buildQueue`: building the module if neccessary (may stores module to cache).
+- `Compilation.buildQueue`: building the module if necessary (may stores module to cache).
 - `Compilation.rebuildQueue`: building a module again if manually triggered.
 - `Compilation.processDependenciesQueue`: processing dependencies of a module.
 
