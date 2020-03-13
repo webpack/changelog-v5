@@ -846,28 +846,28 @@ These dependencies are cheaper to process and webpack uses them when possible
   
 # Minor Changes
 
-- Compiler.name: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
+- `Compiler.name`: When generating a compiler name with absolute paths, make sure to separate them with `|` or `!` on both parts of the name.
   - Using space as a separator is now deprecated. (Paths could contain spaces)
   - Hint: `|` is replaced with space in Stats string output.
-- SystemPlugin is now disabled by default.
+- `SystemPlugin` is now disabled by default.
   - MIGRATION: Avoid using it as the spec has been removed. You can re-enable it with `Rule.parser.system: true`
-- ModuleConcatenationPlugin: concatenation is no longer prevented by `DependencyVariables` as they have been removed
+- `ModuleConcatenationPlugin`: concatenation is no longer prevented by `DependencyVariables` as they have been removed
   - This means it can now concatenate in cases of `module`, `global`, `process` or the ProvidePlugin
 - `exec` removed from the loader context
   - MIGRATION: This can be implemented in the loader itself
 - `Stats.presetToOptions` removed
   - MIGRATION: Use `compilation.createStatsOptions` instead
-- SingleEntryPlugin and SingleEntryDependency removed
-  - MIGRATION: use EntryPlugin and EntryDependency
+- `SingleEntryPlugin` and `SingleEntryDependency` removed
+  - MIGRATION: use `EntryPlugin` and `EntryDependency`
 - Chunks can now have multiple entry modules
-- ExtendedAPIPlugin removed
+- `ExtendedAPIPlugin` removed
   - MIGRATION: No longer needed, `__webpack_hash__` and `__webpack_chunkname__` can always be used and runtime code is injected where needed.
-- ProgressPlugin no longer uses tapable context for `reportProgress`
+- `ProgressPlugin` no longer uses tapable context for `reportProgress`
   - MIGRATION: Use `ProgressPlugin.getReporter(compiler)` instead
-- ProvidePlugin is now re-enabled for `.mjs` files
-- Stats json `errors` and `warnings` no longer contain strings but objects with information splitted into properties.
+- `ProvidePlugin` is now re-enabled for `.mjs` files
+- `Stats` json `errors` and `warnings` no longer contain strings but objects with information splitted into properties.
   - MIGRATION: Access the information on the properties. i. e. `message`
-- Compilation.hooks.normalModuleLoader is deprecated
+- `Compilation.hooks.normalModuleLoader` is deprecated
   - MIGRATION: Use `NormalModule.getCompilationHooks(compilation).loader` instead
 - Changed hooks in `NormalModuleFactory` from waterfall to bailing, changed and renamed hooks that return waterfall functions (since alpha.5)
 - Removed `compilationParams.compilationDependencies` (since alpha.5)
@@ -887,174 +887,174 @@ These dependencies are cheaper to process and webpack uses them when possible
 - removed buildin directory and replaced buildins with runtime modules
 - Removed deprecated features
   - BannerPlugin now only support an options object
-- removed CachePlugin
-- Chunk.entryModule is deprecated
-- Chunk.hasEntryModule is deprecated
-- Chunk.addModule is deprecated
-- Chunk.removeModule is deprecated
-- Chunk.getNumberOfModules is deprecated
-- Chunk.modulesIterable is deprecated
-- Chunk.compareTo is deprecated
-- Chunk.containsModule is deprecated
-- Chunk.getModules is deprecated
-- Chunk.remove is deprecated
-- Chunk.moveModule is deprecated
-- Chunk.integrate is deprecated
-- Chunk.canBeIntegrated is deprecated
-- Chunk.isEmpty is deprecated
-- Chunk.modulesSize is deprecated
-- Chunk.size is deprecated
-- Chunk.integratedSize is deprecated
-- Chunk.getChunkModuleMaps is deprecated
-- Chunk.hasModuleInGraph is deprecated
-- Chunk.updateHash signature changed
-- Chunk.getChildIdsByOrders signature changed (TODO: consider moving to ChunkGraph)
-- Chunk.getChildIdsByOrdersMap signature changed (TODO: consider moving to ChunkGraph)
-- Chunk.getChunkModuleMaps removed
-- Chunk.setModules removed
+- removed `CachePlugin`
+- `Chunk.entryModule` is deprecated
+- `Chunk.hasEntryModule` is deprecated
+- `Chunk.addModule` is deprecated
+- `Chunk.removeModule` is deprecated
+- `Chunk.getNumberOfModules` is deprecated
+- `Chunk.modulesIterable` is deprecated
+- `Chunk.compareTo` is deprecated
+- `Chunk.containsModule` is deprecated
+- `Chunk.getModules` is deprecated
+- `Chunk.remove` is deprecated
+- `Chunk.moveModule` is deprecated
+- `Chunk.integrate` is deprecated
+- `Chunk.canBeIntegrated` is deprecated
+- `Chunk.isEmpty` is deprecated
+- `Chunk.modulesSize` is deprecated
+- `Chunk.size` is deprecated
+- `Chunk.integratedSize` is deprecated
+- `Chunk.getChunkModuleMaps` is deprecated
+- `Chunk.hasModuleInGraph` is deprecated
+- `Chunk.updateHash` signature changed
+- `Chunk.getChildIdsByOrders` signature changed (TODO: consider moving to ChunkGraph)
+- `Chunk.getChildIdsByOrdersMap` signature changed (TODO: consider moving to ChunkGraph)
+- `Chunk.getChunkModuleMaps` removed
+- `Chunk.setModules` removed
 - deprecated Chunk methods removed
-- ChunkGraph added
-- ChunkGroup.setParents removed
-- ChunkGroup.containsModule removed
-- ChunkGroup.remove no longer disconnected the group from block
-- ChunkGroup.compareTo signature changed
-- ChunkGroup.getChildrenByOrders signature changed
-- ChunkGroup index and index renamed to pre/post order index
+- `ChunkGraph` added
+- `ChunkGroup.setParents` removed
+- `ChunkGroup.containsModule` removed
+- `ChunkGroup.remove` no longer disconnected the group from block
+- `ChunkGroup.compareTo` signature changed
+- `ChunkGroup.getChildrenByOrders` signature changed
+- `ChunkGroup` index and index renamed to pre/post order index
   - old getter is deprecated
-- ChunkTemplate.hooks.modules sigature changed
-- ChunkTemplate.hooks.render sigature changed
-- ChunkTemplate.updateHashForChunk sigature changed
-- Compilation.hooks.optimizeChunkOrder removed
-- Compilation.hooks.optimizeModuleOrder removed
-- Compilation.hooks.advancedOptimizeModuleOrder removed
-- Compilation.hooks.optimizeDependenciesBasic removed
-- Compilation.hooks.optimizeDependenciesAdvanced removed
-- Compilation.hooks.optimizeModulesBasic removed
-- Compilation.hooks.optimizeModulesAdvanced removed
-- Compilation.hooks.optimizeChunksBasic removed
-- Compilation.hooks.optimizeChunksAdvanced removed
-- Compilation.hooks.optimizeChunkModulesBasic removed
-- Compilation.hooks.optimizeChunkModulesAdvanced removed
-- Compilation.hooks.optimizeExtractedChunksBasic removed
-- Compilation.hooks.optimizeExtractedChunks removed
-- Compilation.hooks.optimizeExtractedChunksAdvanced removed
-- Compilation.hooks.afterOptimizeExtractedChunks removed
-- Compilation.hooks.stillValidModule added
-- Compilation.hooks.statsPreset added
-- Compilation.hooks.statsNormalize added
-- Compilation.hooks.statsFactory added
-- Compilation.hooks.statsPrinter added
-- Compilation.fileDependencies, Compilation.contextDependencies and Compilation.missingDependencies are now LazySets (since alpha.20)
-- Compilation.entries removed
+- `ChunkTemplate.hooks.modules` sigature changed
+- `ChunkTemplate.hooks.render` sigature changed
+- `ChunkTemplate.updateHashForChunk` sigature changed
+- `Compilation.hooks.optimizeChunkOrder` removed
+- `Compilation.hooks.optimizeModuleOrder` removed
+- `Compilation.hooks.advancedOptimizeModuleOrder` removed
+- `Compilation.hooks.optimizeDependenciesBasic` removed
+- `Compilation.hooks.optimizeDependenciesAdvanced` removed
+- `Compilation.hooks.optimizeModulesBasic` removed
+- `Compilation.hooks.optimizeModulesAdvanced` removed
+- `Compilation.hooks.optimizeChunksBasic` removed
+- `Compilation.hooks.optimizeChunksAdvanced` removed
+- `Compilation.hooks.optimizeChunkModulesBasic` removed
+- `Compilation.hooks.optimizeChunkModulesAdvanced` removed
+- `Compilation.hooks.optimizeExtractedChunksBasic` removed
+- `Compilation.hooks.optimizeExtractedChunks` removed
+- `Compilation.hooks.optimizeExtractedChunksAdvanced` removed
+- `Compilation.hooks.afterOptimizeExtractedChunks` removed
+- `Compilation.hooks.stillValidModule` added
+- `Compilation.hooks.statsPreset` added
+- `Compilation.hooks.statsNormalize` added
+- `Compilation.hooks.statsFactory` added
+- `Compilation.hooks.statsPrinter` added
+- `Compilation.fileDependencies`, `Compilation.contextDependencies` and `Compilation.missingDependencies` are now LazySets (since alpha.20)
+- `Compilation.entries` removed
   - MIGRATION: Use `Compilation.entryDependencies` instead
-- Compilation.\_preparedEntrypoints removed
-- dependencyTemplates is now a `DependencyTemplates` class instead of a raw `Map`
-- Compilation.fileTimestamps and contextTimestamps removed
+- `Compilation._preparedEntrypoints` removed
+- `dependencyTemplates` is now a `DependencyTemplates` class instead of a raw `Map`
+- `Compilation.fileTimestamps` and `contextTimestamps` removed
   - MIGRATION: Use `Compilation.fileSystemInfo` instead
-- Compilation.waitForBuildingFinished removed
+- `Compilation.waitForBuildingFinished` removed
   - MIGRATION: Use the new queues
-- Compilation.addModuleDependencies removed
-- Compilation.prefetch removed
-- Compilation.hooks.beforeHash is now called after the hashes of modules are created
+- `Compilation.addModuleDependencies` removed
+- `Compilation.prefetch` removed
+- `Compilation.hooks.beforeHash` is now called after the hashes of modules are created
   - MIGRATION: Use `Compiliation.hooks.beforeModuleHash` instead
-- Compilation.applyModuleIds removed
-- Compilation.applyChunkIds removed
-- Compiler.root added, which points to the root compiler
+- `Compilation.applyModuleIds` removed
+- `Compilation.applyChunkIds` removed
+- `Compiler.root` added, which points to the root compiler
   - it can be used to cache data in WeakMaps instead of statically scoped
-- Compiler.hooks.afterDone added
-- Source.emitted is no longer set by the Compiler
+- `Compiler.hooks.afterDone` added
+- `Source.emitted` is no longer set by the Compiler
   - MIGRATION: Check `Compilation.emittedAssets` instead
-- Compiler/Compilation.compilerPath added: It's a unique name of the compiler in the compiler tree. (Unique to the root compiler scope)
-- Module.needRebuild deprecated
+- `Compiler/Compilation.compilerPath` added: It's a unique name of the compiler in the compiler tree. (Unique to the root compiler scope)
+- `Module.needRebuild` deprecated
   - MIGRATION: use `Module.needBuild` instead
-- Dependency.getReference signature changed
-- Dependency.getExports signature changed
-- Dependency.getWarnings signature changed
-- Dependency.getErrors signature changed
-- Dependency.updateHash signature changed
-- Dependency.module removed
-- There is now a base class for DependencyTemplate
-- MultiEntryDependency removed
-- EntryDependency added
-- EntryModuleNotFoundError removed
-- SingleEntryPlugin removed
-- EntryPlugin added
-- Generator.getTypes added
-- Generator.getSize added
-- Generator.generate signature changed
-- HotModuleReplacementPlugin.getParserHooks added
-- Parser was moved to JavascriptParser
-- ParserHelpers was moved to JavascriptParserHelpers
-- MainTemplate.hooks.moduleObj removed
-- MainTemplate.hooks.currentHash removed
-- MainTemplate.hooks.addModule removed
-- MainTemplate.hooks.requireEnsure removed
-- MainTemplate.hooks.globalHashPaths removed
-- MainTemplate.hooks.globalHash removed
-- MainTemplate.hooks.hotBootstrap removed
-- MainTemplate.hooks some signatures changed
-- Module.hash deprecated
-- Module.renderedHash deprecated
-- Module.reasons removed
-- Module.id deprecated
-- Module.index deprecated
-- Module.index2 deprecated
-- Module.depth deprecated
-- Module.issuer deprecated
-- Module.profile removed
-- Module.prefetched removed
-- Module.built removed
-- Module.used removed
+- `Dependency.getReference` signature changed
+- `Dependency.getExports` signature changed
+- `Dependency.getWarnings` signature changed
+- `Dependency.getErrors` signature changed
+- `Dependency.updateHash` signature changed
+- `Dependency.module` removed
+- There is now a base class for `DependencyTemplate`
+- `MultiEntryDependency` removed
+- `EntryDependency` added
+- `EntryModuleNotFoundError` removed
+- `SingleEntryPlugin` removed
+- `EntryPlugin` added
+- `Generator.getTypes` added
+- `Generator.getSize` added
+- `Generator.generate` signature changed
+- `HotModuleReplacementPlugin.getParserHooks` added
+- `Parser` was moved to `JavascriptParser`
+- `ParserHelpers` was moved to `JavascriptParserHelpers`
+- `MainTemplate.hooks.moduleObj` removed
+- `MainTemplate.hooks.currentHash` removed
+- `MainTemplate.hooks.addModule` removed
+- `MainTemplate.hooks.requireEnsure` removed
+- `MainTemplate.hooks.globalHashPaths` removed
+- `MainTemplate.hooks.globalHash` removed
+- `MainTemplate.hooks.hotBootstrap` removed
+- `MainTemplate.hooks` some signatures changed
+- `Module.hash` deprecated
+- `Module.renderedHash` deprecated
+- `Module.reasons` removed
+- `Module.id` deprecated
+- `Module.index` deprecated
+- `Module.index2` deprecated
+- `Module.depth` deprecated
+- `Module.issuer` deprecated
+- `Module.profile` removed
+- `Module.prefetched` removed
+- `Module.built` removed
+- `Module.used` removed
   - MIGRATION: Use `Module.getUsedExports` instead
 - Module.usedExports deprecated
   - MIGRATION: Use `Module.getUsedExports` instead
-- Module.optimizationBailout deprecated
-- Module.exportsArgument removed
-- Module.optional deprecated
-- Module.disconnect removed
-- Module.unseal removed
-- Module.setChunks removed
-- Module.addChunk deprecated
-- Module.removeChunk deprecated
-- Module.isInChunk deprecated
-- Module.isEntryModule deprecated
-- Module.getChunks deprecated
-- Module.getNumberOfChunks deprecated
-- Module.chunksIterable deprecated
-- Module.hasEqualsChunks removed
-- Module.useSourceMap moved to NormalModule
-- Module.addReason removed
-- Module.removeReason removed
-- Module.rewriteChunkInReasons removed
-- Module.isUsed removed
+- `Module.optimizationBailout` deprecated
+- `Module.exportsArgument` removed
+- `Module.optional` deprecated
+- `Module.disconnect` removed
+- `Module.unseal` removed
+- `Module.setChunks` removed
+- `Module.addChunk` deprecated
+- `Module.removeChunk` deprecated
+- `Module.isInChunk` deprecated
+- `Module.isEntryModule` deprecated
+- `Module.getChunks` deprecated
+- `Module.getNumberOfChunks` deprecated
+- `Module.chunksIterable` deprecated
+- `Module.hasEqualsChunks` removed
+- `Module.useSourceMap` moved to `NormalModule`
+- `Module.addReason` removed
+- `Module.removeReason` removed
+- `Module.rewriteChunkInReasons` removed
+- `Module.isUsed` removed
   - MIGRATION: Use `isModuleUsed`, `isExportUsed` and `getUsedName` instead
-- Module.updateHash signature changed
-- Module.sortItems removed
-- Module.unbuild removed
+- `Module.updateHash` signature changed
+- `Module.sortItems` removed
+- `Module.unbuild` removed
   - MIGRATION: Use `invalidateBuild` instead
-- Module.getSourceTypes added
-- Module.getRuntimeRequirements added
-- Module.size signature changed
-- ModuleFilenameHelpers.createFilename signature changed
-- ModuleProfile class added with more data
-- ModuleReason removed
-- ModuleTemplate.hooks signatures changed
-- ModuleTemplate.render signature changed
-- Compiler.dependencies removed
+- `Module.getSourceTypes` added
+- `Module.getRuntimeRequirements` added
+- `Module.size` signature changed
+- `ModuleFilenameHelpers.createFilename` signature changed
+- `ModuleProfile` class added with more data
+- `ModuleReason` removed
+- `ModuleTemplate.hooks` signatures changed
+- `ModuleTemplate.render` signature changed
+- `Compiler.dependencies` removed
   - MIGRATION: Use `MultiCompiler.setDependencies` instead
-- MultiModule removed
-- MultiModuleFactory removed
-- NormalModuleFactory.fileDependencies, NormalModuleFactory.contextDependencies and NormalModuleFactory.missingDependencies are now LazySets (since alpha.20)
-- RuntimeTemplate methods now take `runtimeRequirements` arguments
-- serve property is removed
-- Stats.jsonToString removed
-- Stats.filterWarnings removed
-- Stats.getChildOptions removed
-- Stats helper methods removed
-- Stats.toJson signature changed (second argument removed)
-- ExternalModule.external removed
-- HarmonyInitDependency removed
-- Dependency.getInitFragments deprecated
+- `MultiModule` removed
+- `MultiModuleFactory` removed
+- `NormalModuleFactory.fileDependencies`, `NormalModuleFactory.contextDependencies` and `NormalModuleFactory.missingDependencies` are now LazySets (since alpha.20)
+- `RuntimeTemplate` methods now take `runtimeRequirements` arguments
+- `serve` property is removed
+- `Stats.jsonToString` removed
+- `Stats.filterWarnings` removed
+- `Stats.getChildOptions` removed
+- `Stats` helper methods removed
+- `Stats.toJson` signature changed (second argument removed)
+- `ExternalModule.external` removed
+- `HarmonyInitDependency` removed
+- `Dependency.getInitFragments` deprecated
   - MIGRATION: Use `apply` `initFragements` instead
 - DependencyReference now takes a function to a module instead of a Module
 - HarmonyImportSpecifierDependency.redirectedId removed
