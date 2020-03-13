@@ -888,7 +888,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - Removed deprecated features
   - BannerPlugin now only support an options object
 - removed `CachePlugin`
-- `Chunk.entryModule` is deprecated
+- `Chunk.entryModule` is deprecated, use ChunkGraph instead
 - `Chunk.hasEntryModule` is deprecated
 - `Chunk.addModule` is deprecated
 - `Chunk.removeModule` is deprecated
@@ -908,8 +908,8 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `Chunk.getChunkModuleMaps` is deprecated
 - `Chunk.hasModuleInGraph` is deprecated
 - `Chunk.updateHash` signature changed
-- `Chunk.getChildIdsByOrders` signature changed (TODO: consider moving to ChunkGraph)
-- `Chunk.getChildIdsByOrdersMap` signature changed (TODO: consider moving to ChunkGraph)
+- `Chunk.getChildIdsByOrders` signature changed (TODO: consider moving to `ChunkGraph`)
+- `Chunk.getChildIdsByOrdersMap` signature changed (TODO: consider moving to `ChunkGraph`)
 - `Chunk.getChunkModuleMaps` removed
 - `Chunk.setModules` removed
 - deprecated Chunk methods removed
