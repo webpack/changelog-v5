@@ -940,7 +940,11 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `Compilation.hooks.optimizeExtractedChunksAdvanced` removed
 - `Compilation.hooks.afterOptimizeExtractedChunks` removed
 - `Compilation.hooks.stillValidModule` added
-- `Compilation.fileDependencies`, `Compilation.contextDependencies and `Compilation.missingDependencies are now LazySets (since alpha.20)
+- `Compilation.hooks.statsPreset` added
+- `Compilation.hooks.statsNormalize` added
+- `Compilation.hooks.statsFactory` added
+- `Compilation.hooks.statsPrinter` added
+- `Compilation.fileDependencies`, `Compilation.contextDependencies` and `Compilation.missingDependencies` are now LazySets (since alpha.20)
 - `Compilation.entries` removed
   - MIGRATION: Use `Compilation.entryDependencies` instead
 - `Compilation._preparedEntrypoints` removed
