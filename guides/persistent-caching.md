@@ -258,9 +258,9 @@ infrastructureLogging: {
     * from `cache.buildDependencies`
     * from used loaders
 * new build dependencies are resolved
-  * resolve dependencies are tracked
-  * resolve results are tracked
-* a snapshot from all new resolve dependencies is created
+  * `resolve dependencies` are tracked
+  * `resolve results` are tracked
+* a snapshot from all new `resolve dependencies` is created
 * a snapshot from all new build dependencies is created
 * persistent cache file is serialized to disk
 
