@@ -5,7 +5,7 @@ Welcome to the persistent caching guide.
 First, note that persistent caching is not enabled by default. You have to opt-in using it.
 
 Why is that?
-Webpack tries to favor safety over performance.
+webpack tries to favor safety over performance.
 We don't want to enable a feature by default that will improve your performance by 95% but breaks your application/workflow/build in 5%.
 
 That sounds like it's broken, but believe me, it's not.
@@ -14,16 +14,16 @@ But it requires an extra step by the developer to configure it correctly.
 While serialization and deserialization would work out-of-the-box without extra steps by the developer, the part that may not work out-of-the-box is cache invalidation.
 
 What's cache invalidation?
-Webpack needs to figure out when cache entries are no longer valid and stop using them for the build.
+webpack needs to figure out when cache entries are no longer valid and stop using them for the build.
 So this happens when you change a file in your application.
 
 Example: You change `magic.js`.
-Webpack must invalidate the cache entry for `magic.js`.
+webpack must invalidate the cache entry for `magic.js`.
 The build will process the file again, i. e. runs babel, typescript, whatever, parses the file and runs Code Generation again.
-Then Webpack probably also invalidates the cache entry for `bundle.js`,
+Then webpack probably also invalidates the cache entry for `bundle.js`,
 and the build will rebuild this file from the contained modules.
 
-For this Webpack tracks `fileDependencies` `contextDependencies` and `missingDependencies` for each Module, and creates a file system snapshot.
+For this webpack tracks `fileDependencies` `contextDependencies` and `missingDependencies` for each Module, and creates a file system snapshot.
 This snapshot is compared with the real file system and when differences are detected a re-build is triggered for that module.
 
 Then for the cache entry of `bundle.js`, webpack stores an `etag`, which is a hash of all contributors.
@@ -33,7 +33,7 @@ All this was also required for in-memory caching in webpack 4.
 And all this works out-of-the-box from developer-view without extra configuration.
 For persistent caching in webpack 5, there is a new challenge.
 
-Webpack also needs to invalidate cache entries:
+webpack also needs to invalidate cache entries:
 * when you npm upgrade a loader or plugin
 * when you change your configuration
 * when you change a file that is being read in the configuration
@@ -42,7 +42,7 @@ Webpack also needs to invalidate cache entries:
 * when you have a custom build script and change that
 
 Here it becomes tricky.
-Webpack is not able to handle all these cases out-of-the-box.
+webpack is not able to handle all these cases out-of-the-box.
 That's why we've chosen the safe way and made persistent caching an opt-in feature.
 We want you to learn how to enable persistent caching to give you the correct hints.
 We want you to know which configuration needs to be used to handle i. e. your custom build script.
