@@ -128,7 +128,7 @@ cache: {
 
 # Performance optimizations
 
-Hashing and timestamping a large part of node_modules for build and normal dependencies would be pretty expensive, and would slow down webpack a lot.
+Hashing and timestamping a large part of `node_modules` for build and normal dependencies would be pretty expensive, and would slow down webpack a lot.
 To avoid this webpack includes a performance optimization that skips over files in `node_modules` by default and uses the `version` and `name` in `package.json` as a source of truth.
 
 This optimization will be used for all paths in the configuration option `cache.managedPaths`.
