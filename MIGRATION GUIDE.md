@@ -128,7 +128,7 @@ Some configuration options have changed. There should be a validation error with
 
 ## Level 2: webpack crashes with error
 
-The error message should tell you what need to be changed.
+The error message should tell you what needs to be changed.
 
 ## Level 3: Build Errors
 
