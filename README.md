@@ -327,7 +327,7 @@ Not all features are stable from the beginning. In webpack 4 we added experiment
 
 In webpack 5 there is a new `experiments` config option which allows to enabled experimental features. This makes it clear which ones are enabled/used.
 
-While webpack follows semantic versioning, it will make an exception for experimental features. Experimental features might contain breaking changes in minor webpack versions. When this happens we will add a clear note into the changelog. This will allow us to interate faster for experimental features, while also allowing us to stay longer on a major version for stable features.
+While webpack follows semantic versioning, it will make an exception for experimental features. Experimental features might contain breaking changes in minor webpack versions. When this happens we will add a clear note into the changelog. This will allow us to iterate faster for experimental features, while also allowing us to stay longer on a major version for stable features.
 
 The following experiments will ship with webpack 5:
 
