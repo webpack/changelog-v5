@@ -1,6 +1,6 @@
 [Help by editing this file](https://github.com/webpack/changelog-v5/edit/master/MIGRATION%20GUIDE.md).
 
-This guide should help you migrating to webpack 5 when **using webpack directly**. If you are using some higher-level tool to run webpack, please see the guide in this tool for migration.
+This guide should help you migrating to webpack 5 when **using webpack directly**. If you are using some higher-level tool to run webpack, please refer to the guide on migrating to webpack 5 for the tool you are using.
 
 # Preparations
 
