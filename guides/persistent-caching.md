@@ -34,12 +34,13 @@ And all this works out-of-the-box from developer-view without extra configuratio
 For persistent caching in webpack 5, there is a new challenge.
 
 webpack also needs to invalidate cache entries:
-* when you npm upgrade a loader or plugin
-* when you change your configuration
-* when you change a file that is being read in the configuration
-* when you npm upgrade a dependency that is used in the configuration
-* when you pass different command-line arguments to your build script
-* when you have a custom build script and change that
+
+- when you npm upgrade a loader or plugin
+- when you change your configuration
+- when you change a file that is being read in the configuration
+- when you npm upgrade a dependency that is used in the configuration
+- when you pass different command-line arguments to your build script
+- when you have a custom build script and change that
 
 Here it becomes tricky.
 webpack is not able to handle all these cases out-of-the-box.
@@ -65,7 +66,7 @@ For files, we will look into the Node.js module cache to find dependencies.
 Example: The build usually depends on the `lib` folder of `webpack` itself.
 You could specify it this way:
 
-``` js
+```js
 cache.buildDependencies: {
     defaultWebpack: ["webpack/lib/"]
 }
@@ -77,7 +78,7 @@ Coincidentally this is already the default value, so you don't have to specify i
 Another example: The build usually also depends on your configuration file.
 You could specify it this way:
 
-``` js
+```js
 cache.buildDependencies: {
     config: [__filename]
 }
@@ -102,9 +103,9 @@ Example: Your config reads the environment variable `GIT_REV` and uses this valu
 This makes `GIT_REV` a dependency for your build.
 You could specify it this way:
 
-``` js
+```js
 cache: {
-    version: `${process.env.GIT_REV}`
+  version: `${process.env.GIT_REV}`;
 }
 ```
 
@@ -120,9 +121,9 @@ For these values, there is a new configuration options `cache.name`.
 Example: Your config uses the `--env.target mobile|desktop` argument to creates builds for either mobile or desktop users.
 You could specify it this way:
 
-``` js
+```js
 cache: {
-    name: `${env.target}`
+  name: `${env.target}`;
 }
 ```
 
@@ -151,7 +152,7 @@ Make sure you have read and understood the information above!
 
 Here is a typical config to enable the persistent cache:
 
-``` js
+```js
 cache: {
     type: "filesystem",
     buildDependencies: {
@@ -173,28 +174,28 @@ This happens because serialization and disk writing uses up resources and we don
 
 For single builds the workflow is:
 
-* Loading cache
-* Building
-* Emitting
-* Display results (stats)
-* Persisting cache (if changed)
-* Process exits
+- Loading cache
+- Building
+- Emitting
+- Display results (stats)
+- Persisting cache (if changed)
+- Process exits
 
 For continuous builds (watch) the workflow is:
 
-* Loading cache
-* Building
-* Emitting
-* Display results (stats)
-* Attach filesystem watchers
-* Wait `cache.idleTimeoutForInitialStore`
-* Persisting cache (if changed)
-* On change:
-  * Building
-  * Emitting
-  * Display results (stats)
-  * Wait `cache.idleTimeout`
-  * Persisting cache (if changed)
+- Loading cache
+- Building
+- Emitting
+- Display results (stats)
+- Attach filesystem watchers
+- Wait `cache.idleTimeoutForInitialStore`
+- Persisting cache (if changed)
+- On change:
+  - Building
+  - Emitting
+  - Display results (stats)
+  - Wait `cache.idleTimeout`
+  - Persisting cache (if changed)
 
 You see the two new configuration options `cache.idleTimeout` and `cache.idleTimeoutForInitialStore` which control how long the compiler has to idle before cache is persisted.
 `cache.idleTimeout` defaults to 60s and `cache.idleTimeoutForInitialStore` defaults to 0s.
@@ -224,51 +225,51 @@ When it doesn't allow to use a custom config to extend webpack, it could switch 
 
 A CLI using webpack could add some build dependencies by default, which is not possible for the webpack itself.
 
-* It should set `cache.buildDependencies.defaultConfig` to the used config file by default.
-* It should append the command line arguments to `cache.version`
-* It may add a note to `cache.name` when command line arguments are used
+- It should set `cache.buildDependencies.defaultConfig` to the used config file by default.
+- It should append the command line arguments to `cache.version`
+- It may add a note to `cache.name` when command line arguments are used
 
 ## Debug information
 
 With the following config additional debug information will be emitted:
 
-``` js
+```js
 infrastructureLogging: {
-    debug: /webpack\.cache/
+  debug: /webpack\.cache/;
 }
 ```
 
 ## Internal workflow
 
-* webpack reads the cache file.
-  * There is no cache file -> build without cache
-  * `version` in the cache file doesn't match the `cache.version` -> build without cache
-* webpack compares the `resolve snapshot` with the filesystem
-  * It does match -> continue below
-  * It doesn't match:
-    * Resolve all `resolve results` again
-      * It doesn't match -> build without cache
-      * It does match -> continue below
-* webpack compares the `build dependencies snapshot` with the filesystem
-  * It doesn't match -> build without cache
-  * It does match -> continue below
-* cache entries are deserialized (big cache entries are deserialized lazily during the build)
-* build runs (with or without cache)
-  * build dependencies are tracked
-    * from `cache.buildDependencies`
-    * from used loaders
-* new build dependencies are resolved
-  * `resolve dependencies` are tracked
-  * `resolve results` are tracked
-* a snapshot from all new `resolve dependencies` is created
-* a snapshot from all new build dependencies is created
-* persistent cache file is serialized to disk
+- webpack reads the cache file.
+  - There is no cache file -> build without cache
+  - `version` in the cache file doesn't match the `cache.version` -> build without cache
+- webpack compares the `resolve snapshot` with the filesystem
+  - It does match -> continue below
+  - It doesn't match:
+    - Resolve all `resolve results` again
+      - It doesn't match -> build without cache
+      - It does match -> continue below
+- webpack compares the `build dependencies snapshot` with the filesystem
+  - It doesn't match -> build without cache
+  - It does match -> continue below
+- cache entries are deserialized (big cache entries are deserialized lazily during the build)
+- build runs (with or without cache)
+  - build dependencies are tracked
+    - from `cache.buildDependencies`
+    - from used loaders
+- new build dependencies are resolved
+  - `resolve dependencies` are tracked
+  - `resolve results` are tracked
+- a snapshot from all new `resolve dependencies` is created
+- a snapshot from all new build dependencies is created
+- persistent cache file is serialized to disk
 
 ## Serialization
 
 All classes that should support serialization need to have a serializer registered:
 
-``` js
+```js
 webpack.util.serialization.register(Constructor, request, name, serializer);
 ```
 
@@ -297,7 +298,7 @@ This method deserializes something from the input stream.
 
 Example:
 
-``` js
+```js
 // some-module/lib/MyClass.js
 class MyClass {
     constructor(a, b) {

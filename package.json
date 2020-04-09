@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "prettier": "2.0.4"
+  },
+  "scripts":{
+    "pretty-lint-base": "prettier \"**/*.md\"",
+    "pretty-lint-fix": "yarn pretty-lint-base --loglevel warn --write",
+    "pretty-lint": "yarn pretty-lint-base --check"
+  }
+}

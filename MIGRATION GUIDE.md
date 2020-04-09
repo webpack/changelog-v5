@@ -32,7 +32,7 @@ There might be new errors or warnings because of the upgraded versions of webpac
 
 You can invoke webpack this way
 
-``` sh
+```sh
 node --trace-deprecation node_modules/webpack/bin/webpack.js ...
 ```
 
@@ -58,13 +58,13 @@ This will make sure you get the correct defaults.
 
 Update the following options to their new version:
 
-* `optimization.hashedModuleIds: true` -> `optimization.moduleIds: "hashed"`
-* `optimization.namedChunks: true` -> `optimization.chunkIds: "named"`
-* `optimization.namedModules: true` -> `optimization.moduleIds: "named"`
-* `NamedModulesPlugin` -> `optimization.moduleIds: "named"`
-* `NamedChunksPlugin` -> `optimization.chunkIds: "named"`
-* `HashedModulesPlugin` -> `optimization.moduleIds: "hashed"`
-* `optimization.occurrenceOrder: true` -> `optimization: { chunkIds: "total-size", moduleIds: "size" }`
+- `optimization.hashedModuleIds: true` -> `optimization.moduleIds: "hashed"`
+- `optimization.namedChunks: true` -> `optimization.chunkIds: "named"`
+- `optimization.namedModules: true` -> `optimization.moduleIds: "named"`
+- `NamedModulesPlugin` -> `optimization.moduleIds: "named"`
+- `NamedChunksPlugin` -> `optimization.chunkIds: "named"`
+- `HashedModulesPlugin` -> `optimization.moduleIds: "hashed"`
+- `optimization.occurrenceOrder: true` -> `optimization: { chunkIds: "total-size", moduleIds: "size" }`
 
 ## Disable ES2015 syntax in runtime code, if necessary
 
@@ -74,8 +74,8 @@ By default, Webpack's runtime code uses ES2015 syntax to build smaller bundles. 
 
 Try to set the following options in your webpack 4 builds and check if it still works correctly.
 
-* `node.Buffer: false`
-* `node.process: false`
+- `node.Buffer: false`
+- `node.process: false`
 
 Note: webpack 5 removes these options and will always use `false`. You have to remove these options again when upgrading to webpack 5.
 
@@ -85,36 +85,36 @@ Run `yarn add webpack@next -D` resp. `npm install webpack@next --dev`.
 
 # Cleanup configuration
 
-* Consider removing `optimization.moduleIds` and `optimization.chunkIds`. The defaults are probably perfect. They support Long Term Caching (in production) and debugging (in development)
-* Reconsider `optimization.splitChunks`.
-  * It's recommended to use either the defaults or `optimization.splitChunks: { chunks: "all" }`
-  * When using HTTP/2 and Long Term Caching set `optimization.splitChunks: { chunks: "all", maxInitialRequests: 30, maxAsyncRequests: 30, maxSize: 100_000 }`
-  * When really using a custom configuration replace `name` with `idHint`.
-  * Used to disable the defaults with `default: false, vendors: false`. Consider not doing this, but if you really want to `default: false, defaultVendors: false`.
-* When using the `WatchIgnorePlugin`, use `watchOptions.ignore` instead.
-* When using `[hash]`: Consider changing to `[contenthash]` (not the same, but better)
-* Using WASM: Set `experiments.syncWebAssembly: true` (after migration to webpack 5, migrate to `experiments: { asyncWebAssembly: true, importAsync: true }` instead)
-* Using .mjs: Set `experiments.mjs: true`
-* Using `entry: "./src/index.js`: you can omit it, that's the default
-* Using `output.path: path.resolve(__dirname, "dist")`: you can omit it, that's the default
-* Using `output.filename: "[name].js"`: you can omit it, that's the default
-* Using Yarn PnP and the pnp-resolver-plugin: you must omit it, that's supported by default now.
-* Using `IgnorePlugin` with a regular expression as argument: It takes an options object now: `new IgnorePlugin({ resourceRegExp: /regExp/ })`.
+- Consider removing `optimization.moduleIds` and `optimization.chunkIds`. The defaults are probably perfect. They support Long Term Caching (in production) and debugging (in development)
+- Reconsider `optimization.splitChunks`.
+  - It's recommended to use either the defaults or `optimization.splitChunks: { chunks: "all" }`
+  - When using HTTP/2 and Long Term Caching set `optimization.splitChunks: { chunks: "all", maxInitialRequests: 30, maxAsyncRequests: 30, maxSize: 100_000 }`
+  - When really using a custom configuration replace `name` with `idHint`.
+  - Used to disable the defaults with `default: false, vendors: false`. Consider not doing this, but if you really want to `default: false, defaultVendors: false`.
+- When using the `WatchIgnorePlugin`, use `watchOptions.ignore` instead.
+- When using `[hash]`: Consider changing to `[contenthash]` (not the same, but better)
+- Using WASM: Set `experiments.syncWebAssembly: true` (after migration to webpack 5, migrate to `experiments: { asyncWebAssembly: true, importAsync: true }` instead)
+- Using .mjs: Set `experiments.mjs: true`
+- Using `entry: "./src/index.js`: you can omit it, that's the default
+- Using `output.path: path.resolve(__dirname, "dist")`: you can omit it, that's the default
+- Using `output.filename: "[name].js"`: you can omit it, that's the default
+- Using Yarn PnP and the pnp-resolver-plugin: you must omit it, that's supported by default now.
+- Using `IgnorePlugin` with a regular expression as argument: It takes an options object now: `new IgnorePlugin({ resourceRegExp: /regExp/ })`.
 
 # Cleanup code
 
-* Using `/* webpackChunkName: "..." */`: Make sure to understand the intention.
-  * The name here is intended to be public visible.
-  * It's not a development-only name
-  * webpack will use it to name files in production and development mode
-  * webpack 5 will automatically assign useful file names in development even when not using `webpackChunkName`
-* Using named exports from JSON modules: This is not supported by the (new) spec and you will get a warning
-  * Instead of `import { version } from "./package.json"` use `import package from "./package.json"; const { version } = package;`
+- Using `/* webpackChunkName: "..." */`: Make sure to understand the intention.
+  - The name here is intended to be public visible.
+  - It's not a development-only name
+  - webpack will use it to name files in production and development mode
+  - webpack 5 will automatically assign useful file names in development even when not using `webpackChunkName`
+- Using named exports from JSON modules: This is not supported by the (new) spec and you will get a warning
+  - Instead of `import { version } from "./package.json"` use `import package from "./package.json"; const { version } = package;`
 
 # Cleanup build code
 
-* Using `const compiler = webpack(...);`: Make sure to close the compiler after use
-  * `compiler.close()`
+- Using `const compiler = webpack(...);`: Make sure to close the compiler after use
+  - `compiler.close()`
 
 # Run a single build and follow advises
 
@@ -144,7 +144,7 @@ You probably get a lot of deprecation warnings. This is not a problem right now.
 
 You can hide deprecation warnings with
 
-``` sh
+```sh
 node --no-deprecation node_modules/webpack/bin/webpack.js ...
 ```
 
