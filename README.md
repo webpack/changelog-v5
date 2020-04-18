@@ -69,6 +69,8 @@ MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can a
 
 Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was related to changed module order and has been fixed. (since beta.1)
 
+Note: In webpack 5, `deterministic` Ids are enabled by default in production mode
+
 ## Deterministic Mangled Export Names
 
 A new algorithm was added to mangling export names. It's enabled by default.
