@@ -879,7 +879,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `__webpack_get_script_filename__` function added to get the filename of a script file (since alpha.12)
 - `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve` (since alpha.13)
 - `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch` (since alpha.13)
-  - This may have changed semenatics in edge-cases
+  - This may have changed semantics in edge-cases
 - `checkContext` was removed from `IgnorePlugin` (since alpha.16)
 - New `__webpack_exports_info__` API allows export usage introspection (since alpha.21)
 - SourceMapDevToolPlugin applies to non-chunk assets too now (since alpha.27)
@@ -923,9 +923,9 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `ChunkGroup.getChildrenByOrders` signature changed
 - `ChunkGroup` index and index renamed to pre/post order index
   - old getter is deprecated
-- `ChunkTemplate.hooks.modules` sigature changed
-- `ChunkTemplate.hooks.render` sigature changed
-- `ChunkTemplate.updateHashForChunk` sigature changed
+- `ChunkTemplate.hooks.modules` signature changed
+- `ChunkTemplate.hooks.render` signature changed
+- `ChunkTemplate.updateHashForChunk` signature changed
 - `Compilation.hooks.optimizeChunkOrder` removed
 - `Compilation.hooks.optimizeModuleOrder` removed
 - `Compilation.hooks.advancedOptimizeModuleOrder` removed
