@@ -24,7 +24,7 @@ MIGRATION: Make sure that your webpack 4 build does not print deprecation warnin
 
 Here are a few things that were removed but did not have deprecation warnings in v4:
 
-- IgnorePlugin and BannerPlugin must now be passed only one argument that can be object, string or function.
+- IgnorePlugin and BannerPlugin must now be passed only one argument that can be an object, string or function.
 
 ## Deprecation codes
 
@@ -888,7 +888,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 
 - removed buildin directory and replaced buildins with runtime modules
 - Removed deprecated features
-  - BannerPlugin now only support one argument that can be object, string or function
+  - BannerPlugin now only support one argument that can be an object, string or function
 - removed `CachePlugin`
 - `Chunk.entryModule` is deprecated, use ChunkGraph instead
 - `Chunk.hasEntryModule` is deprecated
