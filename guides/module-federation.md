@@ -35,7 +35,7 @@ Circular dependencies between container are also possible.
 
 A container is able to flag selected local modules as "overridable".
 A consumer of the container is able to provide "overrides", which are modules that replace one of the overridable module of the container.
-All modules of the container will use the replacement module instead of the local module when the consomer provides one.
+All modules of the container will use the replacement module instead of the local module when the consumer provides one.
 When the consumer doesn't provide a replacement module, all modules of the container will use the local one.
 
 The container will organize overridable modules in a way that they do not need to be downloaded when they has been overriding by the consumer.
