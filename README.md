@@ -433,8 +433,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `node.console` removed
   - `node.process` removed
   - `node.*` (node.js native module) removed
-  - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints.
-    - Refer to [node-libs-browser](https://github.com/webpack/node-libs-browser) for polyfills & mocks used in v4
+  - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints. (Refer to [node-libs-browser](https://github.com/webpack/node-libs-browser) for polyfills & mocks used in v4)
 - `output.filename` can now be a function (since alpha.17)
 - `output.assetModuleFilename` added (since alpha.19)
 - `devtool` is more strict (since beta.1)
