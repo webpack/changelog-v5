@@ -504,6 +504,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: Change signature
 - `experiments` added (see Experiments section above, since alpha.19)
 - `watchOptions.followSymlinks` added (since alpha.19)
+- `webpack.util.serialization` is now exposed.
 
 ## Changes to the Defaults
 
