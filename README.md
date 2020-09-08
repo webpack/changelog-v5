@@ -186,6 +186,14 @@ The following constructs are supported:
 
 (since beta.9)
 
+## Development Production Similarity
+
+We try to find a good trade-off between build performance in development mode and avoiding production-only problems by improving the similarity between both modes.
+
+Webpack 5 enables the `sideEffects` optimization by default in both modes. In webpack 4 this optimization lead to some production-only errors because of an incorrect `"sideEffects"` flag in package.json. Enabling this optimization in development allows to find these problems faster and easier.
+
+(since beta.14)
+
 ## Compiler Idle and Close
 
 Compilers now need to be closed after being used. Compilers now enter and leave the idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
@@ -399,6 +407,16 @@ To make progress percentage more accurate `ProgressPlugin` caches the last known
 
 (since beta.14)
 
+## Automatic unique naming
+
+In webpack 4 multiple webpack runtimes could conflict on the same page, because they use the same global variable for chunk loading. To fix that it was needed to provide a custom name to the `output.jsonpFunction` configuration.
+
+Webpack 5 does automatically infer a unique name for the build from `package.json` `name` and uses this as default for `output.uniqueName`.
+
+This value is used to make all potentical conflicting globals unique.
+
+MIGRATION: Consider removing `output.jsonpFunction`.
+
 ## Minimum Node.js Version
 
 The minimum supported node.js version has increased from 6 to 10.13.0(LTS).
@@ -533,6 +551,15 @@ See https://github.com/webpack/webpack/pull/10017 for details
 
 The following changes are only relevant for plugin authors:
 
+## New plugin order
+
+Plugins in webpack 5 are now applies **before** the configuration defaults has been applied.
+This allows plugins to apply their own defaults, or act as configuration presets.
+
+But this is also a breaking change as plugins can't rely on configuration values to be set when they are applied.
+
+MIGRATION: Access configuration only in plugin hooks. Or best avoid accessing configuration at all and take options via constructor.
+
 ## Runtime Modules
 
 A large part of the runtime code was moved into the so-called "runtime modules". These special modules are in-charge of adding runtime code. They can be added into any chunk, but are currently always added to the runtime chunk. "Runtime Requirements" control which runtime modules (or core runtime parts) are added to the bundle. This ensures that only runtime code that is used is added to the bundle. In the future, runtime modules could also be added to an on-demand-loaded chunk, to load runtime code when needed.
@@ -599,7 +626,7 @@ If an object is passed as entry point the value might be a string, array of stri
 module.exports = {
   entry: {
     catalog: { 
-      import: './catalog.js', 
+      import: './catalog.js',
     }
   }
 };
@@ -633,6 +660,31 @@ module.exports = {
 ```
 
 The app chunk will not contain the modules that `react-vendors` has.
+
+(since beta.14)
+
+### Entry point library
+
+The entry descriptor allows to pass a different `library` option for each entrypoint.
+
+```js
+module.exports = {
+  entry: {
+    commonjs: {
+      import: './lib.js',
+      library: {
+        type: "commonjs-module"
+      }
+    },
+    amd: {
+      import: './lib.js',
+      library: {
+        type: "amd"
+      }
+    }
+  }
+};
+```
 
 (since beta.14)
 
@@ -890,6 +942,8 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `checkContext` was removed from `IgnorePlugin` (since alpha.16)
 - New `__webpack_exports_info__` API allows export usage introspection (since alpha.21)
 - SourceMapDevToolPlugin applies to non-chunk assets too now (since alpha.27)
+- EnvironmentPlugin shows an error now when referenced env variable is missing and has no fallback (since beta.14)
+- Remove serve property from schema (since beta.14)
 
 # Other Minor Changes
 
