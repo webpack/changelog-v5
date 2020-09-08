@@ -267,6 +267,10 @@ When using Yarn PnP webpack assumes that the yarn cache is immutable (which it u
 
 (since beta.10)
 
+The Persistent Cache will automatically create multiple cache files depending on usage to optimize read and write access to and from the cache.
+
+(since beta.13)
+
 `ProgressPlugin` used the Persistent Cache.
 
 (since beta.14)
@@ -516,6 +520,14 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `resolveLoader.extensions` remove `.json` (since alpha.8)
 - `node.global` `node.__filename` and `node.__dirname` defaults to `false` in node-`target`s (since alpha.14)
 - `stats.errorStack` defaults to `false` (since beta.1)
+
+# Loader related Changes
+
+## `this.getOptions`
+
+This new API should simplity the usage for options in loaders.
+It allows to pass an JSON schema for validation.
+See https://github.com/webpack/webpack/pull/10017 for details
 
 # Major Internal Changes
 
