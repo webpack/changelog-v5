@@ -55,30 +55,22 @@ MIGRATION:
 - It's possible to manually add a polyfill for a node.js core module. An error message will give a hint on how to achieve that.
 - Package authors: Use the `browser` field in `package.json` to make a package frontend-compatible. Provide alternative implementations/dependencies for the browser.
 
-## Deterministic Chunk and Module IDs
+## Deterministic Chunk, Module IDs and Export names
 
 New algorithms were added for long term caching. These are enabled by default in production mode.
 
-`chunkIds: "deterministic", moduleIds: "deterministic"`
+`chunkIds: "deterministic", moduleIds: "deterministic", mangleExports: "deterministic"`
 
-The algorithms assign short (3 or 4 characters) numeric IDs to modules and chunks in a deterministic way.
+The algorithms assign short (3 or 4 characters) numeric IDs to modules and chunks and short (2 characters) names to exports in a deterministic way.
 This is a trade-off between bundle size and long term caching.
 
-`moduleIds/chunkIds: false` disables the default behavior and one can provide a custom algorithm via plugin. Note that in webpack 4 `moduleIds/chunkIds: false` without custom plugin resulted in a working build, while in webpack 5 you must provide a custom plugin.
+`moduleIds/chunkIds/mangleExports: false` disables the default behavior and one can provide a custom algorithm via plugin. Note that in webpack 4 `moduleIds/chunkIds: false` without custom plugin resulted in a working build, while in webpack 5 you must provide a custom plugin.
 
-MIGRATION: Best use the default values for `chunkIds` and `moduleIds`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
+MIGRATION: Best use the default values for `chunkIds`, `moduleIds` and `mangleExports`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size", mangleExports: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
 
 Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was related to changed module order and has been fixed. (since beta.1)
 
 Note: In webpack 5, `deterministic` Ids are enabled by default in production mode
-
-## Deterministic Mangled Export Names
-
-A new algorithm was added to mangling export names. It's enabled by default.
-
-It will mangle export names when possible in a deterministic way.
-
-MIGRATION: Nothing to do.
 
 ## Named Chunk IDs
 
@@ -159,6 +151,7 @@ The following symbols can be analysed:
 * `export default` with or variable declarations with
   * function expressions
   * class expressions
+  * sequence expressions
   * `/*#__PURE__*/` expressions
   * local variables
   * imported bindings
@@ -1084,3 +1077,6 @@ These dependencies are cheaper to process and webpack uses them when possible
 - reorganize from javascript related files into sub-directory (since beta.1)
   - `webpack.JavascriptModulesPlugin` -> `webpack.javascript.JavascriptModulesPlugin`
 - Logger.getChildLogger added (since beta.3)
+- change the default of entryOnly of the DllPlugin to true (since beta.12)
+- remove special request shortening logic and use single relative paths for readable module names (since beta.12)
+- allow webpack:// urls in SourceMaps to provided paths relative to webpack root context (since beta.12)
