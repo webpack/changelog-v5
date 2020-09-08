@@ -6,7 +6,8 @@ This release focus on the following:
 
 - We try to improve build performance with Persistent Caching.
 - We try to improve Long Term Caching with better algorithms and defaults.
-- We try to improve bundle size with better Tree Shaking and Code Generation
+- We try to improve bundle size with better Tree Shaking and Code Generation.
+- We try to improve compatiblity to the web platform.
 - We try to clean up internal structures that were left in a weird state while implementing features in v4 without introducing any breaking changes.
 - We try to prepare for future features by introducing breaking changes now, allowing us to stay on v5 for as long as possible.
 
