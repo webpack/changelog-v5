@@ -423,6 +423,12 @@ The minimum supported node.js version has increased from 6 to 10.13.0(LTS).
 
 MIGRATION: Upgrade to the latest node.js version available.
 
+## Typescript typings
+
+Webpack 5 generates typescript typings from source code and exposes them via the npm package.
+
+MIGRATION: Remove `@types/webpack`. Update references when names differ.
+
 # Changes to the Configuration
 
 ## Changes to the Structure
@@ -733,6 +739,8 @@ HMR runtime has been refactored to Runtime Modules. `HotUpdateChunkTemplate` has
 The javascript part of HMR runtime has been separated from the core HMR runtime. Other module types can now also handle HMR in their own way. In the future, this will allow i. e. HMR for the mini-css-extract-plugin or for WASM modules.
 
 MIGRATION: As this is a newly introduced functionality, there is nothing to migrate.
+
+`import.meta.webpackHot` exposes the same API as `module.hot`. This is also usable from strict ESM modules (.mjs, type: "module" in package.json) which do not have access to `module`.
 
 ## Work Queues
 
@@ -1146,3 +1154,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - change the default of entryOnly of the DllPlugin to true (since beta.12)
 - remove special request shortening logic and use single relative paths for readable module names (since beta.12)
 - allow webpack:// urls in SourceMaps to provided paths relative to webpack root context (since beta.12)
+- add API to generate and process CLI arguments targeting webpack configuration (since beta.15)
+- add `__system_context__` as context from System.js when using System.js as libraryTarget (since beta.15)
+- add bigint support for the DefinePlugin (since beta.15)
+- add bigint support for basic evaluations like maths (since beta.15)
