@@ -208,11 +208,21 @@ From developer persepective modules can be imported from specified remote builds
 
 For more details see [this separate guide](https://github.com/webpack/changelog-v5/blob/master/guides/module-federation.md).
 
-## DataUris
+## Uris
 
-DataUris are now supported. Base64 or raw encoding is supported. Mimetype can be mapped to loaders and module type in `module.rules`
+Webpack 5 support handling of protocols in request.
 
-Example: `import x from "data:text/javascript,export default 42"`
+- `data:` is supported. Base64 or raw encoding is supported. Mimetype can be mapped to loaders and module type in `module.rules`. Example: `import x from "data:text/javascript,export default 42"`
+- `file:` is supported.
+- `http(s):` is supported, but requires opt-in via `new webpack.experiments.schemesHttp(s)UriPlugin()`
+
+Fragments in requests are supported: Example: `./file.js#fragment`
+
+## import.meta
+
+- `import.meta.webpackHot` is an alias for `module.hot` which is also available in strict ESM
+- `import.meta.webpack` is the webpack major version as number
+- `import.meta.url` is the `file:` url of the current file (similar to `__filename` but as file url)
 
 ## Compiler Idle and Close
 
