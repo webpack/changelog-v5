@@ -186,6 +186,10 @@ The following constructs are supported:
 
 (since beta.9)
 
+## General Tree Shaking improvements
+
+`export *` has been improved to track more info and do no longer flag the `default` export as used.
+
 ## Development Production Similarity
 
 We try to find a good trade-off between build performance in development mode and avoiding production-only problems by improving the similarity between both modes.
@@ -336,6 +340,14 @@ Note that since chunk loading is async, this makes initial evaluation async too.
 Chunks that contain no JS code, will no longer generate a JS file.
 
 (since alpha.14)
+
+## Externals
+
+Webpack 5 adds additional external types to cover more applications:
+
+`promise`: An expression that evaluates to a Promise. The external module is an async module and the resolved value is used as module exports.
+
+`import`: Native `import()` is used to load the specified request. The external module is an async module.
 
 ## Experiments
 
@@ -501,6 +513,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
   - MIGRATION: No replacement
 - `output.hotUpdateChunkFilename: Function` is now forbidden: It never worked anyway.
 - `output.hotUpdateMainFilename: Function` is now forbidden: It never worked anyway.
+- `output.importFunctionName: string` specifies the name used as replacement for `import()` to allow polyfilling for non-suppored environments
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
 - `module.rules` `query` and `loaders` were removed (since alpha.13)
 - `module.rules` `options` passing a string is deprecated (since beta.10)
