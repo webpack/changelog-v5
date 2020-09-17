@@ -208,6 +208,12 @@ From developer persepective modules can be imported from specified remote builds
 
 For more details see [this separate guide](https://github.com/webpack/changelog-v5/blob/master/guides/module-federation.md).
 
+## DataUris
+
+DataUris are now supported. Base64 or raw encoding is supported. Mimetype can be mapped to loaders and module type in `module.rules`
+
+Example: `import x from "data:text/javascript,export default 42"`
+
 ## Compiler Idle and Close
 
 Compilers now need to be closed after being used. Compilers now enter and leave the idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
@@ -447,6 +453,13 @@ This value is used to make all potentical conflicting globals unique.
 
 MIGRATION: Consider removing `output.jsonpFunction`.
 
+## Node.js target
+
+In webpack 4 some features were not available e. g. for the Node.js target. Some of them are now available.
+
+SplitChunks in initial chunks was not possible for node.js as multiple initial files couldn't be loaded.
+It's now possible. The entry files will now load the additional files and also the runtime chunk.
+
 ## Minimum Node.js Version
 
 The minimum supported node.js version has increased from 6 to 10.13.0(LTS).
@@ -490,6 +503,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints. (Refer to [node-libs-browser](https://github.com/webpack/node-libs-browser) for polyfills & mocks used in v4)
 - `output.filename` can now be a function (since alpha.17)
 - `output.assetModuleFilename` added (since alpha.19)
+- `output.jsonpScriptType` renamed to `output.scriptType`
 - `devtool` is more strict (since beta.1)
   - Format: `false | eval | [inline-|hidden-|eval-][nosources-][cheap-[module-]]source-map`
 - `optimization.chunkIds: "deterministic"` added
@@ -529,6 +543,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
 - `module.rules` `query` and `loaders` were removed (since alpha.13)
 - `module.rules` `options` passing a string is deprecated (since beta.10)
+- `module.rules` `mimetype` added: allows to match a mimetype of a DataUri
   - MIGRATION: Pass an options object instead, open an issue on the loader when this is not supported
 - `stats.chunkRootModules` added: Show root modules for chunks
 - `stats.orphanModules` added: Show modules which are not emitted
@@ -569,6 +584,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `optimization.nodeEnv` defaults to `false` in `none` mode
 - `optimization.splitChunks` `minRemainingSize` defaults to `minSize` (since alpha.13)
   - This will lead to less splitted chunks created in cases where the remaining part would be too small
+- `optimization.splitChunks` `maxAsyncRequests` and `maxInitialRequests` defaults was been increased to 30
 - `optimization.splitChunks.cacheGroups.vendors` has be renamed to `optimization.splitChunks.cacheGroups.defaultVendors`
 - `optimization.splitChunks.cacheGroups.defaultVendors.reuseExistingChunk` now defaults to `true` (since beta.7)
 - `resolve(Loader).cache` defaults to `true` when `cache` is used
