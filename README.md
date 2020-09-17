@@ -194,6 +194,14 @@ Webpack 5 enables the `sideEffects` optimization by default in both modes. In we
 
 (since beta.14)
 
+## Module Federation
+
+Webpack 5 adds a new feature called "Module Federation", which allows multiple webpack builds to work together.
+From runtime perspective modules form multiple builds will behave like a huge connected module graph.
+From developer persepective modules can be imported from specified remote builds and used with minimal restrictions.
+
+For more details see [this separate guide](https://github.com/webpack/changelog-v5/blob/master/guides/module-federation.md).
+
 ## Compiler Idle and Close
 
 Compilers now need to be closed after being used. Compilers now enter and leave the idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
@@ -385,10 +393,10 @@ A few improvements have been done to the `ProgressPlugin` which is used for `--p
 It used to only count the processed modules. Now it can count `entries` `dependencies` and `modules`.
 All of them are shown by default now.
 
-It used to disable the currently processed module. This caused much process stderr output and yielded a performance problem on some consoles.
+It used to display the currently processed module. This caused much stderr output and yielded a performance problem on some consoles.
 This is now disabled by default (`activeModules` option). This also reduces the amount of spam on the console. (since alpha.31)
 
-Now writing to stderr is throttled to 500ms.
+Now writing to stderr during building modules is throttled to 500ms.
 
 (since beta.4)
 
