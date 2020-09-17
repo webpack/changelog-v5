@@ -190,6 +190,8 @@ The following constructs are supported:
 
 `export *` has been improved to track more info and do no longer flag the `default` export as used.
 
+`import()` allows to manually tree shake the module via `/* webpackExports: ["abc", "default"] */` magic comment.
+
 ## Development Production Similarity
 
 We try to find a good trade-off between build performance in development mode and avoiding production-only problems by improving the similarity between both modes.
@@ -349,6 +351,14 @@ Webpack 5 adds additional external types to cover more applications:
 
 `import`: Native `import()` is used to load the specified request. The external module is an async module.
 
+`script`: Loads a url via `<script>` tag and gets the exports from a global variable (and optionally properties of it). The external module is an async module.
+
+## Package.json fields
+
+The `exports` field in package.json is now supported.
+
+See more details in TODO.
+
 ## Experiments
 
 Not all features are stable from the beginning. In webpack 4 we added experimental features and noted in the changelog that they are experimental, but it was not always clear from the configuration that these features are experimental.
@@ -453,6 +463,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 
 ## Changes to the Structure
 
+- `entry: {}` allows an empty object now (to allow to use plugins to add entries)
 - `cache: Object` removed: Setting to a memory-cache object is no longer possible
 - `cache.type` added: It's now possible to choose between `"memory"` and `"filesystem"`
 - New configuration options for `cache.type = "filesystem"` added:
@@ -470,6 +481,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
 - `resolve.alias` values can be arrays or `false` now (since alpha.18)
+- `resolve.restrictions` added: Allows to restrict potential resolve results
 - Automatic polyfills for native node.js modules were removed
   - `node.Buffer` removed
   - `node.console` removed
