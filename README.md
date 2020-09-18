@@ -1275,3 +1275,4 @@ These dependencies are cheaper to process and webpack uses them when possible
 - remove HotModuleReplacementPlugin multiStep mode
 - `assetInfo` from `emitAsset` will now merge when nested objects or arrays are used
 - `[query]` is now a valid placeholder when for paths based on a `filename` like assets
+- add `Compilation.deleteAsset` to correctly delete an assets and non-shared related assets
