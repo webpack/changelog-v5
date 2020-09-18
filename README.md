@@ -200,6 +200,8 @@ Module Concatenation also works per runtime to allow different concatenation for
 
 `export *` has been improved to track more info and do no longer flag the `default` export as used.
 
+`export *` will now show warnings when webpack is sure that there are conflicting exports.
+
 `import()` allows to manually tree shake the module via `/* webpackExports: ["abc", "default"] */` magic comment.
 
 ## Development Production Similarity
