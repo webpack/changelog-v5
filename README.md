@@ -188,6 +188,14 @@ The following constructs are supported:
 
 When detecting not analysable code, webpack bails out and doesn't track export information at all for these modules (for performance reasons).
 
+## Optimization per runtime
+
+Webpack 5 is now able (and does by default) to analyse and optimize modules per runtime (A runtime is often equal to an entrypoint).
+This allows to only exports in these entrypoints where they are really needed.
+Entrypoints doesn't affect each other (as long as using a runtime per entrypoint)
+
+Module Concatenation also works per runtime to allow different concatenation for each runtime.
+
 ## General Tree Shaking improvements
 
 `export *` has been improved to track more info and do no longer flag the `default` export as used.
@@ -548,7 +556,11 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `optimization.splitChunks` `automaticNamePrefix` removed
   - MIGRATION: Use `idHint` instead
 - `optimization.splitChunks` `filename` is no longer restricted to initial chunks (since alpha.11)
+- `optimization.splitChunks` `usedExports` added to include used exports when comparing modules
 - `optimization.mangleExports` added (since alpha.10)
+- `optimization.minimizer` `"..."` can be used to reference the defaults
+- `optimization.usedExports` `"global"` value added to allow to disable the analysis per runtime and instead do it globally (better performance)
+- `optimization.noEmitOnErrors` renamed to `optimization.emitOnErrors` and logic inverted
 - `output.devtoolLineToLine` removed
   - MIGRATION: No replacement
 - `output.hotUpdateChunkFilename: Function` is now forbidden: It never worked anyway.
@@ -557,8 +569,10 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
 - `module.rules` `query` and `loaders` were removed (since alpha.13)
 - `module.rules` `options` passing a string is deprecated (since beta.10)
-- `module.rules` `mimetype` added: allows to match a mimetype of a DataUri
   - MIGRATION: Pass an options object instead, open an issue on the loader when this is not supported
+- `module.rules` `mimetype` added: allows to match a mimetype of a DataUri
+- `module.rules` `descriptionData` added: allows to match a data from package.json
+- `module.defaultRules` `"..."` can be used to reference the defaults
 - `stats.chunkRootModules` added: Show root modules for chunks
 - `stats.orphanModules` added: Show modules which are not emitted
 - `stats.runtime` added: Show runtime modules
@@ -596,6 +610,8 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `optimization.moduleIds` defaults to `deterministic` in production mode, instead of `size`
 - `optimization.chunkIds` defaults to `deterministic` in production mode, instead of `total-size`
 - `optimization.nodeEnv` defaults to `false` in `none` mode
+- `optimization.splitChunks.minSize` defaults to `20k` in production
+- `optimization.splitChunks.enforceSizeThreshold` defaults to `50k` in production
 - `optimization.splitChunks` `minRemainingSize` defaults to `minSize` (since alpha.13)
   - This will lead to less splitted chunks created in cases where the remaining part would be too small
 - `optimization.splitChunks` `maxAsyncRequests` and `maxInitialRequests` defaults was been increased to 30
@@ -756,6 +772,24 @@ module.exports = {
 ```
 
 (since beta.14)
+
+### Entry point runtime
+
+The entry descriptor allows to specify a `runtime` per entry.
+When specified a chunk with this name is created which contains only the runtime code for the entry.
+When multiple entries specify the same `runtime`, that chunk will contain a common runtime for all these entry.
+This means they could be used together on the same HTML page.
+
+```js
+module.exports = {
+  entry: {
+    app: {
+      import: './app.js',
+      runtime: "app-runtime"
+    }
+  }
+};
+```
 
 ## Order and IDs
 
