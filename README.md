@@ -72,6 +72,11 @@ Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was 
 
 Note: In webpack 5, `deterministic` Ids are enabled by default in production mode
 
+## Real Content Hash
+
+Webpack 5 will use a real hash of the file content when using `[contenthash]` now. Before it "only" used a hash of the internal structure.
+This can be positive impact on long term caching when only comments are changed or variables are renamed. These changes are not visible after minimizing.
+
 ## Named Chunk IDs
 
 A new named chunk id algorithm enabled by default in development mode gives chunks (and filenames) human-readable names.
@@ -175,6 +180,8 @@ webpack 5 adds support for some CommonJs constructs, allows to eliminate unused 
 The following constructs are supported:
 
 - `exports|this|module.exports.xxx = ...`
+- `exports|this|module.exports = require("...")` (reexport)
+- `exports|this|module.exports.xxx = require("...").xxx` (reexport)
 - `Object.defineProperty(exports|this|module.exports, "xxx", ...)`
 - `require("abc").xxx`
 - `require("abc").xxx()`
@@ -578,11 +585,13 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `optimization.minimizer` `"..."` can be used to reference the defaults
 - `optimization.usedExports` `"global"` value added to allow to disable the analysis per runtime and instead do it globally (better performance)
 - `optimization.noEmitOnErrors` renamed to `optimization.emitOnErrors` and logic inverted
+- `optimization.realContentHash` added
 - `output.devtoolLineToLine` removed
   - MIGRATION: No replacement
 - `output.hotUpdateChunkFilename: Function` is now forbidden: It never worked anyway.
 - `output.hotUpdateMainFilename: Function` is now forbidden: It never worked anyway.
 - `output.importFunctionName: string` specifies the name used as replacement for `import()` to allow polyfilling for non-suppored environments
+- `output.charset` added: setting it to false omit the `charset` property on script tags
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
 - `module.rules` `query` and `loaders` were removed (since alpha.13)
 - `module.rules` `options` passing a string is deprecated (since beta.10)
@@ -1278,3 +1287,4 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `assetInfo` from `emitAsset` will now merge when nested objects or arrays are used
 - `[query]` is now a valid placeholder when for paths based on a `filename` like assets
 - add `Compilation.deleteAsset` to correctly delete an assets and non-shared related assets
+- expose `require("webpack-sources")` as `require("webpack").sources`
