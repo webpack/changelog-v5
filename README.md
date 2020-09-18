@@ -232,7 +232,12 @@ Webpack 5 is now able (and does by default) to analyse and optimize modules per 
 This allows to only exports in these entrypoints where they are really needed.
 Entrypoints doesn't affect each other (as long as using a runtime per entrypoint)
 
+## Module Concatenation
+
 Module Concatenation also works per runtime to allow different concatenation for each runtime.
+
+Module Concatenation has become a first class citizen and any module and dependency is now allowed to implement it.
+Initially webpack 5 already added support for ExternalModules and json modules, more will likely ship soonish.
 
 ## General Tree Shaking improvements
 
@@ -259,6 +264,12 @@ From runtime perspective modules form multiple builds will behave like a huge co
 From developer persepective modules can be imported from specified remote builds and used with minimal restrictions.
 
 For more details see [this separate guide](https://github.com/webpack/changelog-v5/blob/master/guides/module-federation.md).
+
+## Resolving
+
+The `exports` and `imports` field in package.json is now supported.
+
+See more details in TODO.
 
 ## Uris
 
@@ -436,12 +447,6 @@ Webpack 5 adds additional external types to cover more applications:
 
 `script`: Loads a url via `<script>` tag and gets the exports from a global variable (and optionally properties of it). The external module is an async module.
 
-## Package.json fields
-
-The `exports` field in package.json is now supported.
-
-See more details in TODO.
-
 ## Experiments
 
 Not all features are stable from the beginning. In webpack 4 we added experimental features and noted in the changelog that they are experimental, but it was not always clear from the configuration that these features are experimental.
@@ -576,6 +581,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `resolve.concord` removed
 - `resolve.alias` values can be arrays or `false` now (since alpha.18)
 - `resolve.restrictions` added: Allows to restrict potential resolve results
+- `resolve.fallback` added: Allow to alias requests that failed to resolve
 - Automatic polyfills for native node.js modules were removed
   - `node.Buffer` removed
   - `node.console` removed
