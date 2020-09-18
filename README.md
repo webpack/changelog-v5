@@ -1288,3 +1288,4 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `[query]` is now a valid placeholder when for paths based on a `filename` like assets
 - add `Compilation.deleteAsset` to correctly delete an assets and non-shared related assets
 - expose `require("webpack-sources")` as `require("webpack").sources`
+- terser 5
