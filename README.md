@@ -115,6 +115,26 @@ They can be used via multiple ways:
 - `import url from "./image.png"` and settings `type: "asset"` in `module.rules` when matching such import.
 - `new URL("./image.png", import.meta.url)`
 
+The syntax is chosen to allow running code without bundler too.
+
+## Native Worker support
+
+When combining `new URL` for assets with `new Worker`/`new SharedWorker`/`navigator.serviceWorker.register` webpack will automatically create a new entrypoint for a web worker.
+
+`new Worker(new URL("./worker.js", import.meta.url))`
+
+The syntax is chosen to allow running code without bundler too.
+
+## Improved target
+
+Webpack 5 allows to pass a list of targets and also support versions of target.
+
+Examples: `target: "node14"` `target: ["web", "es2020"]`
+
+This is a simple way to provide webpack all the information it needs to determine:
+- chunk loading mechnism, and
+- supported syntax like arrow functions
+
 ## Nested tree-shaking
 
 webpack is now able to track access to nested properties of exports. This can improve Tree Shaking (Unused export elimination and export mangling) when reexporting namespace objects.
@@ -534,6 +554,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 ## Changes to the Structure
 
 - `entry: {}` allows an empty object now (to allow to use plugins to add entries)
+- `target` supports an array and versions
 - `cache: Object` removed: Setting to a memory-cache object is no longer possible
 - `cache.type` added: It's now possible to choose between `"memory"` and `"filesystem"`
 - New configuration options for `cache.type = "filesystem"` added:
