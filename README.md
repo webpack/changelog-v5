@@ -104,6 +104,17 @@ JSON modules no longer have named exports when importing from a string EcmaScrip
 
 It's possible to specify a custom JSON parser in `Rule.parser.parse` to import JSON-like files (e. g. for toml, yaml, json5, etc.). (since beta.8)
 
+## Asset modules
+
+Webpack 5 has now native support for modules representing assets.
+These modules will either emit a file into the output folder or inject a DataUri into the javascript bundle.
+Either way they give a URL to work with.
+
+They can be used via multiple ways:
+
+- `import url from "./image.png"` and settings `type: "asset"` in `module.rules` when matching such import.
+- `new URL("./image.png", import.meta.url)`
+
 ## Nested tree-shaking
 
 webpack is now able to track access to nested properties of exports. This can improve Tree Shaking (Unused export elimination and export mangling) when reexporting namespace objects.
@@ -308,13 +319,13 @@ cache: {
 
 Important notes:
 
-By default, webpack assumes that the `node_modules` directory, which webpack is inside of, is **only** modified by a package manager. Hashing and timestamping is skipped for `node_modules`. Instead, only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `cache.managedPaths: []`
+By default, webpack assumes that the `node_modules` directory, which webpack is inside of, is **only** modified by a package manager. Hashing and timestamping is skipped for `node_modules`. Instead, only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `snapshot.managedPaths: []`
 
 The cache will be stored into `node_modules/.cache/webpack` (when using node_modules) resp. `.pnp/.cache/webpack` (when using Yarn PnP, since alpha.21) by default. You probably never have to delete it manually.
 
 (since alpha.20)
 
-When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `cache.immutablePaths: []`
+When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `snapshot.immutablePaths: []`
 
 (since alpha.21)
 
@@ -534,9 +545,12 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
   - `cache.hashAlgorithm`
   - `cache.idleTimeout` (since alpha.8)
   - `cache.idleTimeoutForIntialStore` (since alpha.8)
-  - `cache.managedPaths` (since alpha.20)
-  - `cache.immutablePaths` (since alpha.21)
   - `cache.buildDependencies` (since alpha.20)
+- `snapshot.resolveBuildDependencies` added
+- `snapshot.resolve` added
+- `snapshot.module` added
+- `snapshot.managedPaths` added
+- `snapshot.immutablePaths` added
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
 - `resolve.alias` values can be arrays or `false` now (since alpha.18)
@@ -592,6 +606,12 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `output.hotUpdateMainFilename: Function` is now forbidden: It never worked anyway.
 - `output.importFunctionName: string` specifies the name used as replacement for `import()` to allow polyfilling for non-suppored environments
 - `output.charset` added: setting it to false omit the `charset` property on script tags
+- `output.hotUpdateFunction` renamed to `output.hotUpdateGlobal`
+- `output.jsonpFunction` renamed to `output.chunkLoadingGlobal`
+- `output.chunkCallbackFunction` renamed to `output.chunkLoadingGlobal`
+- `output.chunkLoading` added
+- `output.enabledChunkLoadingTypes` added
+- `output.chunkFormat` added
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
 - `module.rules` `query` and `loaders` were removed (since alpha.13)
 - `module.rules` `options` passing a string is deprecated (since beta.10)
@@ -813,6 +833,25 @@ module.exports = {
     app: {
       import: './app.js',
       runtime: "app-runtime"
+    }
+  }
+};
+```
+
+### Entry point chunk loading
+
+The entry descriptor allows to specify a `chunkLoading` per entry.
+The runtime for this entry will use this to load chunks.
+
+```js
+module.exports = {
+  entry: {
+    app: {
+      import: './app.js'
+    },
+    worker: {
+      import: './worker.js',
+      chunkLoading: "importScripts"
     }
   }
 };
