@@ -186,6 +186,8 @@ The following constructs are supported:
 
 (since beta.9)
 
+When detecting not analysable code, webpack bails out and doesn't track export information at all for these modules (for performance reasons).
+
 ## General Tree Shaking improvements
 
 `export *` has been improved to track more info and do no longer flag the `default` export as used.
@@ -199,6 +201,8 @@ We try to find a good trade-off between build performance in development mode an
 Webpack 5 enables the `sideEffects` optimization by default in both modes. In webpack 4 this optimization lead to some production-only errors because of an incorrect `"sideEffects"` flag in package.json. Enabling this optimization in development allows to find these problems faster and easier.
 
 (since beta.14)
+
+In many cases development and production happen on different OS with different case-sensitivity of filesystem, so webpack 5 adds a few more warnings/errors when there is something weird casing-wise.
 
 ## Module Federation
 
@@ -1217,3 +1221,5 @@ These dependencies are cheaper to process and webpack uses them when possible
 - add `__system_context__` as context from System.js when using System.js as libraryTarget (since beta.15)
 - add bigint support for the DefinePlugin (since beta.15)
 - add bigint support for basic evaluations like maths (since beta.15)
+- remove ability to modify the compilation hash after the hash has been created
+- remove HotModuleReplacementPlugin multiStep mode
