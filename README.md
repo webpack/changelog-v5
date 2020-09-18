@@ -15,7 +15,7 @@ This release focus on the following:
 
 => [see here for a migration guide](https://github.com/webpack/changelog-v5/blob/master/MIGRATION%20GUIDE.md) <=
 
-# Major Changes
+# Major Changes: Removals
 
 ## Removed Deprecated Items
 
@@ -55,6 +55,8 @@ MIGRATION:
 - It's possible to manually add a polyfill for a node.js core module. An error message will give a hint on how to achieve that.
 - Package authors: Use the `browser` field in `package.json` to make a package frontend-compatible. Provide alternative implementations/dependencies for the browser.
 
+# Major Changes: Long Term Caching
+
 ## Deterministic Chunk, Module IDs and Export names
 
 New algorithms were added for long term caching. These are enabled by default in production mode.
@@ -77,6 +79,8 @@ Note: In webpack 5, `deterministic` Ids are enabled by default in production mod
 Webpack 5 will use a real hash of the file content when using `[contenthash]` now. Before it "only" used a hash of the internal structure.
 This can be positive impact on long term caching when only comments are changed or variables are renamed. These changes are not visible after minimizing.
 
+# Major Changes: Development Support
+
 ## Named Chunk IDs
 
 A new named chunk id algorithm enabled by default in development mode gives chunks (and filenames) human-readable names.
@@ -89,6 +93,16 @@ But it would still make sense if you want to control the filenames for productio
 It's possible to use `chunkIds: "named"` in production, but make sure not to accidentally expose sensitive information about module names.
 
 MIGRATION: If you dislike the filenames being changed in development, you can pass `chunkIds: "natural"` to use the old numeric mode.
+
+## Module Federation
+
+Webpack 5 adds a new feature called "Module Federation", which allows multiple webpack builds to work together.
+From runtime perspective modules form multiple builds will behave like a huge connected module graph.
+From developer persepective modules can be imported from specified remote builds and used with minimal restrictions.
+
+For more details see [this separate guide](https://github.com/webpack/changelog-v5/blob/master/guides/module-federation.md).
+
+# Major Changes: New Web Platform Features
 
 ## JSON modules
 
@@ -117,6 +131,12 @@ They can be used via multiple ways:
 
 The syntax is chosen to allow running code without bundler too.
 
+## import.meta
+
+- `import.meta.webpackHot` is an alias for `module.hot` which is also available in strict ESM
+- `import.meta.webpack` is the webpack major version as number
+- `import.meta.url` is the `file:` url of the current file (similar to `__filename` but as file url)
+
 ## Native Worker support
 
 When combining `new URL` for assets with `new Worker`/`new SharedWorker`/`navigator.serviceWorker.register` webpack will automatically create a new entrypoint for a web worker.
@@ -124,6 +144,53 @@ When combining `new URL` for assets with `new Worker`/`new SharedWorker`/`naviga
 `new Worker(new URL("./worker.js", import.meta.url))`
 
 The syntax is chosen to allow running code without bundler too.
+
+## Uris
+
+Webpack 5 support handling of protocols in request.
+
+- `data:` is supported. Base64 or raw encoding is supported. Mimetype can be mapped to loaders and module type in `module.rules`. Example: `import x from "data:text/javascript,export default 42"`
+- `file:` is supported.
+- `http(s):` is supported, but requires opt-in via `new webpack.experiments.schemesHttp(s)UriPlugin()`
+
+Fragments in requests are supported: Example: `./file.js#fragment`
+
+## Async modules
+
+Webpack 5 supports so called "async modules".
+That are modules that do not evaluate synchronously, but are async and Promise-based instead.
+
+Importing them via `import` is automatically handled and no additional syntax is needed and difference is hardly notice-able.
+
+Importing them via `require()` will return a Promise that resolves to the exports.
+
+In webpack there are multiple ways to have async modules:
+
+- async externals
+- WebAssembly Modules in the new spec
+- EcmaScript Modules that are using Top-Level-Await
+
+## Externals
+
+Webpack 5 adds additional external types to cover more applications:
+
+`promise`: An expression that evaluates to a Promise. The external module is an async module and the resolved value is used as module exports.
+
+`import`: Native `import()` is used to load the specified request. The external module is an async module.
+
+`script`: Loads a url via `<script>` tag and gets the exports from a global variable (and optionally properties of it). The external module is an async module.
+
+# Major Changes: New Node.js Ecosystem Features
+
+## Resolving
+
+The `exports` and `imports` field in package.json is now supported.
+
+Yarn PnP is supported natively.
+
+See more details in TODO.
+
+# Major Changes: Development Experience
 
 ## Improved target
 
@@ -134,6 +201,81 @@ Examples: `target: "node14"` `target: ["web", "es2020"]`
 This is a simple way to provide webpack all the information it needs to determine:
 - chunk loading mechnism, and
 - supported syntax like arrow functions
+
+## Stats
+
+Chunk relations are hidden by default now. This can be toggled with `stats.chunkRelations`.
+
+(since alpha.1)
+
+Stats differentiate between `files` and `auxiliaryFiles` now.
+
+(since alpha.19)
+
+Stats hide module and chunk ids by default now. This can be toggled with `stats.ids`.
+
+The list of all modules is sorted by distance to entrypoint now. This can be changed with `stats.modulesSort`.
+
+The list of chunk modules resp. chunk root modules is sorted by module name now. This can be changed with `stats.chunkModulesSort` resp. `stats.chunkRootModulesSort`.
+
+The list of nested modules in concatenated modules is sorted topologically now. This can be changed with `stats.nestedModulesSort`.
+
+Chunks and Assets show chunk id hints now.
+
+(since alpha.31)
+
+Assets and modules will display in a tree instead of a list/table.
+
+## Progress
+
+A few improvements have been done to the `ProgressPlugin` which is used for `--progress` by the CLI, but can also be used manually as plugin.
+
+It used to only count the processed modules. Now it can count `entries` `dependencies` and `modules`.
+All of them are shown by default now.
+
+It used to display the currently processed module. This caused much stderr output and yielded a performance problem on some consoles.
+This is now disabled by default (`activeModules` option). This also reduces the amount of spam on the console. (since alpha.31)
+
+Now writing to stderr during building modules is throttled to 500ms.
+
+(since beta.4)
+
+The profiling mode also got an upgrade and will display timings of nested progress messages.
+This makes it easier to figure out while plugin is causing performance problems.
+
+(since beta.10)
+
+Added `percentBy`-option that tells `ProgressPlugin` how to calculate progress percentage.
+
+```js
+new webpack.ProgressPlugin({ percentBy: "entries" });
+```
+
+To make progress percentage more accurate `ProgressPlugin` caches the last known total modules count and reuses this value on the next build. The first build will warm the cache but the following builds will use and update this value.
+
+(since beta.14)
+
+## Automatic unique naming
+
+In webpack 4 multiple webpack runtimes could conflict on the same page, because they use the same global variable for chunk loading. To fix that it was needed to provide a custom name to the `output.jsonpFunction` configuration.
+
+Webpack 5 does automatically infer a unique name for the build from `package.json` `name` and uses this as default for `output.uniqueName`.
+
+This value is used to make all potentical conflicting globals unique.
+
+MIGRATION: Consider removing `output.jsonpFunction`.
+
+## Automatic public path
+
+Webpack 5 will determine the `output.publicPath` automatically when possible.
+
+## Typescript typings
+
+Webpack 5 generates typescript typings from source code and exposes them via the npm package.
+
+MIGRATION: Remove `@types/webpack`. Update references when names differ.
+
+# Major Changes: Optimization
 
 ## Nested tree-shaking
 
@@ -257,46 +399,6 @@ Webpack 5 enables the `sideEffects` optimization by default in both modes. In we
 
 In many cases development and production happen on different OS with different case-sensitivity of filesystem, so webpack 5 adds a few more warnings/errors when there is something weird casing-wise.
 
-## Module Federation
-
-Webpack 5 adds a new feature called "Module Federation", which allows multiple webpack builds to work together.
-From runtime perspective modules form multiple builds will behave like a huge connected module graph.
-From developer persepective modules can be imported from specified remote builds and used with minimal restrictions.
-
-For more details see [this separate guide](https://github.com/webpack/changelog-v5/blob/master/guides/module-federation.md).
-
-## Resolving
-
-The `exports` and `imports` field in package.json is now supported.
-
-See more details in TODO.
-
-## Uris
-
-Webpack 5 support handling of protocols in request.
-
-- `data:` is supported. Base64 or raw encoding is supported. Mimetype can be mapped to loaders and module type in `module.rules`. Example: `import x from "data:text/javascript,export default 42"`
-- `file:` is supported.
-- `http(s):` is supported, but requires opt-in via `new webpack.experiments.schemesHttp(s)UriPlugin()`
-
-Fragments in requests are supported: Example: `./file.js#fragment`
-
-## import.meta
-
-- `import.meta.webpackHot` is an alias for `module.hot` which is also available in strict ESM
-- `import.meta.webpack` is the webpack major version as number
-- `import.meta.url` is the `file:` url of the current file (similar to `__filename` but as file url)
-
-## Compiler Idle and Close
-
-Compilers now need to be closed after being used. Compilers now enter and leave the idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
-
-Plugins and their respective authors should expect that some users may forget to close the Compiler. So, all work should eventually be finishing while in idle too. Processes should be prevented from exiting when the work is being done.
-
-The `webpack()` facade automatically calls `close` when being passed a callback.
-
-MIGRATION: While using the node.js API, make sure to call `Compiler.close` when done.
-
 ## Improved Code Generation
 
 There is a new option `output.ecmaVersion` now. It allows specifying the EcmaScript version for runtime code generated by webpack.
@@ -328,6 +430,8 @@ minSize: {
 ```
 
 MIGRATION: Check which types of sizes are used in your build and configure these in `splitChunks.minSize` and optionally in `splitChunks.maxSize`.
+
+# Major Changes: Performance
 
 ## Persistent Caching
 
@@ -376,6 +480,16 @@ The Persistent Cache will automatically create multiple cache files depending on
 
 (since beta.14)
 
+### Compiler Idle and Close
+
+Compilers now need to be closed after being used. Compilers now enter and leave the idle state and have hooks for these states. Plugins may use these hooks to do unimportant work. (i. e. the Persistent cache slowly stores the cache to disk). On compiler close - All remaining work should be finished as fast as possible. A callback signals the closing as done.
+
+Plugins and their respective authors should expect that some users may forget to close the Compiler. So, all work should eventually be finishing while in idle too. Processes should be prevented from exiting when the work is being done.
+
+The `webpack()` facade automatically calls `close` when being passed a callback.
+
+MIGRATION: While using the node.js API, make sure to call `Compiler.close` when done.
+
 ## File Emitting
 
 webpack used to always emit all output files during the first build but skipped writing unchanged files during incremental (watch) builds.
@@ -394,6 +508,15 @@ We assume that the content hash will change when file content changes. This is t
 
 (since beta.3)
 
+# Major Changes: Long outstanding problems
+
+## Node.js target
+
+In webpack 4 some features were not available e. g. for the Node.js target. Some of them are now available.
+
+SplitChunks in initial chunks was not possible for node.js as multiple initial files couldn't be loaded.
+It's now possible. The entry files will now load the additional files and also the runtime chunk.
+
 ## SplitChunks for single-file-targets
 
 Targets that only allow to startup a single file (like node, WebWorker, electron main) now supports loading the dependent pieces required for bootstrap automatically by the runtime.
@@ -408,7 +531,6 @@ Note that since chunk loading is async, this makes initial evaluation async too.
 
 `enhanced-resolve` was updated to v5. This has the following improvements:
 
-- When Yarn PnP is used, the resolver will handle it without an additional plugin
 - The resolve tracks more dependencies, like missing files
 - aliasing may have multiple alternatives
 - aliasing to `false` is possible now
@@ -422,30 +544,7 @@ Chunks that contain no JS code, will no longer generate a JS file.
 
 (since alpha.14)
 
-## Async modules
-
-Webpack 5 supports so called "async modules".
-That are modules that do not evaluate synchronously, but are async and Promise-based instead.
-
-Importing them via `import` is automatically handled and no additional syntax is needed and difference is hardly notice-able.
-
-Importing them via `require()` will return a Promise that resolves to the exports.
-
-In webpack there are multiple ways to have async modules:
-
-- async externals
-- WebAssembly Modules in the new spec
-- EcmaScript Modules that are using Top-Level-Await
-
-## Externals
-
-Webpack 5 adds additional external types to cover more applications:
-
-`promise`: An expression that evaluates to a Promise. The external module is an async module and the resolved value is used as module exports.
-
-`import`: Native `import()` is used to load the specified request. The external module is an async module.
-
-`script`: Loads a url via `<script>` tag and gets the exports from a global variable (and optionally properties of it). The external module is an async module.
+# Major Changes: Future
 
 ## Experiments
 
@@ -457,102 +556,23 @@ While webpack follows semantic versioning, it will make an exception for experim
 
 The following experiments will ship with webpack 5:
 
-* `.mjs` support like in webpack 4 (`experiments.mjs`)
 * Old WebAssembly support like in webpack 4 (`experiments.syncWebAssembly`)
 * New WebAssembly support according to the [updated spec](https://github.com/WebAssembly/esm-integration) (`experiments.asyncWebAssembly`)
   * This makes a WebAssembly module an async module
 * [Top Level Await](https://github.com/tc39/proposal-top-level-await) Stage 3 proposal (`experiments.topLevelAwait`)
   * Using `await` on top-level makes the module an async module
-* The `asset` module type which is similar to the `file-loader`|`url-loader`|`raw-loader` (`experiments.asset`) (since alpha.19)
-  * DataUrls and options related to that are supported since beta.8
 * Emitting bundle as module (`experiments.outputModule`) (since alpha.31)
   * This removed the wrapper IIFE from the bundle, enforces strict mode, lazy loads via `<script type="module">` and minimized in module mode
 
-Note that this also means `.mjs` support and WebAssembly support are now disabled by default.
+Note that this also means WebAssembly support is now disabled by default.
 
 (since alpha.15)
-
-## Stats
-
-Chunk relations are hidden by default now. This can be toggled with `stats.chunkRelations`.
-
-(since alpha.1)
-
-Stats differentiate between `files` and `auxiliaryFiles` now.
-
-(since alpha.19)
-
-Stats hide module and chunk ids by default now. This can be toggled with `stats.ids`.
-
-The list of all modules is sorted by distance to entrypoint now. This can be changed with `stats.modulesSort`.
-
-The list of chunk modules resp. chunk root modules is sorted by module name now. This can be changed with `stats.chunkModulesSort` resp. `stats.chunkRootModulesSort`.
-
-The list of nested modules in concatenated modules is sorted topologically now. This can be changed with `stats.nestedModulesSort`.
-
-Chunks and Assets show chunk id hints now.
-
-(since alpha.31)
-
-Assets and modules will display in a tree instead of a list/table.
-
-## Progress
-
-A few improvements have been done to the `ProgressPlugin` which is used for `--progress` by the CLI, but can also be used manually as plugin.
-
-It used to only count the processed modules. Now it can count `entries` `dependencies` and `modules`.
-All of them are shown by default now.
-
-It used to display the currently processed module. This caused much stderr output and yielded a performance problem on some consoles.
-This is now disabled by default (`activeModules` option). This also reduces the amount of spam on the console. (since alpha.31)
-
-Now writing to stderr during building modules is throttled to 500ms.
-
-(since beta.4)
-
-The profiling mode also got an upgrade and will display timings of nested progress messages.
-This makes it easier to figure out while plugin is causing performance problems.
-
-(since beta.10)
-
-Added `percentBy`-option that tells `ProgressPlugin` how to calculate progress percentage.
-
-```js
-new webpack.ProgressPlugin({ percentBy: "entries" });
-```
-
-To make progress percentage more accurate `ProgressPlugin` caches the last known total modules count and reuses this value on the next build. The first build will warm the cache but the following builds will use and update this value.
-
-(since beta.14)
-
-## Automatic unique naming
-
-In webpack 4 multiple webpack runtimes could conflict on the same page, because they use the same global variable for chunk loading. To fix that it was needed to provide a custom name to the `output.jsonpFunction` configuration.
-
-Webpack 5 does automatically infer a unique name for the build from `package.json` `name` and uses this as default for `output.uniqueName`.
-
-This value is used to make all potentical conflicting globals unique.
-
-MIGRATION: Consider removing `output.jsonpFunction`.
-
-## Node.js target
-
-In webpack 4 some features were not available e. g. for the Node.js target. Some of them are now available.
-
-SplitChunks in initial chunks was not possible for node.js as multiple initial files couldn't be loaded.
-It's now possible. The entry files will now load the additional files and also the runtime chunk.
 
 ## Minimum Node.js Version
 
 The minimum supported node.js version has increased from 6 to 10.13.0(LTS).
 
 MIGRATION: Upgrade to the latest node.js version available.
-
-## Typescript typings
-
-Webpack 5 generates typescript typings from source code and exposes them via the npm package.
-
-MIGRATION: Remove `@types/webpack`. Update references when names differ.
 
 # Changes to the Configuration
 
