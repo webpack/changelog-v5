@@ -371,6 +371,21 @@ Chunks that contain no JS code, will no longer generate a JS file.
 
 (since alpha.14)
 
+## Async modules
+
+Webpack 5 supports so called "async modules".
+That are modules that do not evaluate synchronously, but are async and Promise-based instead.
+
+Importing them via `import` is automatically handled and no additional syntax is needed and difference is hardly notice-able.
+
+Importing them via `require()` will return a Promise that resolves to the exports.
+
+In webpack there are multiple ways to have async modules:
+
+- async externals
+- WebAssembly Modules in the new spec
+- EcmaScript Modules that are using Top-Level-Await
+
 ## Externals
 
 Webpack 5 adds additional external types to cover more applications:
@@ -403,8 +418,6 @@ The following experiments will ship with webpack 5:
   * This makes a WebAssembly module an async module
 * [Top Level Await](https://github.com/tc39/proposal-top-level-await) Stage 3 proposal (`experiments.topLevelAwait`)
   * Using `await` on top-level makes the module an async module
-* Importing async modules with `import` (`experiments.importAsync`)
-* Importing async modules with `import await` (`experiments.importAwait`)
 * The `asset` module type which is similar to the `file-loader`|`url-loader`|`raw-loader` (`experiments.asset`) (since alpha.19)
   * DataUrls and options related to that are supported since beta.8
 * Emitting bundle as module (`experiments.outputModule`) (since alpha.31)
@@ -435,6 +448,8 @@ The list of nested modules in concatenated modules is sorted topologically now. 
 Chunks and Assets show chunk id hints now.
 
 (since alpha.31)
+
+Assets and modules will display in a tree instead of a list/table.
 
 ## Progress
 
@@ -579,6 +594,7 @@ MIGRATION: Remove `@types/webpack`. Update references when names differ.
 - `stats.chunkRelations` added: Show parent/children/sibling chunks (since alpha.1)
 - `stats.errorStack` added: Show webpack-internal stack trace of errors (since beta.1)
 - `stats.preset` added: select a preset (since alpha.1)
+- `stats.relatedAssets` added: show assets that are related to other assets (e. g. SourceMaps)
 - `BannerPlugin.banner` signature changed
   - `data.basename` removed
   - `data.query` removed
@@ -1257,3 +1273,5 @@ These dependencies are cheaper to process and webpack uses them when possible
 - add bigint support for basic evaluations like maths (since beta.15)
 - remove ability to modify the compilation hash after the hash has been created
 - remove HotModuleReplacementPlugin multiStep mode
+- `assetInfo` from `emitAsset` will now merge when nested objects or arrays are used
+- `[query]` is now a valid placeholder when for paths based on a `filename` like assets
