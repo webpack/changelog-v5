@@ -673,6 +673,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `stats.errorStack` added: Show webpack-internal stack trace of errors (since beta.1)
 - `stats.preset` added: select a preset (since alpha.1)
 - `stats.relatedAssets` added: show assets that are related to other assets (e. g. SourceMaps)
+- `stats.warningsFilter` deprecated in favor of `ignoreWarnings`
 - `BannerPlugin.banner` signature changed
   - `data.basename` removed
   - `data.query` removed
