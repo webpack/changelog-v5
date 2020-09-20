@@ -31,15 +31,11 @@ Here are a few things that were removed but did not have deprecation warnings in
 
 New deprecations include a deprecation code so they are easier to reference.
 
-(since beta.7)
-
 ## Syntax deprecated
 
 `require.include` has been deprecated and will emit a warning by default when used.
 
 Behavior can be changed with `Rule.parser.requireInclude` to allowed, deprecated or disabled.
-
-(since beta.1)
 
 ## Automatic Node.js Polyfills Removed
 
@@ -70,7 +66,7 @@ This is a trade-off between bundle size and long term caching.
 
 MIGRATION: Best use the default values for `chunkIds`, `moduleIds` and `mangleExports`. You can also opt-in to the old defaults `chunkIds: "size", moduleIds: "size", mangleExports: "size"`, this will generate smaller bundles, but invalidate them more often for caching.
 
-Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was related to changed module order and has been fixed. (since beta.1)
+Note: In webpack 4 hashed module ids yielded reduced gzip performance. This was related to changed module order and has been fixed.
 
 Note: In webpack 5, `deterministic` Ids are enabled by default in production mode
 
@@ -107,16 +103,13 @@ For more details see [this separate guide](https://github.com/webpack/changelog-
 ## JSON modules
 
 JSON modules now align with the spec and emit a warning when using a non-default export.
+JSON modules no longer have named exports when importing from a strict EcmaScript module.
 
 MIGRATION: Use the default export.
 
-(since alpha.16)
+Unused properties are dropped by the `optimization.usedExports` optimization and properties are mangled by the `optimization.mangleExports` optimization.
 
-Unused properties are dropped by the `optimization.usedExports` optimization and properties are mangled by the `optimization.mangleExports` optimization. (since beta.3)
-
-JSON modules no longer have named exports when importing from a string EcmaScript module (since beta.7)
-
-It's possible to specify a custom JSON parser in `Rule.parser.parse` to import JSON-like files (e. g. for toml, yaml, json5, etc.). (since beta.8)
+It's possible to specify a custom JSON parser in `Rule.parser.parse` to import JSON-like files (e. g. for toml, yaml, json5, etc.).
 
 ## Asset modules
 
@@ -204,27 +197,20 @@ This is a simple way to provide webpack all the information it needs to determin
 
 ## Stats
 
-Chunk relations are hidden by default now. This can be toggled with `stats.chunkRelations`.
+The Stats test format has been improve regarding readablility and verbosity. The defaults has been improved to be less verbose and also suitable for large builds.
 
-(since alpha.1)
-
-Stats differentiate between `files` and `auxiliaryFiles` now.
-
-(since alpha.19)
-
-Stats hide module and chunk ids by default now. This can be toggled with `stats.ids`.
-
-The list of all modules is sorted by distance to entrypoint now. This can be changed with `stats.modulesSort`.
-
-The list of chunk modules resp. chunk root modules is sorted by module name now. This can be changed with `stats.chunkModulesSort` resp. `stats.chunkRootModulesSort`.
-
-The list of nested modules in concatenated modules is sorted topologically now. This can be changed with `stats.nestedModulesSort`.
-
-Chunks and Assets show chunk id hints now.
-
-(since alpha.31)
-
-Assets and modules will display in a tree instead of a list/table.
+* Chunk relations are hidden by default now. This can be toggled with `stats.chunkRelations`.
+* Stats differentiate between `files` and `auxiliaryFiles` now.
+* Stats hide module and chunk ids by default now. This can be toggled with `stats.ids`.
+* The list of all modules is sorted by distance to entrypoint now. This can be changed with `stats.modulesSort`.
+* The list of chunk modules is sorted by module name now. This can be changed with `stats.chunkModulesSort`.
+* The list of nested modules in concatenated modules is sorted topologically now. This can be changed with `stats.nestedModulesSort`.
+* Chunks and Assets show chunk id hints now.
+* Assets and modules will display in a tree instead of a list/table.
+* General information is shown in a summary at the end now. It shows webpack version, config name and warnings/errors count.
+* Hash is hidden by default now. This can be changed with `stats.hash`.
+* Timestamp of build is no longer shown by default. This can be enabled with `stats.builtAt`. It will show the timestamp in the summary.
+* Child compilations will no longer shown by default. They can be displayed with `stats.children`.
 
 ## Progress
 
@@ -234,26 +220,19 @@ It used to only count the processed modules. Now it can count `entries` `depende
 All of them are shown by default now.
 
 It used to display the currently processed module. This caused much stderr output and yielded a performance problem on some consoles.
-This is now disabled by default (`activeModules` option). This also reduces the amount of spam on the console. (since alpha.31)
-
+This is now disabled by default (`activeModules` option). This also reduces the amount of spam on the console. 
 Now writing to stderr during building modules is throttled to 500ms.
-
-(since beta.4)
 
 The profiling mode also got an upgrade and will display timings of nested progress messages.
 This makes it easier to figure out while plugin is causing performance problems.
 
-(since beta.10)
-
-Added `percentBy`-option that tells `ProgressPlugin` how to calculate progress percentage.
+A newly added `percentBy`-option tells `ProgressPlugin` how to calculate progress percentage.
 
 ```js
 new webpack.ProgressPlugin({ percentBy: "entries" });
 ```
 
 To make progress percentage more accurate `ProgressPlugin` caches the last known total modules count and reuses this value on the next build. The first build will warm the cache but the following builds will use and update this value.
-
-(since beta.14)
 
 ## Automatic unique naming
 
@@ -297,8 +276,6 @@ console.log(module.inner.a);
 
 In this example, the export `b` can be removed in production mode.
 
-(since alpha.15)
-
 ## Inner-module tree-shaking
 
 webpack 4 didn't analyze dependencies between exports and imports of a module. webpack 5 has a new option `optimization.innerGraph`, which is enabled by default in production mode, that runs an analysis on symbols in a module to figure out dependencies from exports to imports.
@@ -336,13 +313,9 @@ The following symbols can be analysed:
 
 FEEDBACK: If you find something missing in this analysis, please report an issue and we consider adding it.
 
-This optimization is also known as Deep Scope Analysis.
-
-(since alpha.24)
-
 Using `eval()` will bail-out this optimization for a module, because evaled code could reference any symbol in scope.
 
-(since beta.10)
+This optimization is also known as Deep Scope Analysis.
 
 ## CommonJs Tree Shaking
 
@@ -363,8 +336,6 @@ The following constructs are supported:
 - flagged exportType (special handling for non-strict ESM import):
   - `Object.defineProperty(exports|this|module.exports, "__esModule", { value: true|!0 })`
   - `exports|this|module.exports.__esModule = true|!0`
-
-(since beta.9)
 
 When detecting not analysable code, webpack bails out and doesn't track export information at all for these modules (for performance reasons).
 
@@ -395,25 +366,19 @@ We try to find a good trade-off between build performance in development mode an
 
 Webpack 5 enables the `sideEffects` optimization by default in both modes. In webpack 4 this optimization lead to some production-only errors because of an incorrect `"sideEffects"` flag in package.json. Enabling this optimization in development allows to find these problems faster and easier.
 
-(since beta.14)
-
 In many cases development and production happen on different OS with different case-sensitivity of filesystem, so webpack 5 adds a few more warnings/errors when there is something weird casing-wise.
 
 ## Improved Code Generation
 
-There is a new option `output.ecmaVersion` now. It allows specifying the EcmaScript version for runtime code generated by webpack.
+There are now options in `output.environment` now.
+They allows specifying which EcmaScript feature can be used for runtime code generated by webpack.
+
+One usually do not specify this option directly, but would use the `target` option instead.
 
 webpack 4 used to only emit ES5 code. 
-
 webpack 5 can generate both ES5 and ES6/ES2015 code now. 
 
-The default configuration will generate ES2015 code. If you need to support older browser (like IE11), you can decrease this to `output.ecmaVersion: 5`.
-
-Choosing `output.ecmaVersion: 2015` will generate shorter code using arrow functions and more spec-comform code using `const` declarations with TDZ for `export default`.
-
-(since alpha.23)
-
-The default minimizing in production mode also used this `ecmaVersion` option to generate smaller code. (since alpha.31)
+Supporting only modern browsers will generate shorter code using arrow functions and more spec-comform code using `const` declarations with TDZ for `export default`.
 
 ## SplitChunks and Module Sizes
 
@@ -454,31 +419,13 @@ cache: {
 
 Important notes:
 
-By default, webpack assumes that the `node_modules` directory, which webpack is inside of, is **only** modified by a package manager. Hashing and timestamping is skipped for `node_modules`. Instead, only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `snapshot.managedPaths: []`
+By default, webpack assumes that the `node_modules` directory, which webpack is inside of, is **only** modified by a package manager. Hashing and timestamping is skipped for `node_modules`. Instead, only the package name and version is used for performance reasons. Symlinks (i. e. `npm/yarn link`) are fine. Do not edit files in `node_modules` directly unless you opt-out of this optimization with `snapshot.managedPaths: []`. When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `snapshot.immutablePaths: []`
 
-The cache will be stored into `node_modules/.cache/webpack` (when using node_modules) resp. `.pnp/.cache/webpack` (when using Yarn PnP, since alpha.21) by default. You probably never have to delete it manually.
+The cache will be stored into `node_modules/.cache/webpack` (when using node_modules) resp. `.yarn/.cache/webpack` (when using Yarn PnP) by default. You probably never have to delete it manually.
 
-(since alpha.20)
-
-When using Yarn PnP webpack assumes that the yarn cache is immutable (which it usually is). You can opt-out of this optimization with `snapshot.immutablePaths: []`
-
-(since alpha.21)
-
-`SourceMapDevToolPlugin` uses the Persistent Cache.
-
-(since beta.4)
-
-`ConcatenatedModule` used the Persistent Cache.
-
-(since beta.10)
+Many internal plugins will use the Persistent Cache too. Examples: `SourceMapDevToolPlugin` (to cache the SourceMap generation), `ProgressPlugin` (to cache the number of modules)
 
 The Persistent Cache will automatically create multiple cache files depending on usage to optimize read and write access to and from the cache.
-
-(since beta.13)
-
-`ProgressPlugin` used the Persistent Cache.
-
-(since beta.14)
 
 ### Compiler Idle and Close
 
@@ -506,8 +453,6 @@ Not following this advice will degrade performance.
 Files that are flagged as `immutable` (including a content hash), will never be written when a file with the same name already exists.
 We assume that the content hash will change when file content changes. This is true in general, but might not be always true during webpack or plugin development.
 
-(since beta.3)
-
 # Major Changes: Long outstanding problems
 
 ## Node.js target
@@ -525,8 +470,6 @@ This allows using `splitChunks` for these targets with `chunks: "all"`.
 
 Note that since chunk loading is async, this makes initial evaluation async too. This can be an issue when using `output.library`, since the exported value is a Promise now. Since alpha.14 this does not apply to `target: "node"` since chunk loading is sync here.
 
-(since alpha.3)
-
 ## Updated Resolver
 
 `enhanced-resolve` was updated to v5. This has the following improvements:
@@ -536,13 +479,9 @@ Note that since chunk loading is async, this makes initial evaluation async too.
 - aliasing to `false` is possible now
 - Increased performance
 
-(since alpha.18)
-
 ## Chunks without JS
 
 Chunks that contain no JS code, will no longer generate a JS file.
-
-(since alpha.14)
 
 # Major Changes: Future
 
@@ -561,12 +500,10 @@ The following experiments will ship with webpack 5:
   * This makes a WebAssembly module an async module
 * [Top Level Await](https://github.com/tc39/proposal-top-level-await) Stage 3 proposal (`experiments.topLevelAwait`)
   * Using `await` on top-level makes the module an async module
-* Emitting bundle as module (`experiments.outputModule`) (since alpha.31)
+* Emitting bundle as module (`experiments.outputModule`)
   * This removed the wrapper IIFE from the bundle, enforces strict mode, lazy loads via `<script type="module">` and minimized in module mode
 
 Note that this also means WebAssembly support is now disabled by default.
-
-(since alpha.15)
 
 ## Minimum Node.js Version
 
@@ -587,11 +524,10 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `cache.name`
   - `cache.version`
   - `cache.store`
-  - ~`cache.loglevel`~ (removed since alpha.20)
   - `cache.hashAlgorithm`
-  - `cache.idleTimeout` (since alpha.8)
-  - `cache.idleTimeoutForIntialStore` (since alpha.8)
-  - `cache.buildDependencies` (since alpha.20)
+  - `cache.idleTimeout`
+  - `cache.idleTimeoutForIntialStore`
+  - `cache.buildDependencies`
 - `snapshot.resolveBuildDependencies` added
 - `snapshot.resolve` added
 - `snapshot.module` added
@@ -599,7 +535,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `snapshot.immutablePaths` added
 - `resolve.cache` added: Allows to disable/enable the safe resolve cache
 - `resolve.concord` removed
-- `resolve.alias` values can be arrays or `false` now (since alpha.18)
+- `resolve.alias` values can be arrays or `false` now
 - `resolve.restrictions` added: Allows to restrict potential resolve results
 - `resolve.fallback` added: Allow to alias requests that failed to resolve
 - Automatic polyfills for native node.js modules were removed
@@ -608,10 +544,10 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `node.process` removed
   - `node.*` (node.js native module) removed
   - MIGRATION: `resolve.alias` and `ProvidePlugin`. Errors will give hints. (Refer to [node-libs-browser](https://github.com/webpack/node-libs-browser) for polyfills & mocks used in v4)
-- `output.filename` can now be a function (since alpha.17)
-- `output.assetModuleFilename` added (since alpha.19)
+- `output.filename` can now be a function
+- `output.assetModuleFilename` added
 - `output.jsonpScriptType` renamed to `output.scriptType`
-- `devtool` is more strict (since beta.1)
+- `devtool` is more strict
   - Format: `false | eval | [inline-|hidden-|eval-][nosources-][cheap-[module-]]source-map`
 - `optimization.chunkIds: "deterministic"` added
 - `optimization.moduleIds: "deterministic"` added
@@ -626,13 +562,13 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.splitChunks` `test` no longer matches chunk name
   - MIGRATION: Use a test function
     `(module, { chunkGraph }) => chunkGraph.getModuleChunks(module).some(chunk => chunk.name === "name")`
-- `optimization.splitChunks` `minRemainingSize` was added (since alpha.13)
-- `optimization.splitChunks` `filename` can now be a function (since alpha.17)
+- `optimization.splitChunks` `minRemainingSize` was added
+- `optimization.splitChunks` `filename` can now be a function
 - `optimization.splitChunks` sizes can now be objects with a size per source type
   - `minSize`
   - `minRemainingSize`
   - `maxSize`
-  - `maxAsyncSize` (since alpha.13)
+  - `maxAsyncSize`
   - `maxInitialSize`
 - `optimization.splitChunks` `maxAsyncSize` and `maxInitialSize` added next to `maxSize`: allows to specify different max sizes for initial and async chunks
 - `optimization.splitChunks` `name: true` removed: Automatic names are no longer supported
@@ -640,9 +576,9 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.splitChunks.cacheGroups[].idHint` added: Gives a hint how the named chunk id should be chosen
 - `optimization.splitChunks` `automaticNamePrefix` removed
   - MIGRATION: Use `idHint` instead
-- `optimization.splitChunks` `filename` is no longer restricted to initial chunks (since alpha.11)
+- `optimization.splitChunks` `filename` is no longer restricted to initial chunks
 - `optimization.splitChunks` `usedExports` added to include used exports when comparing modules
-- `optimization.mangleExports` added (since alpha.10)
+- `optimization.mangleExports` added
 - `optimization.minimizer` `"..."` can be used to reference the defaults
 - `optimization.usedExports` `"global"` value added to allow to disable the analysis per runtime and instead do it globally (better performance)
 - `optimization.noEmitOnErrors` renamed to `optimization.emitOnErrors` and logic inverted
@@ -659,9 +595,9 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `output.chunkLoading` added
 - `output.enabledChunkLoadingTypes` added
 - `output.chunkFormat` added
-- `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value) (since alpha.13)
-- `module.rules` `query` and `loaders` were removed (since alpha.13)
-- `module.rules` `options` passing a string is deprecated (since beta.10)
+- `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value)
+- `module.rules` `query` and `loaders` were removed
+- `module.rules` `options` passing a string is deprecated
   - MIGRATION: Pass an options object instead, open an issue on the loader when this is not supported
 - `module.rules` `mimetype` added: allows to match a mimetype of a DataUri
 - `module.rules` `descriptionData` added: allows to match a data from package.json
@@ -669,9 +605,9 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `stats.chunkRootModules` added: Show root modules for chunks
 - `stats.orphanModules` added: Show modules which are not emitted
 - `stats.runtime` added: Show runtime modules
-- `stats.chunkRelations` added: Show parent/children/sibling chunks (since alpha.1)
-- `stats.errorStack` added: Show webpack-internal stack trace of errors (since beta.1)
-- `stats.preset` added: select a preset (since alpha.1)
+- `stats.chunkRelations` added: Show parent/children/sibling chunks
+- `stats.errorStack` added: Show webpack-internal stack trace of errors
+- `stats.preset` added: select a preset
 - `stats.relatedAssets` added: show assets that are related to other assets (e. g. SourceMaps)
 - `stats.warningsFilter` deprecated in favor of `ignoreWarnings`
 - `BannerPlugin.banner` signature changed
@@ -695,8 +631,8 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `[ext]`
 - `externals` when passing a function, it has now a different signature `({ context, request }, callback)`
   - MIGRATION: Change signature
-- `experiments` added (see Experiments section above, since alpha.19)
-- `watchOptions.followSymlinks` added (since alpha.19)
+- `experiments` added (see Experiments section above)
+- `watchOptions.followSymlinks` added
 - `webpack.util.serialization` is now exposed.
 
 ## Changes to the Defaults
@@ -707,17 +643,16 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.nodeEnv` defaults to `false` in `none` mode
 - `optimization.splitChunks.minSize` defaults to `20k` in production
 - `optimization.splitChunks.enforceSizeThreshold` defaults to `50k` in production
-- `optimization.splitChunks` `minRemainingSize` defaults to `minSize` (since alpha.13)
+- `optimization.splitChunks` `minRemainingSize` defaults to `minSize`
   - This will lead to less splitted chunks created in cases where the remaining part would be too small
 - `optimization.splitChunks` `maxAsyncRequests` and `maxInitialRequests` defaults was been increased to 30
 - `optimization.splitChunks.cacheGroups.vendors` has be renamed to `optimization.splitChunks.cacheGroups.defaultVendors`
-- `optimization.splitChunks.cacheGroups.defaultVendors.reuseExistingChunk` now defaults to `true` (since beta.7)
+- `optimization.splitChunks.cacheGroups.defaultVendors.reuseExistingChunk` now defaults to `true`
 - `resolve(Loader).cache` defaults to `true` when `cache` is used
 - `resolve(Loader).cacheWithContext` defaults to `false`
-- ~`node.global` defaults to `false`~ (since alpha.4 removed)
-- `resolveLoader.extensions` remove `.json` (since alpha.8)
-- `node.global` `node.__filename` and `node.__dirname` defaults to `false` in node-`target`s (since alpha.14)
-- `stats.errorStack` defaults to `false` (since beta.1)
+- `resolveLoader.extensions` remove `.json`
+- `node.global` `node.__filename` and `node.__dirname` defaults to `false` in node-`target`s
+- `stats.errorStack` defaults to `false`
 
 # Loader related Changes
 
@@ -750,8 +685,6 @@ In the best case, no runtime code is needed at all.
 
 MIGRATION: If you are injecting runtime code into the webpack runtime in a plugin, consider using RuntimeModules instead.
 
-(since alpha.31)
-
 ## Serialization
 
 A serialization mechanism was added to allow serialization of complex objects in webpack. It has an opt-in semantic, so classes that should be serialized need to be explicitly flagged (and their serialization implemented). This has been done for most Modules, all Dependencies and some Errors.
@@ -774,7 +707,7 @@ MIGRATION: The recommended way to add custom hooks is using a WeakMap and a stat
 
 The compat layer for webpack 3 plugins has been removed. It had already been deprecated for webpack 4.
 
-Some less used tapable APIs were removed or deprecated. (since alpha.12)
+Some less used tapable APIs were removed or deprecated.
 
 MIGRATION: Use the new tapable API.
 
@@ -795,8 +728,6 @@ It's still possible to hook into parts of the templating. The hooks are in Javas
 There is a compat-layer, so Main/Chunk/ModuleTemplate still exist, but only delegate tap calls to the new hook locations.
 
 MIGRATION: Follow the advice in the deprecation messages. Mostly pointing to hooks at different locations.
-
-(since alpha.31)
 
 ## Entry point descriptor
 
@@ -841,8 +772,6 @@ module.exports = {
 
 The app chunk will not contain the modules that `react-vendors` has.
 
-(since beta.14)
-
 ### Entry point library
 
 The entry descriptor allows to pass a different `library` option for each entrypoint.
@@ -865,8 +794,6 @@ module.exports = {
   }
 };
 ```
-
-(since beta.14)
 
 ### Entry point runtime
 
@@ -917,7 +844,7 @@ MIGRATION: You cannot rely on the order of modules and chunks in the compilation
 
 - Compilation.modules is now a Set
 - Compilation.chunks is now a Set
-- Chunk.files is now a Set (since alpha.16)
+- Chunk.files is now a Set
 
 There is a compat-layer which prints deprecation warnings.
 
@@ -931,17 +858,15 @@ In the future, asking for file content hashes will be added and modules will be 
 
 MIGRATION: Instead of using `file/contextTimestamps` use the `compilation.fileSystemInfo` API instead.
 
-Timestamping for directories is possible now, which allows serialization of ContextModules. (since alpha.24)
+Timestamping for directories is possible now, which allows serialization of ContextModules.
 
-`Compiler.modifiedFiles` has been added (next to `Compiler.removedFiles`) to make it easier to reference the changed files. (since beta.7)
+`Compiler.modifiedFiles` has been added (next to `Compiler.removedFiles`) to make it easier to reference the changed files.
 
 ## Filesystems
 
 Next to `compiler.inputFileSystem` and `compiler.outputFileSystem` there is a new `compiler.intermediateFileSystem` for all fs actions that are not considered as input or output, like writing records, cache or profiling output.
 
 The filesystems have now the `fs` interface and do no longer demand additional methods like `join` or `mkdirp`. But if they have methods like `join` or `dirname` they are used.
-
-(since alpha.16)
 
 ## Hot Module Replacement
 
@@ -974,8 +899,6 @@ MIGRATION: As this is a newly introduced functionality, there is nothing to migr
 webpack internals includes some logging now.
 `stats.logging` and `infrastructureLogging` options can be used to enabled these messages.
 
-(since beta.3)
-
 ## Module and Chunk Graph
 
 webpack used to store a resolved module in the dependency, and store the contained modules in the chunk. This is no longer the case. All information about how modules are connected in the module graph are now stored in a ModuleGraph class. All information about how modules are connected with chunks are now stored in the ChunkGraph class. The information which depends on i. e. the chunk graph, is also stored in the related class.
@@ -986,7 +909,7 @@ That means the following information about modules has been moved:
 - Module issuer -> ModuleGraph
 - Module optimization bailout -> ModuleGraph (TODO: check if it should ChunkGraph instead)
 - Module usedExports -> ModuleGraph
-- Module providedExports -> ModuleGraph (since alpha.4)
+- Module providedExports -> ModuleGraph
 - Module pre order index -> ModuleGraph
 - Module post order index -> ModuleGraph
 - Module depth -> ModuleGraph
@@ -1031,19 +954,13 @@ The watcher used by webpack was refactored. It was previously using `chokidar` a
 
 It also captures more information about filesystem while watching. It now captures mtimes and watches event times, as well as information about missing files. For this, the `WatchFileSystem` API changed a little bit. While on it we also converted Arrays to Sets and Objects to Maps.
 
-(since alpha.5)
-
 ## SizeOnlySource after emit
 
 webpack now replaces the Sources in `Compilation.assets` with `SizeOnlySource` variants to reduce memory usage.
 
-(since alpha.8)
-
 ## Emitting assets multiple times
 
 The warning `Multiple assets emit different content to the same filename` has been made an error.
-
-(since beta.7)
 
 ## ExportsInfo
 
@@ -1057,9 +974,7 @@ For each export the following information is stored:
 - The new name, if the export has been renamed. (see also `optimization.mangleExports`)
 - Nested ExportsInfo, if the export is an object with information attached itself
   - Used for reexporting namespace objects: `import * as X from "..."; export { X };`
-  - Used for representing structure in JSON modules (since beta.3)
-
-(since alpha.10)
+  - Used for representing structure in JSON modules
 
 ## Code Generation Phase
 
@@ -1069,13 +984,11 @@ This should make the flow much cleaner. It also allows to report progress for th
 
 MIGRATION: `Module.source()` and `Module.getRuntimeRequirements()` are deprecated now. Use `Module.codeGeneration()` instead.
 
-(since alpha.31)
-
 ## Improved Code Generation
 
-webpack detects when ASI happens and generates shorter code when no semicolons are inserted. `Object(...)` -> `(0, ...)` (since alpha.22)
+webpack detects when ASI happens and generates shorter code when no semicolons are inserted. `Object(...)` -> `(0, ...)`
 
-webpack merges multiple export getters into a single runtime function call: `r.d(x, "a", () => a); r.d(x, "b", () => b);` -> `r.d(x, {a: () => a, b: () => b});` (since alpha.22)
+webpack merges multiple export getters into a single runtime function call: `r.d(x, "a", () => a); r.d(x, "b", () => b);` -> `r.d(x, {a: () => a, b: () => b});`
 
 ## DependencyReference
 
@@ -1091,8 +1004,6 @@ In webpack 5 this part of the codebase was refactored and the method has been sp
 - There is a `weak` flag on the `Dependency` class
 - Ordering is only relevant to `HarmonyImportDependencies` and can be get via `sourceOrder` property
 
-(since beta.2)
-
 ## Presentational Dependencies
 
 There is now a new type of dependency in `NormalModules`: Presentational Dependencies
@@ -1101,8 +1012,6 @@ These dependencies are only used during the Code Generation phase but are not us
 So they can never have referenced modules or influence exports/imports.
 
 These dependencies are cheaper to process and webpack uses them when possible
-
-(since beta.2)
 
 ## Deprecated loaders
 
@@ -1149,20 +1058,20 @@ These dependencies are cheaper to process and webpack uses them when possible
   - MIGRATION: Access the information on the properties. i. e. `message`
 - `Compilation.hooks.normalModuleLoader` is deprecated
   - MIGRATION: Use `NormalModule.getCompilationHooks(compilation).loader` instead
-- Changed hooks in `NormalModuleFactory` from waterfall to bailing, changed and renamed hooks that return waterfall functions (since alpha.5)
-- Removed `compilationParams.compilationDependencies` (since alpha.5)
+- Changed hooks in `NormalModuleFactory` from waterfall to bailing, changed and renamed hooks that return waterfall functions
+- Removed `compilationParams.compilationDependencies`
   - Plugins can add dependencies to the compilation by adding to `compilation.file/context/missingDependencies`
-  - Compat layer will delegate `compilationDependencies.add` to `fileDependencies.add` (since alpha.30)
-- `stats.assetsByChunkName[x]` is now always an array (since alpha.5)
-- `__webpack_get_script_filename__` function added to get the filename of a script file (since alpha.12)
-- `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve` (since alpha.13)
-- `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch` (since alpha.13)
+  - Compat layer will delegate `compilationDependencies.add` to `fileDependencies.add`
+- `stats.assetsByChunkName[x]` is now always an array
+- `__webpack_get_script_filename__` function added to get the filename of a script file
+- `getResolve(options)` in the loader API will merge options in a different way, see `module.rules` `resolve`
+- `"sideEffects"` in package.json will be handled by `glob-to-regex` instead of `micromatch`
   - This may have changed semantics in edge-cases
-- `checkContext` was removed from `IgnorePlugin` (since alpha.16)
-- New `__webpack_exports_info__` API allows export usage introspection (since alpha.21)
-- SourceMapDevToolPlugin applies to non-chunk assets too now (since alpha.27)
-- EnvironmentPlugin shows an error now when referenced env variable is missing and has no fallback (since beta.14)
-- Remove serve property from schema (since beta.14)
+- `checkContext` was removed from `IgnorePlugin`
+- New `__webpack_exports_info__` API allows export usage introspection
+- SourceMapDevToolPlugin applies to non-chunk assets too now
+- EnvironmentPlugin shows an error now when referenced env variable is missing and has no fallback
+- Remove serve property from schema
 
 # Other Minor Changes
 
@@ -1226,7 +1135,7 @@ These dependencies are cheaper to process and webpack uses them when possible
 - `Compilation.hooks.statsNormalize` added
 - `Compilation.hooks.statsFactory` added
 - `Compilation.hooks.statsPrinter` added
-- `Compilation.fileDependencies`, `Compilation.contextDependencies` and `Compilation.missingDependencies` are now LazySets (since alpha.20)
+- `Compilation.fileDependencies`, `Compilation.contextDependencies` and `Compilation.missingDependencies` are now LazySets
 - `Compilation.entries` removed
   - MIGRATION: Use `Compilation.entryDependencies` instead
 - `Compilation._preparedEntrypoints` removed
@@ -1326,7 +1235,7 @@ These dependencies are cheaper to process and webpack uses them when possible
   - MIGRATION: Use `MultiCompiler.setDependencies` instead
 - `MultiModule` removed
 - `MultiModuleFactory` removed
-- `NormalModuleFactory.fileDependencies`, `NormalModuleFactory.contextDependencies` and `NormalModuleFactory.missingDependencies` are now LazySets (since alpha.20)
+- `NormalModuleFactory.fileDependencies`, `NormalModuleFactory.contextDependencies` and `NormalModuleFactory.missingDependencies` are now LazySets
 - `RuntimeTemplate` methods now take `runtimeRequirements` arguments
 - `serve` property is removed
 - `Stats.jsonToString` removed
@@ -1341,34 +1250,34 @@ These dependencies are cheaper to process and webpack uses them when possible
 - DependencyReference now takes a function to a module instead of a Module
 - HarmonyImportSpecifierDependency.redirectedId removed
   - MIGRATION: Use `setId` instead
-- acorn 5 -> 7 (since alpha.21)
+- acorn 5 -> 7
 - Testing
   - HotTestCases now runs for multiple targets `async-node` `node` `web` `webworker`
   - TestCases now also runs for filesystem caching with `store: "instant"` and `store: "pack"`
   - TestCases now also runs for deterministic module ids
 - Tooling added to order the imports (checked in CI)
 - Chunk name mapping in runtime no longer contains entries when chunk name equals chunk id
-- add `resolvedModuleId` `resolvedModuleIdentifier` and `resolvedModule` to reasons in Stats which point to the module before optimizations like scope hoisting (since alpha.6)
-- show `resolvedModule` in Stats toString output (since alpha.6)
-- loader-runner was upgraded: https://github.com/webpack/loader-runner/releases/tag/v3.0.0 (since alpha.6)
-- `file/context/missingDependencies` in `Compilation` are no longer sorted for performance reasons (since alpha.8)
+- add `resolvedModuleId` `resolvedModuleIdentifier` and `resolvedModule` to reasons in Stats which point to the module before optimizations like scope hoisting
+- show `resolvedModule` in Stats toString output
+- loader-runner was upgraded: https://github.com/webpack/loader-runner/releases/tag/v3.0.0
+- `file/context/missingDependencies` in `Compilation` are no longer sorted for performance reasons
   - Do not rely on the order
-- webpack-sources was upgraded: https://github.com/webpack/webpack-sources/releases/tag/v2.0.0-beta.0 (since alpha.8)
-- webpack-command support was removed (since alpha.12)
-- Use schema-utils@2 for schema validation (since alpha.20)
-- `Compiler.assetEmitted` has an improved second argument with more information (since alpha.27)
-- BannerPlugin omits trailing whitespace (since beta.1)
-- removed `minChunkSize` option from `LimitChunkCountPlugin` (since beta.1)
-- reorganize from javascript related files into sub-directory (since beta.1)
+- webpack-sources was upgraded: https://github.com/webpack/webpack-sources/releases/tag/v2.0.0-beta.0
+- webpack-command support was removed
+- Use schema-utils@2 for schema validation
+- `Compiler.assetEmitted` has an improved second argument with more information
+- BannerPlugin omits trailing whitespace
+- removed `minChunkSize` option from `LimitChunkCountPlugin`
+- reorganize from javascript related files into sub-directory
   - `webpack.JavascriptModulesPlugin` -> `webpack.javascript.JavascriptModulesPlugin`
-- Logger.getChildLogger added (since beta.3)
-- change the default of entryOnly of the DllPlugin to true (since beta.12)
-- remove special request shortening logic and use single relative paths for readable module names (since beta.12)
-- allow webpack:// urls in SourceMaps to provided paths relative to webpack root context (since beta.12)
-- add API to generate and process CLI arguments targeting webpack configuration (since beta.15)
-- add `__system_context__` as context from System.js when using System.js as libraryTarget (since beta.15)
-- add bigint support for the DefinePlugin (since beta.15)
-- add bigint support for basic evaluations like maths (since beta.15)
+- Logger.getChildLogger added
+- change the default of entryOnly of the DllPlugin to true
+- remove special request shortening logic and use single relative paths for readable module names
+- allow webpack:// urls in SourceMaps to provided paths relative to webpack root context
+- add API to generate and process CLI arguments targeting webpack configuration
+- add `__system_context__` as context from System.js when using System.js as libraryTarget
+- add bigint support for the DefinePlugin
+- add bigint support for basic evaluations like maths
 - remove ability to modify the compilation hash after the hash has been created
 - remove HotModuleReplacementPlugin multiStep mode
 - `assetInfo` from `emitAsset` will now merge when nested objects or arrays are used
