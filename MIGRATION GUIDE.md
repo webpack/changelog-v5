@@ -6,7 +6,7 @@ This guide should help you migrating to webpack 5 when **using webpack directly*
 
 ## Upgrade your Node.js version
 
-webpack requires at least 8.9.0, but using Node.js 10 or 12 is recommended.
+webpack requires at least 10.13.0, but using Node.js 12 or 14 is recommended.
 
 Newer Node.js version will improve build performance a lot.
 
@@ -38,7 +38,7 @@ node --trace-deprecation node_modules/webpack/bin/webpack.js ...
 
 to get stack traces for deprecation warnings to figure out which plugins are responsible.
 
-webpack 5 removes all deprecated features. You must have no webpack deprecation warning.
+webpack 5 removes all deprecated features. You must have no webpack deprecation warning to be able to upgrade.
 
 ## Make sure you are using entrypoint information from stats
 
@@ -66,10 +66,6 @@ Update the following options to their new version:
 * `HashedModulesPlugin` -> `optimization.moduleIds: "hashed"`
 * `optimization.occurrenceOrder: true` -> `optimization: { chunkIds: "total-size", moduleIds: "size" }`
 
-## Disable ES2015 syntax in runtime code, if necessary
-
-By default, Webpack's runtime code uses ES2015 syntax to build smaller bundles. If your build targets environments that don't support this syntax (like IE11), you'll need to set `output.ecmaVersion: 5` to revert to ES5 syntax.
-
 # Test webpack 5 compatibility
 
 Try to set the following options in your webpack 4 builds and check if it still works correctly.
@@ -77,7 +73,8 @@ Try to set the following options in your webpack 4 builds and check if it still 
 * `node.Buffer: false`
 * `node.process: false`
 
-Note: webpack 5 removes these options and will always use `false`. You have to remove these options again when upgrading to webpack 5.
+Note: webpack 5 removes these options and will always use `false`.
+You have to remove these options again when upgrading to webpack 5.
 
 # Upgrade webpack version
 
@@ -88,18 +85,20 @@ Run `yarn add webpack@next -D` resp. `npm install webpack@next --dev`.
 * Consider removing `optimization.moduleIds` and `optimization.chunkIds`. The defaults are probably perfect. They support Long Term Caching (in production) and debugging (in development)
 * Reconsider `optimization.splitChunks`.
   * It's recommended to use either the defaults or `optimization.splitChunks: { chunks: "all" }`
-  * When using HTTP/2 and Long Term Caching set `optimization.splitChunks: { chunks: "all", maxInitialRequests: 30, maxAsyncRequests: 30, maxSize: 100_000 }`
   * When really using a custom configuration replace `name` with `idHint`.
-  * Used to disable the defaults with `default: false, vendors: false`. Consider not doing this, but if you really want to `default: false, defaultVendors: false`.
+  * When used to disable the defaults with `default: false, vendors: false`: Consider not doing this, but if you really want to `default: false, defaultVendors: false`.
 * When using the `WatchIgnorePlugin`, use `watchOptions.ignore` instead.
 * When using `[hash]`: Consider changing to `[contenthash]` (not the same, but better)
 * Using WASM: Set `experiments.syncWebAssembly: true` (after migration to webpack 5, migrate to `experiments: { asyncWebAssembly: true, importAsync: true }` instead)
-* Using .mjs: Set `experiments.mjs: true`
 * Using `entry: "./src/index.js`: you can omit it, that's the default
 * Using `output.path: path.resolve(__dirname, "dist")`: you can omit it, that's the default
 * Using `output.filename: "[name].js"`: you can omit it, that's the default
 * Using Yarn PnP and the pnp-resolver-plugin: you must omit it, that's supported by default now.
 * Using `IgnorePlugin` with a regular expression as argument: It takes an options object now: `new IgnorePlugin({ resourceRegExp: /regExp/ })`.
+* Need to support an older browser? Add version to `target` options
+  * By default, Webpack's runtime code uses ES2015 syntax to build smaller bundles.
+  * If your build targets environments that don't support this syntax (like IE11), you'll need to add `"es5"` to the `target` option, e. g. `target: ["web", "es5"]`.
+  * For Node.js builds include the supported node.js in the `target` option and webpack automatically figure out which syntax is supported, e. g. `target: "node8.6"`.
 
 # Cleanup code
 
@@ -109,14 +108,18 @@ Run `yarn add webpack@next -D` resp. `npm install webpack@next --dev`.
   * webpack will use it to name files in production and development mode
   * webpack 5 will automatically assign useful file names in development even when not using `webpackChunkName`
 * Using named exports from JSON modules: This is not supported by the (new) spec and you will get a warning
-  * Instead of `import { version } from "./package.json"` use `import package from "./package.json"; const { version } = package;`
+  * Instead of `import { version } from "./package.json"; console.log(version);` use `import package from "./package.json"; console.log(package.version);`
 
 # Cleanup build code
 
 * Using `const compiler = webpack(...);`: Make sure to close the compiler after use
-  * `compiler.close()`
+  * `compiler.close(callback)`
+  * This doesn't apply to the `webpack(..., callback)` form.
+  * This is optional if you use webpack in watching mode until the user ends the process.
 
 # Run a single build and follow advises
+
+Please make sure to read errors/warnings carefully.
 
 There is no advise? Please create an issue and we will add one.
 
@@ -124,7 +127,7 @@ Repeat this step until you solved at least level 3. Best continue to solve level
 
 ## Level 1: Schema validation fails
 
-Some configuration options have changed. There should be a validation error with a `BREAKING CHANGE:` note.
+Some configuration options have changed. There should be a validation error with a `BREAKING CHANGE:` note, or a hint which option should be used instead.
 
 ## Level 2: webpack crashes with error
 
@@ -138,9 +141,36 @@ The error message should have a `BREAKING CHANGE:` note.
 
 The warning message should tell you what can be improved.
 
-## Deprecation warnings
+There might be some cases where you don't have direct control over the code, like when using packages from NPM.
+There the new `ignoreWarnings` configuration option might become handy to temporary hide the warnings, e. g.
 
-You probably get a lot of deprecation warnings. This is not a problem right now. Plugins need time to catch up with core changes. Please do not care about them until release candidate.
+``` js
+ignoreWarnings: [
+  { module: /node_modules/, message: /only default export is available soon/ }
+]
+```
+
+## Level 5: Runtime errors
+
+This is tricky. You probably have to debug to find the problem. A general advise is difficult here.
+
+Here are some common things:
+
+* `process` is not defined.
+  * Webpack 5 do no longer include a polyfill for this Node.js variable. Avoid using it in frontend code.
+  * Want to support frontend and browser usage? Use the `exports` or `imports` package.json field to use different code depending on environment.
+    * To support older bundlers use the `browser` field too.
+    * Alternative: Wrap code blocks with `typeof process` checks. Note that this is worse regarding bundle size.
+  * Want to use environment variables with `process.env.VARIABLE`? You need to use the `DefinePlugin` or `EnvironmentPlugin` to define these variables in the configuration.
+    * Consider using `VARIABLE` instead and make sure to check `typeof VARIABLE !== "undefined"` too. `process.env` is Node.js specific and should be avoided in frontend code.
+
+## Level 6: Deprecation warnings
+
+You probably get a lot of deprecation warnings.
+This is not directly a problem.
+Plugins need time to catch up with core changes.
+Please report these deprecations to the plugins.
+These deprecations are only warnings and the build will still work with only minor drawbacks (like less performance).
 
 You can hide deprecation warnings with
 
@@ -151,6 +181,26 @@ node --no-deprecation node_modules/webpack/bin/webpack.js ...
 but this should only be a temporary workaround.
 
 Contributors to plugins can follow the advises in the deprecation messages.
+
+## Level 7: Performance issues
+
+Usually performance should improve with webpack 5, but there are also a few cases where performance get worse.
+
+* Profile where the time is spend.
+  * `--profile --progress` displays a very simple performance profile now
+  * `node --inspect-brk node_modules/webpack/bin/webpack.js` + [`chrome://inspect`](chrome://inspect) / [`edge://inspect`](edge://inspect) (see profiler tab).
+    * You can save these profiles to files and provide them in issues.
+    * Add `--no-turbo-inlining` for better stack traces in some cases
+* Time for building modules in incremental builds can be improved by reverting to unsafe caching like in webpack 4:
+  * `module.unsafeCache: true`
+  * But this might affect the ability to handle some of the changes to the code base
+* Full build
+  * Backward-compat layer for deprecated things usually have worse performance compared to the new thing.
+  * Creating many warnings can affect build performance, even if they are ignored.
+  * Source Maps are expensive. Check `devtool` option in documentation to see a comparision of the different options.
+  * Anti-Virus-Protection might affect performance of file system access.
+  * Persistent Caching can help to improve repeated full builds.
+  * Module Federation allows to split the application into multiple smaller builds.
 
 # Everything working?
 
