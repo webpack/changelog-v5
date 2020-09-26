@@ -197,7 +197,7 @@ Usually performance should improve with webpack 5, but there are also a few case
 * Full build
   * Backward-compat layer for deprecated things usually have worse performance compared to the new thing.
   * Creating many warnings can affect build performance, even if they are ignored.
-  * Source Maps are expensive. Check `devtool` option in documentation to see a comparision of the different options.
+  * Source Maps are expensive. Check `devtool` option in documentation to see a comparison of the different options.
   * Anti-Virus-Protection might affect performance of file system access.
   * Persistent Caching can help to improve repeated full builds.
   * Module Federation allows to split the application into multiple smaller builds.
