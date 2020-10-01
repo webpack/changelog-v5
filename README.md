@@ -613,6 +613,7 @@ MIGRATION: Upgrade to the latest node.js version available.
   - MIGRATION: Use `idHint` instead
 - `optimization.splitChunks` `filename` is no longer restricted to initial chunks
 - `optimization.splitChunks` `usedExports` added to include used exports when comparing modules
+- `optimization.splitChunks.defaultSizeTypes` added: Specified the size types when using numbers for sizes
 - `optimization.mangleExports` added
 - `optimization.minimizer` `"..."` can be used to reference the defaults
 - `optimization.usedExports` `"global"` value added to allow to disable the analysis per runtime and instead do it globally (better performance)
