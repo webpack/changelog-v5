@@ -380,6 +380,40 @@ webpack 5 can generate both ES5 and ES6/ES2015 code now.
 
 Supporting only modern browsers will generate shorter code using arrow functions and more spec-comform code using `const` declarations with TDZ for `export default`.
 
+## Improved `target` option
+
+In webpack 4 the `target` was a very rough choice between `"web"` and `"node"` (and a few others).
+Webpack 5 gives you more options here.
+
+The `target` option now influences more things about the generated code than before:
+
+* method of chunk loading
+* format of chunks
+* method of wasm loading
+* method of chunk and wasm loading in workers
+* global object used
+* if publicPath should be determined automatically
+* EcmaScript features/syntax used in the generated code
+* `externals` enabled by default
+* Behavior of some node.js compat layers (`global`, `__filename`, `__dirname`)
+* Resolving of modules (`browser` field, `exports` and `imports` conditions)
+* Some loaders might change behavior based on that
+
+For some of these things the choice between `"web"` and `"node"` is too rough and we need more information.
+Therefore we allow to specify the minimum version e. g. like `"node10.13"` and infer more properties about the target environment.
+
+It's now also allowed to combined multiple targets with an array and webpack will determine the minimum properties of all targets. Using an array is also useful when using targets that doesn't give full information like `"web"` or `"node"` (without version number). E. g. `["web", "es2020"]` combines these two partial targets.
+
+There is a target `"browserslist"` which will use browserslist data to determine properties of the environment.
+This target is also used by default when there is a browserslist config available in the project. When none such config is available, the `"web"` target will be used by default.
+
+Some combinations and features are not yet implemented and will result in errors. They are preparations for future features. Examples:
+
+* `["web", "node"]` will lead to an universal chunk loading method, which is not implemented yet
+* `["web", "node"]` + `output.module: true` will lead to a module chunk loading method, which is not implemented yet
+* `"web"` will lead to `http(s):` imports being treated as `module` externals, which are not implemented yet (Workaround: `externalsPresets: { web: false, webAsync: true }`, which will use `import()` instead).
+
+
 ## SplitChunks and Module Sizes
 
 Modules now express size in a better way than displaying a single number. Also, there are now different types of sizes.
@@ -516,7 +550,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 ## Changes to the Structure
 
 - `entry: {}` allows an empty object now (to allow to use plugins to add entries)
-- `target` supports an array and versions
+- `target` supports an array, versions and browserslist
 - `cache: Object` removed: Setting to a memory-cache object is no longer possible
 - `cache.type` added: It's now possible to choose between `"memory"` and `"filesystem"`
 - New configuration options for `cache.type = "filesystem"` added:
@@ -538,6 +572,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `resolve.alias` values can be arrays or `false` now
 - `resolve.restrictions` added: Allows to restrict potential resolve results
 - `resolve.fallback` added: Allow to alias requests that failed to resolve
+- `resolve.preferRelative` added: Allows to resolve modules requests are relative requests too
 - Automatic polyfills for native node.js modules were removed
   - `node.Buffer` removed
   - `node.console` removed
@@ -585,6 +620,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `optimization.realContentHash` added
 - `output.devtoolLineToLine` removed
   - MIGRATION: No replacement
+- `output.chunkFilename: Function` is now allowed
 - `output.hotUpdateChunkFilename: Function` is now forbidden: It never worked anyway.
 - `output.hotUpdateMainFilename: Function` is now forbidden: It never worked anyway.
 - `output.importFunctionName: string` specifies the name used as replacement for `import()` to allow polyfilling for non-suppored environments
@@ -596,6 +632,7 @@ MIGRATION: Upgrade to the latest node.js version available.
 - `output.enabledChunkLoadingTypes` added
 - `output.chunkFormat` added
 - `module.rules` `resolve` and `parser` will merge in a different way (objects are deeply merged, array may include `"..."` to reference to prev value)
+- `module.rules` `parser.worker` added: Allows to configure the worker supported
 - `module.rules` `query` and `loaders` were removed
 - `module.rules` `options` passing a string is deprecated
   - MIGRATION: Pass an options object instead, open an issue on the loader when this is not supported
@@ -631,12 +668,15 @@ MIGRATION: Upgrade to the latest node.js version available.
   - `[ext]`
 - `externals` when passing a function, it has now a different signature `({ context, request }, callback)`
   - MIGRATION: Change signature
+- `externalsPresets` added
 - `experiments` added (see Experiments section above)
 - `watchOptions.followSymlinks` added
+- `watchOptions.ignored` can now be a RegExp
 - `webpack.util.serialization` is now exposed.
 
 ## Changes to the Defaults
 
+- `target` is now `"browserslist"` by default when a browserslist config is available
 - `module.unsafeCache` is now only enabled for `node_modules` by default
 - `optimization.moduleIds` defaults to `deterministic` in production mode, instead of `size`
 - `optimization.chunkIds` defaults to `deterministic` in production mode, instead of `total-size`
