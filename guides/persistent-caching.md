@@ -384,11 +384,11 @@ class MyClass {
 }
 
 register(MyClass, "some-module/lib/MyClass", null, {
-    seralize(obj, { write }) {
+    serialize(obj, { write }) {
         write(obj.a);
         write(obj.b);
         write(obj.c);
-    }
+    },
     deserialize({ read }) {
         const obj = new MyClass(read(), read());
         obj.c = read();
