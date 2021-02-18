@@ -1326,3 +1326,5 @@ These dependencies are cheaper to process and webpack uses them when possible
 - add `Compilation.deleteAsset` to correctly delete an assets and non-shared related assets
 - expose `require("webpack-sources")` as `require("webpack").sources`
 - terser 5
+- The `--dev`, `-d`, `--prod`, and `-p` CLI flags were removed in [webpack-cli 4.x](https://github.com/webpack/webpack-cli/blob/master/CHANGELOG.md#400-beta9-2020-09-19)
+- The `--optimize-minimize` flag has been renamed to `--optimization-minimize`.
