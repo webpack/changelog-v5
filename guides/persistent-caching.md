@@ -157,7 +157,7 @@ For different use cases there are different types of snapshots:
 
 Timestamping is very fast to capture and compare as it only needs a meta data read from filesystem. Contenthashing is slow compared to that, because it need to read the file content from filesystem. But timestamping might invalidate the cache even when the file content is the same, but only the timestamp changed. This can happen because of multiple factors:
 
-* git operations always update the timestamp. e. g. fresh clone, changing branches
+* git operations always update the timestamp. e. g. fresh clone
 * save without changes
 
 So the question is: Do you expect timestamp changes, while content stays equal? And is the extra performance cost worth it?
