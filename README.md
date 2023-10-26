@@ -1041,7 +1041,7 @@ Bundling all these information together makes getting the reference expensive an
 In webpack 5 this part of the codebase was refactored and the method has been split up.
 
 - The referenced module can be read from the ModuleGraphConnection
-- The imported export names can be get via `Dependency.getReferencedExports()`
+- The imported export names can be got via `Dependency.getReferencedExports()`
 - There is a `weak` flag on the `Dependency` class
 - Ordering is only relevant to `HarmonyImportDependencies` and can be get via `sourceOrder` property
 
